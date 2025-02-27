@@ -6,3 +6,19 @@ Effortlessly save and access your copied links across all your devices.
 ![Firebase](https://img.shields.io/badge/firebase-a08021?style=for-the-badge&logo=firebase&logoColor=ffcd34)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+
+## Firebase
+
+Services used:
+
+- Firestore
+- Firebase Authentication
+- Firebase Hosting
+
+### Emulators
+
+To run the Firebase emulators, use the following command:
+
+```bash
+make firebase-emulator
+```

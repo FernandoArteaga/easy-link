@@ -1,4 +1,4 @@
-name: "Deploy to Firebase Hosting"
+name: 'Deploy to Firebase Hosting'
 on:
   push:
     branches:
@@ -6,31 +6,31 @@ on:
 
 jobs:
   deploy:
-    name: "Build and Deploy"
+    name: 'Build and Deploy'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: "Setup pnpm"
+      - name: 'Setup pnpm'
         uses: pnpm/action-setup@v4
         id: pnpm-install
         with:
           version: 9
           run_install: false
 
-      - name: "Setup node"
+      - name: 'Setup node'
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
+          cache: 'pnpm'
 
-      - name: "Install dependencies"
+      - name: 'Install dependencies'
         run: pnpm install
 
-      - name: "Build app"
+      - name: 'Build app'
         run: pnpm build
 
-      - name: "Deploy to Firebase Hosting"
+      - name: 'Deploy to Firebase Hosting'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}

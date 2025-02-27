@@ -1,7 +1,7 @@
 @import 'tailwindcss';
+@plugin '@tailwindcss/forms';
 
+@source '../node_modules/@skeletonlabs/skeleton-svelte';
 @import '@skeletonlabs/skeleton';
 @import '@skeletonlabs/skeleton/optional/presets';
-@import '@skeletonlabs/skeleton/themes/cerberus';
-
-@plugin '@tailwindcss/forms';
+@import '@skeletonlabs/skeleton/themes/terminus';

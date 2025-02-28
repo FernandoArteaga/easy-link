@@ -28,9 +28,11 @@ let app;
 if (!getApps().length) {
 	app = initializeApp(firebaseConfig);
 }
-if (!dev && (await isSupported())) {
-	getAnalytics(app);
-}
+(async () => {
+	if (!dev && (await isSupported())) {
+		getAnalytics(app);
+	}
+})();
 
 const auth = getAuth(app);
 

@@ -4,7 +4,7 @@
 /firestore-debug.log
 /firestore-debug.*.log
 .firebaserc
-
+.firebase-emulator-data
 .idea
 
 node_modules

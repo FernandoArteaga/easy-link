@@ -9,9 +9,11 @@ import {
 	PUBLIC_FIREBASE_MEASUREMENT_ID,
 	PUBLIC_FIREBASE_USE_EMULATOR
 } from '$env/static/public';
+import type { FirebaseApp } from 'firebase/app';
 import { initializeApp, getApps } from 'firebase/app';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 
 const firebaseConfig = {
 	apiKey: PUBLIC_FIREBASE_API_KEY,
@@ -23,11 +25,14 @@ const firebaseConfig = {
 	measurementId: PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
-let app;
+let app: FirebaseApp;
 
-if (!getApps().length) {
+if (getApps().length > 0) {
+	app = getApps()[0];
+} else {
 	app = initializeApp(firebaseConfig);
 }
+
 (async () => {
 	if (!dev && (await isSupported())) {
 		getAnalytics(app);
@@ -35,9 +40,11 @@ if (!getApps().length) {
 })();
 
 const auth = getAuth(app);
+const firestore = getFirestore(app);
 
 if (dev && PUBLIC_FIREBASE_USE_EMULATOR === 'true') {
 	connectAuthEmulator(auth, 'http://localhost:9099');
+	connectFirestoreEmulator(firestore, 'localhost', 9080);
 }
 
-export { app, auth };
+export { app, auth, firestore };

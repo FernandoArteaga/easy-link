@@ -3,8 +3,10 @@
 	import { CornerDownRight, Link2 } from 'lucide-svelte';
 	import { signOut } from 'firebase/auth';
 	import { auth } from '$lib/firebase';
+	import sessionStore from '$lib/stores/session.svelte';
 
-	let inputLink: string;
+	let loading = $state(true);
+	let inputLink: string | undefined = $state(undefined)
 	let submit = (e: SubmitEvent) => {
 		e.preventDefault();
 		console.log(inputLink);
@@ -12,6 +14,7 @@
 	const handleLogout = () => {
 		signOut(auth)
 			.then(() => {
+				sessionStore.signOut();
 				goto('/login');
 			})
 			.catch((error) => {
@@ -44,8 +47,10 @@
 		</div>
 	</form>
 	<div class="space-y-4">
-		{#each { length: 4 }, n}
-			<div class="placeholder h-10 animate-pulse"></div>
-		{/each}
+		{#if loading}
+			{#each { length: 4 }, n}
+				<div class="placeholder h-10 animate-pulse"></div>
+			{/each}
+		{/if}
 	</div>
 </div>

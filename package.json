@@ -12,7 +12,9 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"fmt": "prettier --write .",
-		"lint": "prettier --check . && eslint ."
+		"lint": "prettier --check . && eslint .",
+		"firebase-emulator:start": "open http://localhost:9090 && firebase emulators:start --import=./.firebase-emulator-data --export-on-exit",
+		"firebase-emulator:export": "firebase emulators:export ./.firebase-emulator-data"
 	},
 	"dependencies": {
 		"firebase": "^11.3.1",

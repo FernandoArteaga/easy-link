@@ -1,8 +1,9 @@
 <script lang="ts">
 	import '../app.css';
+	import { ToastProvider } from '@skeletonlabs/skeleton-svelte';
 	let { children } = $props();
 </script>
 
-<main class="container mx-auto p-4">
-{@render children()}
-</main>
+<ToastProvider>
+	{@render children()}
+</ToastProvider>

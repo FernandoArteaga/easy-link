@@ -20,5 +20,5 @@ Services used:
 To run the Firebase emulators, use the following command:
 
 ```bash
-make firebase-emulator
+pnpm firebase-emulator:start
 ```

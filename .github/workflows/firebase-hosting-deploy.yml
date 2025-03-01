@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: "Build"
+    name: 'Build'
     uses: ./.github/workflows/build-sveltekit.yml
 
   deploy:
@@ -18,11 +18,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: "Download build artifact"
+      - name: 'Download build artifact'
         uses: actions/download-artifact@v4
         with:
-          name: "build"
-          path: "./public"
+          name: 'build'
+          path: './public'
 
       - name: 'Deploy to Firebase Hosting'
         id: firebase-deploy

@@ -2,8 +2,15 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if false;
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    function ownsDoc(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    match /users/{uid}/links/{document=**} {
+      allow read, write: if ownsDoc(uid);
     }
   }
 }

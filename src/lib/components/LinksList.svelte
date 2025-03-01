@@ -3,6 +3,7 @@
 	import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 	import sessionStore from '$lib/stores/session.svelte';
 	import { firestore } from '$lib/firebase';
+	import LinkChip from '$lib/components/LinkChip.svelte';
 
 	let links: Firestore.Link[] = $state([]);
 	let loading = $state(true);
@@ -42,6 +43,6 @@
 	{/each}
 {:else}
 	{#each links as link}
-		<p>{link.url}</p>
+		<LinkChip {link} />
 	{/each}
 {/if}

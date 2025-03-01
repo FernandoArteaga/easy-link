@@ -30,9 +30,9 @@
 	};
 </script>
 
-<div class="mx-auto flex max-w-4/5 flex-col justify-center pb-12 sm:max-w-lg">
+<div class="mx-auto flex max-w-4/5 flex-col justify-center pb-12 sm:max-w-xl">
 	<div class="bg-surface-50-950 sticky -top-4 z-10 space-y-10 py-12">
-		<nav class="btn-group preset-outlined-surface-200-800 w-full flex-col p-2 md:flex-row-reverse">
+		<nav class="btn-group preset-outlined-surface-200-800 w-full flex-col flex-row-reverse p-2">
 			<button type="button" class="btn btn-sm preset-filled w-fit" onclick={handleLogout}>
 				Sign out
 			</button>
@@ -49,7 +49,7 @@
 					type="text"
 					placeholder="Add link"
 				/>
-				<button class="ig-btn preset-filled bg-secondary-500" type="submit" onclick={submit}>
+				<button class="ig-btn preset-filled-secondary-500" type="submit" onclick={submit}>
 					<CornerDownRight size={16} />
 				</button>
 			</div>

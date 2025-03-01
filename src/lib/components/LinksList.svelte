@@ -11,12 +11,21 @@
 	$effect.pre(() => {
 		if (sessionStore.user === null) return;
 		loading = false;
-		const q =  query(collection(firestore, "users", sessionStore.user.uid, "links"), orderBy("timestamp", "desc"));
+		const q = query(
+			collection(firestore, 'users', sessionStore.user.uid, 'links'),
+			orderBy('timestamp', 'desc')
+		);
 		unsubscribe = onSnapshot(q, (snapshot) => {
 			links = snapshot.docs.map((doc) => {
+				const data = doc.data();
+				let serverTimestamp = 0;
+				if (data.timestamp) {
+					serverTimestamp = data.timestamp.toMillis();
+				}
 				return {
 					id: doc.id,
-					...doc.data(),
+					url: data.url,
+					timestamp: serverTimestamp
 				};
 			});
 		});

@@ -5,25 +5,25 @@
 	import sessionStore from '$lib/stores/session.svelte';
 	import { routeGuard } from '$lib/guard';
 	import { ToastProvider } from '@skeletonlabs/skeleton-svelte';
-	import { onAuthStateChanged } from "firebase/auth";
+	import { onAuthStateChanged } from 'firebase/auth';
 
 	let { children, data } = $props();
 	let unsubscribe = () => {};
 
-	$effect.pre(() => routeGuard(data.pathname))
+	$effect.pre(() => routeGuard(data.pathname));
 	$effect.pre(() => {
 		unsubscribe = onAuthStateChanged(auth, (user) => {
 			if (user) {
 				sessionStore.user = {
 					uid: user.uid,
 					email: user.email,
-					displayName: user.displayName,
+					displayName: user.displayName
 				};
 			} else {
 				sessionStore.signOut();
 			}
 		});
-	})
+	});
 
 	onDestroy(() => {
 		unsubscribe();

@@ -40,7 +40,7 @@ if (getApps().length > 0) {
 })();
 
 const auth = getAuth(app);
-const firestore = getFirestore(app);
+const firestore = getFirestore();
 
 if (dev && PUBLIC_FIREBASE_USE_EMULATOR === 'true') {
 	connectAuthEmulator(auth, 'http://localhost:9099');

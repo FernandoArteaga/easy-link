@@ -3,12 +3,16 @@
 declare global {
 	type Nullable<T> = T | null
 
-	namespace App {
-		// interface Error {}
-		// interface Locals {}
-		// interface PageData {}
-		// interface PageState {}
-		// interface Platform {}
+	namespace Firestore {
+		type Link = {
+			id: string
+			url: string
+			timestamp: number
+		}
+
+		type CreateLink = {
+			url: string
+		}
 	}
 }
 

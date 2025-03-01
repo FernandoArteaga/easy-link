@@ -4,9 +4,10 @@
 	import { signOut } from 'firebase/auth';
 	import { auth } from '$lib/firebase';
 	import sessionStore from '$lib/stores/session.svelte';
+	import Links from '$lib/components/Links.svelte';
 
-	let loading = $state(true);
 	let inputLink: string | undefined = $state(undefined)
+
 	let submit = (e: SubmitEvent) => {
 		e.preventDefault();
 		console.log(inputLink);
@@ -18,7 +19,7 @@
 				goto('/login');
 			})
 			.catch((error) => {
-				console.log(error);
+				console.error(error);
 			});
 	};
 </script>
@@ -47,10 +48,6 @@
 		</div>
 	</form>
 	<div class="space-y-4">
-		{#if loading}
-			{#each { length: 4 }, n}
-				<div class="placeholder h-10 animate-pulse"></div>
-			{/each}
-		{/if}
+		<Links />
 	</div>
 </div>

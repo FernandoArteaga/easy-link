@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onDestroy, onMount } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import '../app.css';
 	import { auth } from '$lib/firebase';
 	import sessionStore from '$lib/stores/session.svelte';
@@ -11,8 +11,7 @@
 	let unsubscribe = () => {};
 
 	$effect.pre(() => routeGuard(data.pathname))
-
-	onMount(() => {
+	$effect.pre(() => {
 		unsubscribe = onAuthStateChanged(auth, (user) => {
 			if (user) {
 				sessionStore.user = {
@@ -24,7 +23,7 @@
 				sessionStore.signOut();
 			}
 		});
-	});
+	})
 
 	onDestroy(() => {
 		unsubscribe();

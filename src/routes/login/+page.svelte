@@ -1,6 +1,6 @@
 <script lang="ts">
+	import SignForm from '$lib/components/SignForm.svelte';
 	import { Tabs } from '@skeletonlabs/skeleton-svelte';
-	import SignForm from './SignForm.svelte';
 
 	let group = $state('signin');
 </script>

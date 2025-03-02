@@ -79,25 +79,5 @@
 
 	<div class="space-y-4 overflow-auto">
 		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
-		<LinksList />
 	</div>
 </div>

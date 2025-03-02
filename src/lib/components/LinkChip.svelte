@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
-	import { Copy, ExternalLink, Link2Off } from 'lucide-svelte';
+	import { Copy, ExternalLink, Delete } from 'lucide-svelte';
 	import type { ToastContext } from '@skeletonlabs/skeleton-svelte';
 	import { concatClasses } from '$lib/utils/utils';
 	import { deleteLink } from '$lib/firestore/links';
@@ -36,7 +36,7 @@
 		class={concatClasses(btnStyle, 'rounded-l-md')}
 		onclick={removeLink}
 	>
-		<Link2Off size={16} />
+		<Delete size={16} />
 	</button>
 	<div class="border-surface-800 flex-1 overflow-x-auto border px-4 py-1.5">
 		{link.url}

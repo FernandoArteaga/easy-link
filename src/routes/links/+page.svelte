@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { CornerDownRight, Link2, X, Sun, Moon } from 'lucide-svelte';
+	import { CornerDownRight, Link, Sun, Moon, Eraser } from 'lucide-svelte';
 	import { signOut } from 'firebase/auth';
 	import { auth } from '$lib/firebase';
 	import { createLink } from '$lib/firestore/links';
@@ -39,13 +39,13 @@
 </script>
 
 <div class="mx-auto flex max-w-9/10 flex-col justify-center pb-12 sm:max-w-xl">
-	<div class="bg-surface-50-950 sticky -top-4 z-10 space-y-10 py-12">
-		<nav class="btn-group preset-outlined-surface-200-800 w-full flex-row flex-wrap justify-end p-2">
+	<div class="bg-surface-50-950 sticky -top-4 z-10 pb-12">
+		<nav class="w-full flex flex-row flex-wrap justify-end items-center space-x-2 py-8">
 			<button class={navButton} onclick={changeTheme}>
 				{#if themeStore.isLight()}
-					<Moon size={16} />
+					<Moon size={14} />
 				{:else}
-					<Sun size={16} />
+					<Sun size={14} />
 				{/if}
 			</button>
 			<button type="button" class={navButton} onclick={handleLogout}>
@@ -56,11 +56,11 @@
 			<div class="input-group grid-cols-[auto_1fr_auto]">
 				{#if inputLink}
 					<button class="ig-cell preset-tonal-primary hover:preset-filled-primary-500 cursor-pointer" onclick={() => (inputLink = undefined)}>
-						<X size={16} />
+						<Eraser size={16} />
 					</button>
 				{:else}
 					<div class="ig-cell preset-tonal">
-						<Link2 size={16} />
+						<Link size={16} />
 					</div>
 				{/if}
 				<input
@@ -78,6 +78,26 @@
 	</div>
 
 	<div class="space-y-4 overflow-auto">
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
+		<LinksList />
 		<LinksList />
 	</div>
 </div>

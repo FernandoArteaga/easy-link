@@ -38,7 +38,7 @@
 </script>
 
 {#if loading}
-	{#each { length: 4 }, n}
+	{#each { length: 4 }}
 		<div class="placeholder h-10 animate-pulse"></div>
 	{/each}
 {:else}

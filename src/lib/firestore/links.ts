@@ -1,4 +1,4 @@
-import { collection, getDocs, query, addDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, collection, query, addDoc, getDocs, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { firestore } from '$lib/firebase';
 
 export async function getUserLinks(uid: string) {
@@ -12,4 +12,8 @@ export async function createLink(uid: string, link: Firestore.CreateLink) {
 		url: link.url,
 		timestamp: serverTimestamp()
 	});
+}
+
+export async function deleteLink(uid: string, id: string) {
+	await deleteDoc(doc(firestore, 'users', uid, 'links', id));
 }

@@ -6,4 +6,4 @@
 @import '@skeletonlabs/skeleton/optional/presets';
 @import '@skeletonlabs/skeleton/themes/terminus';
 
-/*@variant dark (&:where(.dark, .dark *));*/
+@variant dark (&:where(.dark, .dark *));

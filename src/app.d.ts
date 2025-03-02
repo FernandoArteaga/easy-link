@@ -3,6 +3,10 @@
 declare global {
 	type Nullable<T> = T | null;
 
+	namespace App {
+		type Themes = 'dark' | 'light'
+	}
+
 	namespace Firestore {
 		type Link = {
 			id: string;

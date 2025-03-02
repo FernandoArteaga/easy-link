@@ -25,7 +25,7 @@
 				break;
 			case 'auth/password-does-not-meet-requirements':
 				message =
-					'The password does not meet the requirements. It must be at least 6 characters long, contain one uppercase letter, one lowercase letter, one number, and one special character.';
+					'The password does not meet the requirements. It must be at least 6 characters long and contain at least: one uppercase letter, one lowercase letter, and one number.';
 				break;
 			case 'auth/email-already-in-use':
 				message = 'Email already in use. Please sign in 😃';
@@ -54,7 +54,7 @@
 	let signIn = () => {
 		signInWithEmailAndPassword(auth, inputEmail, inputPwd)
 			.then(() => {
-				goto('/');
+				goto('/links');
 			})
 			.catch((error) => {
 				handleErrorMessages(error);
@@ -63,7 +63,7 @@
 	let signUp = () => {
 		createUserWithEmailAndPassword(auth, inputEmail, inputPwd)
 			.then(() => {
-				goto('/');
+				goto('/links');
 			})
 			.catch((error) => {
 				handleErrorMessages(error);

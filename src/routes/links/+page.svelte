@@ -14,11 +14,11 @@
 	let submit = async () => {
 		if (!inputLink) return;
 		const newLink: Firestore.CreateLink = {
-			url: sanitize(inputLink),
+			url: sanitize(inputLink)
 		};
 		await createLink(sessionStore.user!.uid, newLink);
 		inputLink = undefined;
-	}
+	};
 
 	const handleLogout = () => {
 		signOut(auth)
@@ -29,18 +29,18 @@
 			.catch((error) => {
 				console.error(error);
 			});
-	}
+	};
 
 	const changeTheme = () => {
-		themeStore.theme = themeStore.theme === 'light' ? 'dark' : 'light'
-	}
+		themeStore.theme = themeStore.theme === 'light' ? 'dark' : 'light';
+	};
 
 	const navButton = 'btn btn-sm preset-filled w-fit min-w-20';
 </script>
 
 <div class="mx-auto flex max-w-9/10 flex-col justify-center pb-12 sm:max-w-xl">
 	<div class="bg-surface-50-950 sticky -top-4 z-10 pb-12">
-		<nav class="w-full flex flex-row flex-wrap justify-end items-center space-x-2 py-8">
+		<nav class="flex w-full flex-row flex-wrap items-center justify-end space-x-2 py-8">
 			<button class={navButton} onclick={changeTheme}>
 				{#if themeStore.isLight()}
 					<Moon size={14} />
@@ -48,14 +48,16 @@
 					<Sun size={14} />
 				{/if}
 			</button>
-			<button type="button" class={navButton} onclick={handleLogout}>
-				Sign out
-			</button>
+			<button type="button" class={navButton} onclick={handleLogout}> Sign out </button>
 		</nav>
-		<div class="w-full">
+		<form class="w-full" onsubmit="{submit}">
 			<div class="input-group grid-cols-[auto_1fr_auto]">
 				{#if inputLink}
-					<button class="ig-cell preset-tonal-primary hover:preset-filled-primary-500 cursor-pointer" onclick={() => (inputLink = undefined)}>
+					<button
+						type="button"
+						class="ig-cell preset-tonal-primary hover:preset-filled-primary-500 cursor-pointer"
+						onclick={() => (inputLink = undefined)}
+					>
 						<Eraser size={16} />
 					</button>
 				{:else}
@@ -70,11 +72,11 @@
 					type="text"
 					placeholder="Add link"
 				/>
-				<button class="ig-btn preset-filled-secondary-500" type="submit" onclick={submit}>
+				<button class="ig-btn preset-filled-secondary-500" type="submit">
 					<CornerDownRight size={16} />
 				</button>
 			</div>
-		</div>
+		</form>
 	</div>
 
 	<div class="space-y-4 overflow-auto">

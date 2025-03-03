@@ -4,7 +4,7 @@ declare global {
 	type Nullable<T> = T | null;
 
 	namespace App {
-		type Themes = 'dark' | 'light'
+		type Themes = 'dark' | 'light';
 	}
 
 	namespace Firestore {

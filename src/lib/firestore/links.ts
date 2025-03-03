@@ -1,4 +1,12 @@
-import { doc, collection, query, addDoc, getDocs, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import {
+	doc,
+	collection,
+	query,
+	addDoc,
+	getDocs,
+	deleteDoc,
+	serverTimestamp
+} from 'firebase/firestore';
 import { firestore } from '$lib/firebase';
 
 export async function getUserLinks(uid: string) {

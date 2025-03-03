@@ -3,6 +3,7 @@
 	import '../app.css';
 	import { auth } from '$lib/firebase';
 	import sessionStore from '$lib/stores/session.svelte';
+	import themeStore from '$lib/stores/theme.svelte';
 	import { routeGuard } from '$lib/guard';
 	import { ToastProvider } from '@skeletonlabs/skeleton-svelte';
 	import { onAuthStateChanged } from 'firebase/auth';
@@ -24,6 +25,7 @@
 			}
 		});
 	});
+	themeStore.isLight()
 
 	onDestroy(() => {
 		unsubscribe();

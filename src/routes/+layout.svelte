@@ -25,7 +25,7 @@
 			}
 		});
 	});
-	themeStore.isLight()
+	themeStore.isLight();
 
 	onDestroy(() => {
 		unsubscribe();

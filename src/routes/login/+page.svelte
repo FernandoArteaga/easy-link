@@ -1,23 +1,23 @@
 <script lang="ts">
-	import SignForm from '$lib/components/SignForm.svelte';
+	import SignInForm from '$lib/components/SignInForm.svelte';
+	import SignUpForm from '$lib/components/SignUpForm.svelte';
 	import { Tabs } from '@skeletonlabs/skeleton-svelte';
 
-	let group = $state('signin');
+	let group = $state('sign-in');
 </script>
 
 <div class="mx-auto flex h-svh max-w-96 items-center justify-center">
-	<Tabs bind:value={group} fluid classes="p-4 ">
+	<Tabs value={group} onValueChange={(e) => (group = e.value)} classes="p-4" fluid composite>
 		{#snippet list()}
-			<Tabs.Control value="signin">Sign in</Tabs.Control>
-			<Tabs.Control value="signup">Sign up</Tabs.Control>
+			<Tabs.Control value="sign-in">Sign in</Tabs.Control>
+			<Tabs.Control value="sign-up">Sign up</Tabs.Control>
 		{/snippet}
 		{#snippet content()}
-			<Tabs.Panel value="signin">
-				<SignForm formType="signin" />
-			</Tabs.Panel>
-			<Tabs.Panel value="signup">
-				<SignForm formType="signup" />
-			</Tabs.Panel>
+			{#if group === 'sign-in'}
+				<SignInForm />
+			{:else}
+				<SignUpForm />
+			{/if}
 		{/snippet}
 	</Tabs>
 </div>

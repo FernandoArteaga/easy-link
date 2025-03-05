@@ -36,7 +36,7 @@
 	<button class={concatClasses(btnStyle, 'rounded-l-md')} onclick={removeLink}>
 		<Delete size={16} />
 	</button>
-	<div class="border-surface-800 flex-1 overflow-x-auto border px-4 py-1.5">
+	<div class="border-surface-800 max-h-20 min-h-10 flex-1 overflow-x-auto border px-4 py-1.5">
 		{link.url}
 	</div>
 	{#if isValidLink(link.url)}

@@ -6,7 +6,7 @@
 	import { createLink } from '$lib/firestore/links';
 	import sessionStore from '$lib/stores/session.svelte';
 	import themeStore from '$lib/stores/theme.svelte';
-	import LinksList from '$lib/components/LinksList.svelte';
+	import LinkList from '$lib/components/LinkList.svelte';
 	import sanitize from '$lib/utils/sanitizer';
 
 	let inputLink: string | undefined = $state(undefined);
@@ -50,7 +50,7 @@
 			</button>
 			<button type="button" class={navButton} onclick={handleLogout}> Sign out </button>
 		</nav>
-		<form class="w-full" onsubmit="{submit}">
+		<form class="w-full" onsubmit={submit}>
 			<div class="input-group grid-cols-[auto_1fr_auto]">
 				{#if inputLink}
 					<button
@@ -80,6 +80,6 @@
 	</div>
 
 	<div class="space-y-4 overflow-auto">
-		<LinksList />
+		<LinkList />
 	</div>
 </div>

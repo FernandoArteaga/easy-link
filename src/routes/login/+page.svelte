@@ -7,18 +7,17 @@
 </script>
 
 <div class="mx-auto flex h-svh max-w-96 items-center justify-center">
-	<Tabs value={group} onValueChange={(e) => (group = e.value)} fluid classes="p-4 ">
+	<Tabs value={group} onValueChange={(e) => (group = e.value)} classes="p-4" fluid composite>
 		{#snippet list()}
 			<Tabs.Control value="sign-in">Sign in</Tabs.Control>
 			<Tabs.Control value="sign-up">Sign up</Tabs.Control>
 		{/snippet}
 		{#snippet content()}
-			<Tabs.Panel value="sign-in">
+			{#if (group === 'sign-in')}
 				<SignInForm />
-			</Tabs.Panel>
-			<Tabs.Panel value="sign-up">
+			{:else}
 				<SignUpForm />
-			</Tabs.Panel>
+			{/if}
 		{/snippet}
 	</Tabs>
 </div>

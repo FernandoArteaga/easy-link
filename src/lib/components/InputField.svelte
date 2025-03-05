@@ -28,11 +28,10 @@
 	}: Props = $props();
 
 	const inputID = randomInputID();
-	let inputType = $state(type);
 	let revealClass = $derived(canReveal && value ? 'pr-8' : '');
 
 	let toggleReveal = () => {
-		inputType = inputType === 'text' ? 'password' : 'text';
+		type = type === 'text' ? 'password' : 'text';
 	};
 </script>
 
@@ -44,7 +43,7 @@
 		id={inputID}
 		class={concatClasses('ig-input', revealClass)}
 		{name}
-		type={inputType}
+		{type}
 		{placeholder}
 		{autocomplete}
 		bind:value
@@ -54,7 +53,7 @@
 
 	{#if canReveal && value}
 		<button class="ig-btn preset" type="button" onclick={toggleReveal}>
-			{#if inputType === 'text'}
+			{#if type === 'text'}
 				<EyeOff size={16} />
 			{:else}
 				<Eye size={16} />

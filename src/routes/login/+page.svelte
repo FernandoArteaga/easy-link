@@ -13,7 +13,7 @@
 			<Tabs.Control value="sign-up">Sign up</Tabs.Control>
 		{/snippet}
 		{#snippet content()}
-			{#if (group === 'sign-in')}
+			{#if group === 'sign-in'}
 				<SignInForm />
 			{:else}
 				<SignUpForm />

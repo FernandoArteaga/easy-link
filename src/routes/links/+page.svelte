@@ -50,7 +50,7 @@
 			</button>
 			<button type="button" class={navButton} onclick={handleLogout}> Sign out </button>
 		</nav>
-		<form class="w-full" onsubmit="{submit}">
+		<form class="w-full" onsubmit={submit}>
 			<div class="input-group grid-cols-[auto_1fr_auto]">
 				{#if inputLink}
 					<button

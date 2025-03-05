@@ -2,6 +2,8 @@ export function concatClasses(...classes: string[]) {
 	return classes.join(' ').trim();
 }
 
+export const randomInputID = () => Math.random().toString(36).substring(2);
+
 export function isValidLink(link: string) {
 	return isValidUrl(link) || isValidDomain(link) || isValidIp(link);
 }

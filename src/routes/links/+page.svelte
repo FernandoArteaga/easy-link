@@ -38,6 +38,7 @@
 	const navButton = 'btn btn-sm preset-filled w-fit min-w-20';
 </script>
 
+{#if sessionStore.user}
 <div class="mx-auto flex max-w-9/10 flex-col justify-center pb-12 sm:max-w-xl">
 	<div class="bg-surface-50-950 sticky -top-4 z-10 pb-12">
 		<nav class="flex w-full flex-row flex-wrap items-center justify-end space-x-2 py-8">
@@ -83,3 +84,4 @@
 		<LinkList />
 	</div>
 </div>
+{/if}

@@ -12,8 +12,8 @@ importers:
         specifier: ^11.4.0
         version: 11.4.0
       lucide-svelte:
-        specifier: ^0.477.0
-        version: 0.477.0(svelte@5.23.0)
+        specifier: ^0.482.0
+        version: 0.482.0(svelte@5.23.0)
     devDependencies:
       '@eslint/compat':
         specifier: ^1.2.7
@@ -1442,8 +1442,8 @@ packages:
   long@5.3.1:
     resolution: {integrity: sha512-ka87Jz3gcx/I7Hal94xaN2tZEOPoUOEVftkQqZx2EeQRN7LGdfLlI3FvZ+7WDplm+vK2Urx9ULrvSowtdCieng==}
 
-  lucide-svelte@0.477.0:
-    resolution: {integrity: sha512-w/zj6/CXTtTizIeo8SuWGYu0u45CJ7cD2AtNzIObVHZrWXNgaIIX/2cI25wybjSmYHIi4pub2TLv/kNPKiB3ww==}
+  lucide-svelte@0.482.0:
+    resolution: {integrity: sha512-C8JbaG0ZW6ap65xyUGlbp/1iOxVlSHhmLHp1lqP7AZu2gX/OoB7FjBroSOR8MTL3HjG4PrL+o0I50Yj6Tqh0iA==}
     peerDependencies:
       svelte: ^3 || ^4 || ^5.0.0-next.42
 
@@ -3376,7 +3376,7 @@ snapshots:
 
   long@5.3.1: {}
 
-  lucide-svelte@0.477.0(svelte@5.23.0):
+  lucide-svelte@0.482.0(svelte@5.23.0):
     dependencies:
       svelte: 5.23.0
 

@@ -18,7 +18,7 @@
 	},
 	"dependencies": {
 		"firebase": "^11.4.0",
-		"lucide-svelte": "^0.477.0"
+		"lucide-svelte": "^0.482.0"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.7",

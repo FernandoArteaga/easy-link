@@ -17,31 +17,31 @@
 		"firebase-emulator:export": "firebase emulators:export ./.firebase-emulator-data"
 	},
 	"dependencies": {
-		"firebase": "^11.4.0",
-		"lucide-svelte": "~0.482.0"
+		"firebase": "^11.5.0",
+		"lucide-svelte": "~0.483.0"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.7",
-		"@eslint/js": "^9.22.0",
-		"@skeletonlabs/skeleton": "3.1.0",
-		"@skeletonlabs/skeleton-svelte": "1.0.0",
+		"@eslint/js": "^9.23.0",
+		"@skeletonlabs/skeleton": "^3.1.1",
+		"@skeletonlabs/skeleton-svelte": "^1.0.0",
 		"@sveltejs/adapter-static": "^3.0.8",
-		"@sveltejs/kit": "^2.20.0",
+		"@sveltejs/kit": "^2.20.2",
 		"@sveltejs/vite-plugin-svelte": "^5.0.3",
 		"@tailwindcss/forms": "^0.5.10",
-		"@tailwindcss/vite": "^4.0.14",
-		"eslint": "^9.22.0",
+		"@tailwindcss/vite": "^4.0.15",
+		"eslint": "^9.23.0",
 		"eslint-config-prettier": "^10.1.1",
 		"eslint-plugin-svelte": "^2.46.1",
 		"globals": "^16.0.0",
 		"prettier": "^3.5.3",
 		"prettier-plugin-svelte": "^3.3.3",
 		"prettier-plugin-tailwindcss": "^0.6.11",
-		"svelte": "^5.23.1",
+		"svelte": "^5.25.2",
 		"svelte-check": "^4.1.5",
-		"tailwindcss": "^4.0.14",
+		"tailwindcss": "^4.0.15",
 		"typescript": "^5.8.2",
-		"typescript-eslint": "^8.26.1",
+		"typescript-eslint": "^8.27.0",
 		"vite": "^6.2.2"
 	},
 	"pnpm": {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
 	import { Copy, ExternalLink, Delete } from 'lucide-svelte';
-	import type { ToastContext } from '@skeletonlabs/skeleton-svelte';
+	import type { Toaster } from '@skeletonlabs/skeleton-svelte';
 	import { concatClasses, isValidLink } from '$lib/utils/utils';
 	import { deleteLink } from '$lib/firestore/links';
 	import sessionStore from '$lib/stores/session.svelte';
@@ -10,7 +10,7 @@
 		link: Firestore.Link;
 	};
 	let { link }: Props = $props();
-	export const toast: ToastContext = getContext('toast');
+	export const toast: Toaster = getContext('toast');
 
 	async function setClipboard(text: string) {
 		await navigator.clipboard.writeText(text);

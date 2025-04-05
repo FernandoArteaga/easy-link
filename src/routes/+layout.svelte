@@ -5,10 +5,16 @@
 	import sessionStore from '$lib/stores/session.svelte';
 	import themeStore from '$lib/stores/theme.svelte';
 	import { routeGuard } from '$lib/guard';
-	import { ToastProvider } from '@skeletonlabs/skeleton-svelte';
+	import { Toaster, createToaster } from '@skeletonlabs/skeleton-svelte';
+	import { setContext } from 'svelte'
 	import { onAuthStateChanged } from 'firebase/auth';
 
 	let { children, data } = $props();
+	const toaster = createToaster({
+		placement: 'bottom-end',
+		max: 5
+	});
+	setContext('toast', toaster);
 	let unsubscribe = () => {};
 
 	$effect.pre(() => routeGuard(data.pathname));
@@ -32,6 +38,5 @@
 	});
 </script>
 
-<ToastProvider>
-	{@render children()}
-</ToastProvider>
+<Toaster {toaster} />
+{@render children()}

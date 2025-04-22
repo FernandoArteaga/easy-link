@@ -18,31 +18,31 @@
 	},
 	"dependencies": {
 		"firebase": "^11.6.0",
-		"lucide-svelte": "~0.488.0"
+		"lucide-svelte": "~0.503.0"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.8",
-		"@eslint/js": "^9.23.0",
+		"@eslint/js": "^9.25.1",
 		"@skeletonlabs/skeleton": "^3.1.2",
-		"@skeletonlabs/skeleton-svelte": "^1.1.0",
+		"@skeletonlabs/skeleton-svelte": "^1.2.1",
 		"@sveltejs/adapter-static": "^3.0.8",
-		"@sveltejs/kit": "^2.20.3",
+		"@sveltejs/kit": "^2.20.7",
 		"@sveltejs/vite-plugin-svelte": "^5.0.3",
 		"@tailwindcss/forms": "^0.5.10",
-		"@tailwindcss/vite": "^4.1.2",
-		"eslint": "^9.23.0",
-		"eslint-config-prettier": "^10.1.1",
-		"eslint-plugin-svelte": "^2.46.1",
+		"@tailwindcss/vite": "^4.1.4",
+		"eslint": "^9.25.1",
+		"eslint-config-prettier": "^10.1.2",
+		"eslint-plugin-svelte": "^3.5.1",
 		"globals": "^16.0.0",
 		"prettier": "^3.5.3",
 		"prettier-plugin-svelte": "^3.3.3",
 		"prettier-plugin-tailwindcss": "^0.6.11",
-		"svelte": "^5.25.6",
-		"svelte-check": "^4.1.5",
-		"tailwindcss": "^4.1.2",
-		"typescript": "^5.8.2",
-		"typescript-eslint": "^8.29.0",
-		"vite": "^6.2.5"
+		"svelte": "^5.28.1",
+		"svelte-check": "^4.1.6",
+		"tailwindcss": "^4.1.4",
+		"typescript": "^5.8.3",
+		"typescript-eslint": "^8.31.0",
+		"vite": "^6.3.2"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [

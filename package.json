@@ -17,7 +17,7 @@
 		"firebase-emulator:export": "firebase emulators:export ./.firebase-emulator-data"
 	},
 	"dependencies": {
-		"firebase": "^11.10.0",
+		"firebase": "^12.2.1",
 		"lucide-svelte": "^0.536.0"
 	},
 	"devDependencies": {

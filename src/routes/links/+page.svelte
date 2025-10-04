@@ -4,10 +4,10 @@
 	import { signOut } from 'firebase/auth';
 	import { auth } from '$lib/firebase';
 	import { createLink } from '$lib/firestore/links';
+	import sanitize from '$lib/utils/sanitizer';
 	import sessionStore from '$lib/stores/session.svelte';
 	import themeStore from '$lib/stores/theme.svelte';
 	import LinkList from '$lib/components/LinkList.svelte';
-	import sanitize from '$lib/utils/sanitizer';
 
 	let inputLink: string | undefined = $state(undefined);
 
@@ -35,7 +35,7 @@
 		themeStore.theme = themeStore.theme === 'light' ? 'dark' : 'light';
 	};
 
-	const navButton = 'btn btn-sm preset-filled w-fit min-w-20';
+	const navButton = 'btn btn-sm preset-filled w-fit min-w-20 h-6';
 </script>
 
 {#if sessionStore.user}

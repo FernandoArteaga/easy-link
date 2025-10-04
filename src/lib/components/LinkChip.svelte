@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
-	import { Copy, ExternalLink, Delete } from 'lucide-svelte';
+	import { Copy, ExternalLink, OctagonX } from 'lucide-svelte';
 	import type { Toaster } from '@skeletonlabs/skeleton-svelte';
 	import { concatClasses, isValidLink } from '$lib/utils/utils';
 	import { deleteLink } from '$lib/firestore/links';
@@ -34,7 +34,7 @@
 
 <div class="flex">
 	<button class={concatClasses(btnStyle, 'rounded-l-md')} onclick={removeLink}>
-		<Delete size={16} />
+		<OctagonX size={16} />
 	</button>
 	<div class="border-surface-800 max-h-19 min-h-9.5 flex-1 overflow-x-auto border px-4 py-1.5">
 		{link.url}

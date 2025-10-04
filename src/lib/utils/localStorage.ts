@@ -1,23 +1,23 @@
-import { browser } from '$app/environment';
+import { browser } from '$app/environment'
 
 export function saveToLocalStorage(storageKey: string, data: string) {
 	if (browser) {
-		localStorage.setItem(storageKey, btoa(data));
+		localStorage.setItem(storageKey, btoa(data))
 	}
 }
 
 export function readJSONFromLocalStorage<T>(storageKey: string): T | T[] | null {
 	if (browser) {
-		const data = localStorage.getItem(storageKey);
-		return data !== null ? JSON.parse(atob(data)) : data;
+		const data = localStorage.getItem(storageKey)
+		return data !== null ? JSON.parse(atob(data)) : data
 	}
-	return null;
+	return null
 }
 
 export function readFromLocalStorage(storageKey: string, defaultValue: string): string {
 	if (browser) {
-		const data = localStorage.getItem(storageKey);
-		return data ? atob(data) : defaultValue;
+		const data = localStorage.getItem(storageKey)
+		return data ? atob(data) : defaultValue
 	}
-	return defaultValue;
+	return defaultValue
 }

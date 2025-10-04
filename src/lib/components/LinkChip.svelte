@@ -1,35 +1,35 @@
 <script lang="ts">
-	import { getContext } from 'svelte';
-	import { Copy, ExternalLink, OctagonX } from 'lucide-svelte';
-	import type { Toaster } from '@skeletonlabs/skeleton-svelte';
-	import { concatClasses, isValidLink } from '$lib/utils/utils';
-	import { deleteLink } from '$lib/firestore/links';
-	import sessionStore from '$lib/stores/session.svelte';
+	import { getContext } from 'svelte'
+	import { Copy, ExternalLink, OctagonX } from 'lucide-svelte'
+	import type { Toaster } from '@skeletonlabs/skeleton-svelte'
+	import { concatClasses, isValidLink } from '$lib/utils/utils'
+	import { deleteLink } from '$lib/firestore/links'
+	import sessionStore from '$lib/stores/session.svelte'
 
 	type Props = {
-		link: Firestore.Link;
-	};
-	let { link }: Props = $props();
-	export const toast: Toaster = getContext('toast');
+		link: Firestore.Link
+	}
+	let { link }: Props = $props()
+	export const toast: Toaster = getContext('toast')
 
 	async function setClipboard(text: string) {
-		await navigator.clipboard.writeText(text);
+		await navigator.clipboard.writeText(text)
 		toast.create({
 			description: 'Link copied to clipboard',
 			type: 'info'
-		});
+		})
 	}
 
 	async function removeLink() {
-		await deleteLink(sessionStore.user!.uid, link.id);
+		await deleteLink(sessionStore.user!.uid, link.id)
 		toast.create({
 			description: 'Link deleted',
 			type: 'info'
-		});
+		})
 	}
 
 	let btnStyle =
-		'preset-tonal-primary hover:preset-filled-primary-500 flex w-12 items-center justify-center';
+		'preset-tonal-primary hover:preset-filled-primary-500 flex w-12 items-center justify-center'
 </script>
 
 <div class="flex">

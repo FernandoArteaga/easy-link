@@ -9,6 +9,8 @@
 	import themeStore from '$lib/stores/theme.svelte'
 	import LinkList from '$lib/components/LinkList.svelte'
 	import FolderList from '$lib/components/FolderList.svelte'
+	import { concatClasses } from '$lib/utils/utils'
+	import { btnPrimary } from '$lib/utils/styles'
 
 	let inputLink: string | undefined = $state(undefined)
 
@@ -58,7 +60,7 @@
 					{#if inputLink}
 						<button
 							type="button"
-							class="ig-cell preset-tonal-primary hover:preset-filled-primary-500 cursor-pointer"
+							class={concatClasses(btnPrimary, 'ig-cell')}
 							onclick={() => (inputLink = undefined)}
 						>
 							<Eraser size={16} />
@@ -82,8 +84,9 @@
 			</form>
 		</div>
 
-	<div class="space-y-4 overflow-auto">
-		<LinkList />
+		<div class="space-y-4 overflow-auto">
+			<FolderList />
+			<LinkList />
+		</div>
 	</div>
-</div>
 {/if}

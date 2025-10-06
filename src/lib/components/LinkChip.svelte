@@ -5,6 +5,7 @@
 	import { concatClasses, isValidLink } from '$lib/utils/utils'
 	import { deleteLink } from '$lib/firestore/links'
 	import sessionStore from '$lib/stores/session.svelte'
+	import { btnPrimary } from '$lib/utils/styles'
 
 	type Props = {
 		link: Firestore.Link
@@ -27,24 +28,29 @@
 			type: 'info'
 		})
 	}
-
-	let btnStyle =
-		'preset-tonal-primary hover:preset-filled-primary-500 flex w-12 items-center justify-center'
 </script>
 
 <div class="flex">
-	<button class={concatClasses(btnStyle, 'rounded-l-md')} onclick={removeLink}>
+	<button class={concatClasses(btnPrimary, 'w-12 rounded-l-md')} onclick={removeLink}>
 		<OctagonX size={16} />
 	</button>
 	<div class="border-surface-800 max-h-19 min-h-9.5 flex-1 overflow-x-auto border px-4 py-1.5">
 		{link.url}
 	</div>
 	{#if isValidLink(link.url)}
-		<a href={link.url} target="_blank" rel="noopener noreferrer" class={btnStyle}>
+		<a
+			href={link.url}
+			target="_blank"
+			rel="noopener noreferrer"
+			class={concatClasses(btnPrimary, 'w-12')}
+		>
 			<ExternalLink size={16} />
 		</a>
 	{/if}
-	<button class={concatClasses(btnStyle, 'rounded-r-md')} onclick={() => setClipboard(link.url)}>
+	<button
+		class={concatClasses(btnPrimary, 'w-12 rounded-r-md')}
+		onclick={() => setClipboard(link.url)}
+	>
 		<Copy size={16} />
 	</button>
 </div>

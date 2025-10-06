@@ -8,6 +8,8 @@
 	import { Toaster, createToaster } from '@skeletonlabs/skeleton-svelte'
 	import { setContext } from 'svelte'
 	import { onAuthStateChanged } from 'firebase/auth'
+	import activeFolderCtx from '$lib/contexts/activeFolder'
+	import { ActiveFolder } from '$lib/stores/folders.svelte'
 
 	let { children, data } = $props()
 	const toaster = createToaster({
@@ -15,6 +17,7 @@
 		max: 5
 	})
 	setContext('toast', toaster)
+	activeFolderCtx.setCtx(new ActiveFolder())
 	let unsubscribe = () => {}
 
 	$effect.pre(() => routeGuard(data.pathname))

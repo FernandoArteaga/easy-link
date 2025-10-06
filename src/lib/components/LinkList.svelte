@@ -4,6 +4,7 @@
 	import sessionStore from '$lib/stores/session.svelte'
 	import { firestore } from '$lib/firebase'
 	import LinkChip from '$lib/components/LinkChip.svelte'
+	import Placeholder from '$lib/components/Placeholder.svelte'
 
 	let links: Firestore.Link[] = $state([])
 	let loading = $state(true)
@@ -11,12 +12,12 @@
 
 	$effect.pre(() => {
 		if (sessionStore.user === null) return
-		loading = false
 		const q = query(
 			collection(firestore, 'users', sessionStore.user.uid, 'links'),
 			orderBy('timestamp', 'desc')
 		)
 		unsubscribe = onSnapshot(q, (snapshot) => {
+			loading = false
 			links = snapshot.docs.map((doc) => {
 				const data = doc.data()
 				let serverTimestamp = 0
@@ -38,9 +39,7 @@
 </script>
 
 {#if loading}
-	{#each { length: 4 }}
-		<div class="placeholder h-10 animate-pulse"></div>
-	{/each}
+	<Placeholder repeat={4} />
 {:else}
 	{#each links as link}
 		<LinkChip {link} />

@@ -41,7 +41,7 @@
 {#if loading}
 	<Placeholder repeat={4} />
 {:else}
-	{#each links as link}
+	{#each links as link (link.id)}
 		<LinkChip {link} />
 	{/each}
 {/if}

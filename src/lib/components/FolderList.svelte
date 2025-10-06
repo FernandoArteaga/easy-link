@@ -51,7 +51,7 @@
 	<Placeholder repeat={4} horizontal />
 {:else}
 	<div class="flex flex-row">
-		{#each folders as f}
+		{#each folders as f (f.id)}
 			<button
 				type="button"
 				class={concatClasses(btnFolder, btnFolderActive(f.id))}

@@ -14,7 +14,7 @@
 	let { children, data } = $props()
 	const toaster = createToaster({
 		placement: 'bottom-end',
-		max: 5
+		max: 5,
 	})
 	setContext('toast', toaster)
 	activeFolderCtx.setCtx(new ActiveFolder())
@@ -27,7 +27,7 @@
 				sessionStore.user = {
 					uid: user.uid,
 					email: user.email,
-					displayName: user.displayName
+					displayName: user.displayName,
 				}
 			} else {
 				sessionStore.signOut()

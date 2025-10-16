@@ -1,23 +1,22 @@
 <script lang="ts">
 	import { getContext } from 'svelte'
 	import { Copy, ExternalLink, OctagonX } from 'lucide-svelte'
-	import type { Toaster } from '@skeletonlabs/skeleton-svelte'
 	import { concatClasses, isValidLink } from '$lib/utils/utils'
 	import { deleteLink } from '$lib/firestore/links'
 	import sessionStore from '$lib/stores/session.svelte'
 	import { btnPrimary } from '$lib/utils/styles'
 
 	type Props = {
-		link: Firestore.Link
+		link: Firestore.Doc<Firestore.Link>
 	}
 	let { link }: Props = $props()
-	export const toast: Toaster = getContext('toast')
+	const toast = getContext('toast')
 
 	async function setClipboard(text: string) {
 		await navigator.clipboard.writeText(text)
 		toast.create({
 			description: 'Link copied to clipboard',
-			type: 'info'
+			type: 'info',
 		})
 	}
 
@@ -25,7 +24,7 @@
 		await deleteLink(sessionStore.user!.uid, link.id)
 		toast.create({
 			description: 'Link deleted',
-			type: 'info'
+			type: 'info',
 		})
 	}
 </script>

@@ -21,7 +21,7 @@ function store(): SessionStore {
 		},
 		signOut() {
 			_session = null
-		}
+		},
 	}
 }
 

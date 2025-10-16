@@ -9,7 +9,7 @@ function ctx(): Ctx<ActiveFolder> {
 		},
 		getCtx() {
 			return getContext(this.key) as ActiveFolder
-		}
+		},
 	}
 }
 

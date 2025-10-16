@@ -7,7 +7,7 @@ import {
 	PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
 	PUBLIC_FIREBASE_APP_ID,
 	PUBLIC_FIREBASE_MEASUREMENT_ID,
-	PUBLIC_FIREBASE_USE_EMULATOR
+	PUBLIC_FIREBASE_USE_EMULATOR,
 } from '$env/static/public'
 import type { FirebaseApp } from 'firebase/app'
 import { initializeApp, getApps } from 'firebase/app'
@@ -22,7 +22,7 @@ const firebaseConfig = {
 	storageBucket: PUBLIC_FIREBASE_STORAGE_BUCKET,
 	messagingSenderId: PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
 	appId: PUBLIC_FIREBASE_APP_ID,
-	measurementId: PUBLIC_FIREBASE_MEASUREMENT_ID
+	measurementId: PUBLIC_FIREBASE_MEASUREMENT_ID,
 }
 
 let app: FirebaseApp

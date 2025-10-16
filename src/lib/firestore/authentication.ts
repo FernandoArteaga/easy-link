@@ -1,7 +1,8 @@
 import type { AuthError } from 'firebase/auth'
+import type { FirestoreError } from 'firebase/firestore'
 
-export function handleErrorMessages(error: AuthError): string {
-	let message = error.message
+export function handleErrorMessages(error: AuthError | FirestoreError): string {
+	let message: string
 	switch (error.code) {
 		case 'auth/user-not-found':
 			message = 'User not found. Please sign up 😃'
@@ -15,6 +16,9 @@ export function handleErrorMessages(error: AuthError): string {
 			break
 		case 'auth/invalid-credential':
 			message = 'Your email or password is incorrect. Please try again 😃'
+			break
+		case 'permission-denied':
+			message = 'You do not have permission to perform this action.'
 			break
 		default:
 			message = error.message

@@ -43,7 +43,7 @@ function store(): ThemeStore {
 		},
 		isLight() {
 			return _theme === 'light'
-		}
+		},
 	}
 }
 

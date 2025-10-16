@@ -4,7 +4,6 @@
 	import { signOut } from 'firebase/auth'
 	import { auth } from '$lib/firebase'
 	import { createLink } from '$lib/firestore/links'
-	import sanitize from '$lib/utils/sanitizer'
 	import sessionStore from '$lib/stores/session.svelte'
 	import themeStore from '$lib/stores/theme.svelte'
 	import LinkList from '$lib/components/LinkList.svelte'
@@ -14,12 +13,12 @@
 
 	let inputLink: string | undefined = $state(undefined)
 
-	let submit = async () => {
+	const submit = async () => {
 		if (!inputLink) return
-		const newLink: Firestore.CreateLink = {
-			url: sanitize(inputLink)
+		const data: Firestore.CreateLink = {
+			url: inputLink.trim().toLowerCase(),
 		}
-		await createLink(sessionStore.user!.uid, newLink)
+		await createLink(sessionStore.user!.uid, data)
 		inputLink = undefined
 	}
 

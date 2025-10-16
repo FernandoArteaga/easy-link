@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { getContext } from 'svelte'
-	import { type ToastContext } from '@skeletonlabs/skeleton-svelte'
 	import { AtSign, RectangleEllipsis } from 'lucide-svelte'
 	import { signInWithEmailAndPassword } from 'firebase/auth'
 	import { auth } from '$lib/firebase'
@@ -8,7 +7,7 @@
 	import { handleErrorMessages } from '$lib/firestore/authentication'
 	import InputField from '$lib/components/InputField.svelte'
 
-	export const toast: ToastContext = getContext('toast')
+	const toast = getContext('toast')
 
 	let inputEmail: string = $state('')
 	let inputPwd: string = $state('')
@@ -24,7 +23,7 @@
 				toast.create({
 					title: 'Error',
 					description: handleErrorMessages(error),
-					type: 'error'
+					type: 'error',
 				})
 			})
 	}

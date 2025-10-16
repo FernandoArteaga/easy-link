@@ -24,7 +24,7 @@
 		icon,
 		constraints,
 		canReveal = false,
-		disabled = false
+		disabled = false,
 	}: Props = $props()
 
 	const inputID = randomInputID()
@@ -35,7 +35,7 @@
 	}
 </script>
 
-<div class="input-group relative grid-cols-[auto_1fr_auto]">
+<div class="input-group relative flex">
 	{#if icon}
 		<div class="ig-cell preset-tonal">{@render icon?.()}</div>
 	{/if}

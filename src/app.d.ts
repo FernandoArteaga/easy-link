@@ -1,3 +1,5 @@
+import type { Timestamp } from 'firebase/firestore'
+
 declare global {
 	type Nullable<T> = T | null
 
@@ -15,17 +17,25 @@ declare global {
 	}
 
 	namespace Firestore {
+		type Doc<T> = T & { id: string }
+
+		type User = {
+			totalFolders: number
+		}
+
 		type Link = {
-			id: string
 			url: string
-			timestamp: number
+			timestamp: Timestamp
 		}
 		type CreateLink = {
 			url: string
 		}
 
 		type Folder = {
-			id: string
+			name: string
+			nameLower: string
+		}
+		type CreateFolder = {
 			name: string
 		}
 	}

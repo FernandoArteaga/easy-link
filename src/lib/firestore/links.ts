@@ -1,27 +1,29 @@
 import {
 	doc,
 	collection,
-	query,
 	addDoc,
-	getDocs,
 	deleteDoc,
-	serverTimestamp
-} from 'firebase/firestore';
-import { firestore } from '$lib/firebase';
+	serverTimestamp,
+	type CollectionReference,
+	type DocumentReference,
+} from 'firebase/firestore'
+import { firestore } from '$lib/firebase'
 
-export async function getUserLinks(uid: string) {
-	const q = query(collection(firestore, 'users', uid, 'links'));
-	const docs = await getDocs(q);
-	return docs.docs.map((doc) => doc.data());
+export function linkCollection(uid: string): CollectionReference<Firestore.Link> {
+	return collection(firestore, 'users', uid, 'links') as CollectionReference<Firestore.Link>
+}
+
+export function linkDoc(userUid: string, uid: string): DocumentReference<Firestore.Link> {
+	return doc(firestore, 'users', userUid, 'links', uid) as DocumentReference<Firestore.Link>
 }
 
 export async function createLink(uid: string, link: Firestore.CreateLink) {
-	await addDoc(collection(firestore, 'users', uid, 'links'), {
+	await addDoc(linkCollection(uid), {
 		url: link.url,
-		timestamp: serverTimestamp()
-	});
+		timestamp: serverTimestamp(),
+	})
 }
 
-export async function deleteLink(uid: string, id: string) {
-	await deleteDoc(doc(firestore, 'users', uid, 'links', id));
+export async function deleteLink(userUid: string, uid: string) {
+	await deleteDoc(linkDoc(userUid, uid))
 }

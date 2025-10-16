@@ -1,41 +1,44 @@
 <script lang="ts">
-	import { onDestroy } from 'svelte';
-	import '../app.css';
-	import { auth } from '$lib/firebase';
-	import sessionStore from '$lib/stores/session.svelte';
-	import themeStore from '$lib/stores/theme.svelte';
-	import { routeGuard } from '$lib/guard';
-	import { Toaster, createToaster } from '@skeletonlabs/skeleton-svelte';
+	import { onDestroy } from 'svelte'
+	import '../app.css'
+	import { auth } from '$lib/firebase'
+	import sessionStore from '$lib/stores/session.svelte'
+	import themeStore from '$lib/stores/theme.svelte'
+	import { routeGuard } from '$lib/guard'
+	import { Toaster, createToaster } from '@skeletonlabs/skeleton-svelte'
 	import { setContext } from 'svelte'
-	import { onAuthStateChanged } from 'firebase/auth';
+	import { onAuthStateChanged } from 'firebase/auth'
+	import activeFolderCtx from '$lib/contexts/activeFolder'
+	import { ActiveFolder } from '$lib/stores/folders.svelte'
 
-	let { children, data } = $props();
+	let { children, data } = $props()
 	const toaster = createToaster({
 		placement: 'bottom-end',
-		max: 5
-	});
-	setContext('toast', toaster);
-	let unsubscribe = () => {};
+		max: 5,
+	})
+	setContext('toast', toaster)
+	activeFolderCtx.setCtx(new ActiveFolder())
+	let unsubscribe = () => {}
 
-	$effect.pre(() => routeGuard(data.pathname));
+	$effect.pre(() => routeGuard(data.pathname))
 	$effect.pre(() => {
 		unsubscribe = onAuthStateChanged(auth, (user) => {
 			if (user) {
 				sessionStore.user = {
 					uid: user.uid,
 					email: user.email,
-					displayName: user.displayName
-				};
+					displayName: user.displayName,
+				}
 			} else {
-				sessionStore.signOut();
+				sessionStore.signOut()
 			}
-		});
-	});
-	themeStore.isLight();
+		})
+	})
+	themeStore.isLight()
 
 	onDestroy(() => {
-		unsubscribe();
-	});
+		unsubscribe()
+	})
 </script>
 
 <Toaster {toaster} />

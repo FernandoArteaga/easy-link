@@ -1,9 +1,9 @@
 <script lang="ts">
-	import SignInForm from '$lib/components/SignInForm.svelte';
-	import SignUpForm from '$lib/components/SignUpForm.svelte';
-	import { Tabs } from '@skeletonlabs/skeleton-svelte';
+	import SignInForm from '$lib/components/SignInForm.svelte'
+	import SignUpForm from '$lib/components/SignUpForm.svelte'
+	import { Tabs } from '@skeletonlabs/skeleton-svelte'
 
-	let group = $state('sign-in');
+	let group = $state('sign-in')
 </script>
 
 <div class="mx-auto flex h-svh max-w-96 items-center justify-center">

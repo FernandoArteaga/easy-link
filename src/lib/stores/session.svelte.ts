@@ -1,28 +1,28 @@
 interface SessionUser {
-	uid: string;
-	email: Nullable<string>;
-	displayName: Nullable<string>;
+	uid: string
+	email: Nullable<string>
+	displayName: Nullable<string>
 }
 interface SessionStore {
-	get user(): Nullable<SessionUser>;
-	set user(value: SessionUser);
-	signOut: () => void;
+	get user(): Nullable<SessionUser>
+	set user(value: SessionUser)
+	signOut: () => void
 }
 
 function store(): SessionStore {
-	let _session = $state<Nullable<SessionUser>>(null);
+	let _session = $state<Nullable<SessionUser>>(null)
 
 	return {
 		get user(): Nullable<SessionUser> {
-			return _session;
+			return _session
 		},
 		set user(user: SessionUser) {
-			_session = user;
+			_session = user
 		},
 		signOut() {
-			_session = null;
-		}
-	};
+			_session = null
+		},
+	}
 }
 
-export default store();
+export default store()

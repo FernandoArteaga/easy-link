@@ -119,7 +119,7 @@
 	<Placeholder repeat={4} horizontal />
 {:else}
 	<div class="flex flex-row overflow-x-auto overflow-y-hidden">
-		{#if userData && userData.totalFolders < 10}
+		{#if userData && (userData.totalFolders === undefined || userData.totalFolders < 10)}
 			<Modal
 				bind:isOpen={isCreateModalOpen}
 				title="Add folder"

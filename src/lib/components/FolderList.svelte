@@ -10,7 +10,7 @@
 		increment,
 	} from 'firebase/firestore'
 	import { signOut } from 'firebase/auth'
-	import { Folder, Plus } from 'lucide-svelte'
+	import { Folder, Folders, Plus } from 'lucide-svelte';
 	import { goto } from '$app/navigation'
 	import { auth, firestore } from '$lib/firebase'
 	import { folderCollection } from '$lib/firestore/folders'
@@ -22,6 +22,7 @@
 	import { concatClasses } from '$lib/utils/utils'
 	import Modal from '$lib/components/Modal.svelte'
 	import InputField from '$lib/components/InputField.svelte'
+	import ButtonInline from '$lib/components/ButtonInline.svelte';
 
 	const toast = getContext('toast')
 	let formId = 'add-folder'
@@ -118,17 +119,20 @@
 {#if loading}
 	<Placeholder repeat={4} horizontal />
 {:else}
-	<div class="flex flex-row overflow-x-auto overflow-y-hidden">
+	<div class="flex flex-row">
 		{#if userData && (userData.totalFolders === undefined || userData.totalFolders < 10)}
 			<Modal
 				bind:isOpen={isCreateModalOpen}
 				title="Add folder"
 				description="Create a folder to better organize your links"
-				triggerClasses={concatClasses(btnFolder, 'w-fit border-transparent')}
+				triggerClasses='p-0 flex'
 				confirmButtonFormId={formId}
 			>
 				{#snippet triggerContent()}
-					<Plus size={16} />
+					<ButtonInline
+						Icon={Plus}
+						start
+					/>
 				{/snippet}
 
 				{#snippet body()}
@@ -156,14 +160,20 @@
 				{/snippet}
 			</Modal>
 		{/if}
-		{#each folders as f (f.id)}
-			<button
-				type="button"
-				class={concatClasses(btnFolder, btnFolderActive(f.id))}
-				onclick={() => selectFolder(f.id)}
-			>
-				{f.name}
-			</button>
-		{/each}
+		<div class="flex flex-row overflow-x-auto overflow-y-hidden px-2">
+			{#each folders as f (f.id)}
+				<button
+					type="button"
+					class={concatClasses(btnFolder, btnFolderActive(f.id))}
+					onclick={() => selectFolder(f.id)}
+				>
+					{f.name}
+				</button>
+			{/each}
+		</div>
+		<ButtonInline
+			Icon={Folders}
+			end
+		/>
 	</div>
 {/if}

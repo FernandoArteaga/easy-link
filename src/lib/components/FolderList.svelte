@@ -1,19 +1,11 @@
 <script lang="ts">
 	import { getContext } from 'svelte'
-	import {
-		collection,
-		doc,
-		onSnapshot,
-		orderBy,
-		query,
-		runTransaction,
-		increment,
-	} from 'firebase/firestore'
+	import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
 	import { signOut } from 'firebase/auth'
-	import { Folder, Folders, Plus } from 'lucide-svelte';
+	import { Folder, Folders, Plus } from 'lucide-svelte'
 	import { goto } from '$app/navigation'
 	import { auth, firestore } from '$lib/firebase'
-	import { folderCollection } from '$lib/firestore/folders'
+	import { createFolder } from '$lib/firestore/folders'
 	import { handleErrorMessages } from '$lib/firestore/authentication'
 	import { userDoc } from '$lib/firestore/users'
 	import sessionStore from '$lib/stores/session.svelte'
@@ -22,7 +14,7 @@
 	import { concatClasses } from '$lib/utils/utils'
 	import Modal from '$lib/components/Modal.svelte'
 	import InputField from '$lib/components/InputField.svelte'
-	import ButtonInline from '$lib/components/ButtonInline.svelte';
+	import ButtonInline from '$lib/components/ButtonInline.svelte'
 
 	const toast = getContext('toast')
 	let formId = 'add-folder'
@@ -94,15 +86,8 @@
 		const folderName = inputFolder.trim()
 		if (folderName.length < 2) return
 		try {
-			const userUid = sessionStore.user!.uid
-			await runTransaction(firestore, async (transaction) => {
-				transaction.update(userDoc(userUid), {
-					totalFolders: increment(1),
-				})
-				transaction.set(doc(folderCollection(userUid)), {
-					name: folderName,
-					nameLower: folderName.toLowerCase(),
-				})
+			await createFolder(sessionStore.user!.uid, {
+				name: folderName,
 			})
 			inputFolder = undefined
 			isCreateModalOpen = false
@@ -125,14 +110,11 @@
 				bind:isOpen={isCreateModalOpen}
 				title="Add folder"
 				description="Create a folder to better organize your links"
-				triggerClasses='p-0 flex'
+				triggerClasses="p-0 flex"
 				confirmButtonFormId={formId}
 			>
 				{#snippet triggerContent()}
-					<ButtonInline
-						Icon={Plus}
-						start
-					/>
+					<ButtonInline Icon={Plus} start />
 				{/snippet}
 
 				{#snippet body()}
@@ -171,9 +153,6 @@
 				</button>
 			{/each}
 		</div>
-		<ButtonInline
-			Icon={Folders}
-			end
-		/>
+		<ButtonInline Icon={Folders} href="/folders" end />
 	</div>
 {/if}

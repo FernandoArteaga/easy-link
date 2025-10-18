@@ -1,0 +1,115 @@
+<script lang="ts">
+	import { getContext } from 'svelte'
+	import type { HTMLInputAttributes } from 'svelte/elements'
+	import { Folder, Link, Moon, Sun } from 'lucide-svelte'
+	import { signOut } from 'firebase/auth'
+	import { goto } from '$app/navigation'
+	import { auth } from '$lib/firebase'
+	import { createLink } from '$lib/firestore/links'
+	import { createFolder } from '$lib/firestore/folders'
+	import { handleErrorMessages } from '$lib/firestore/authentication'
+	import sessionStore from '$lib/stores/session.svelte'
+	import themeStore from '$lib/stores/theme.svelte'
+	import QuickForm from '$lib/components/QuickForm.svelte'
+
+	let { children, data } = $props()
+
+	const toast = getContext('toast')
+	let inputLink: string | undefined = $state(undefined)
+	let inputFolder: string | undefined = $state(undefined)
+
+	$inspect(inputLink)
+
+	const handleLogout = () => {
+		signOut(auth)
+			.then(() => {
+				sessionStore.signOut()
+				goto('/login')
+			})
+			.catch((error) => {
+				console.error(error)
+			})
+	}
+
+	const submitLink = async () => {
+		try {
+			if (!inputLink) return
+			const link = inputLink.trim()
+			if (link.length < 2) return
+			await createLink(sessionStore.user!.uid, {
+				url: link.toLowerCase(),
+			})
+			inputLink = undefined
+		} catch (error) {
+			toast.create({
+				title: 'Error',
+				description: handleErrorMessages(error),
+				type: 'error',
+			})
+		}
+	}
+
+	const submitFolder = async () => {
+		try {
+			if (!inputFolder) return
+			const folder = inputFolder.trim()
+			if (folder.length < 2) return
+			await createFolder(sessionStore.user!.uid, {
+				name: folder,
+			})
+			inputFolder = undefined
+		} catch (error) {
+			toast.create({
+				title: 'Error',
+				description: handleErrorMessages(error),
+				type: 'error',
+			})
+		}
+	}
+
+	const changeTheme = () => {
+		themeStore.theme = themeStore.theme === 'light' ? 'dark' : 'light'
+	}
+
+	const navButton = 'btn btn-sm preset-filled w-fit min-w-20 h-6'
+	const inputAttributes: HTMLInputAttributes = {
+		autocomplete: 'off',
+		spellcheck: 'false',
+		minlength: 2,
+	}
+</script>
+
+{#if sessionStore.user}
+	<div class="bg-surface-50-950 sticky -top-4 z-10 pb-8">
+		<nav class="flex w-full flex-row flex-wrap items-center justify-end space-x-2 py-8">
+			<button class={navButton} onclick={changeTheme}>
+				{#if themeStore.isLight()}
+					<Moon size={14} />
+				{:else}
+					<Sun size={14} />
+				{/if}
+			</button>
+			<button type="button" class={navButton} onclick={handleLogout}> Sign out </button>
+		</nav>
+
+		{#if data.pathname === '/links'}
+			<QuickForm
+				placeholder="Add link"
+				bind:value={inputLink}
+				submit={submitLink}
+				Icon={Link}
+				attr={inputAttributes}
+			/>
+		{:else if data.pathname === '/folders'}
+			<QuickForm
+				placeholder="Add folder"
+				bind:value={inputFolder}
+				submit={submitFolder}
+				Icon={Folder}
+				attr={inputAttributes}
+			/>
+		{/if}
+	</div>
+
+	{@render children()}
+{/if}

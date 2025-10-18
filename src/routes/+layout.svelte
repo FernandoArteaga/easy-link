@@ -42,4 +42,6 @@
 </script>
 
 <Toaster {toaster} />
-{@render children()}
+<div class="mx-auto flex max-w-9/10 flex-col justify-center sm:max-w-xl">
+	{@render children()}
+</div>

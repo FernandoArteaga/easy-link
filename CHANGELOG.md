@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 ## [1.2.0] - 2025-10-15
 ### Added
 - Folders feature to organize links.
-
+- New page for managing folders.
 
 ## [1.1.2] - 2025-04-04
 ### Changed

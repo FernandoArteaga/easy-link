@@ -37,7 +37,7 @@
 			placeholder="Email"
 			autocomplete="email"
 			bind:value={inputEmail}
-			constraints={{ required: true }}
+			attr={{ required: true }}
 		>
 			{#snippet icon()}
 				<AtSign size={16} />
@@ -50,7 +50,7 @@
 			autocomplete="current-password"
 			canReveal
 			bind:value={inputPwd}
-			constraints={{ minlength: 6, maxlength: 64, required: true }}
+			attr={{ minlength: 6, maxlength: 64, required: true }}
 		>
 			{#snippet icon()}
 				<RectangleEllipsis size={16} />

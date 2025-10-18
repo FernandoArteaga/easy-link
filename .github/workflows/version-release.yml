@@ -1,0 +1,67 @@
+name: 'Publish docker images'
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  validate:
+    name: 'Validate version'
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 'Get tag version'
+        id: version
+        run: |
+          tag=$(echo ${{ github.ref_name }})
+          echo "version=${tag#v}" >> $GITHUB_OUTPUT
+
+      - name: 'Check app version'
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          PKG_VERSION=$(jq -r '.version' package.json)
+          if [ "$VERSION" != "$PKG_VERSION" ]; then
+            echo "The version '$VERSION' does not match the version defined in the package.json file. Please update the version in the package.json file."
+            echo "⛔ The version \`$VERSION\` does not match the version defined in the package.json file. Please update the version in the package.json file." >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+      - name: 'Check CHANGELOG.md'
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          if ! grep -q "^## \[$VERSION\]" CHANGELOG.md; then
+            echo "The version '$VERSION' is not present in the CHANGELOG.md file. Please document the changes."
+            echo "⛔ The version \`$VERSION\` is not present in the \`CHANGELOG.md\` file. Please document the changes." >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+  release:
+    name: 'GitHub release'
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 'Create release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${{ github.ref_name }}" --title "${{ github.ref_name }}" --generate-notes
+
+  publish-docker:
+    name: 'Publish docker image'
+    needs: validate
+    secrets: inherit
+    permissions:
+      id-token: write
+      contents: read
+      packages: write
+    uses: goats-tech/github-actions/.github/workflows/publish-ghcr-docker.yml@publish-ghcr-docker/v1.4
+    with:
+      image-name: ${{ github.repository }}
+      stage: runtime
+      platforms: 'linux/amd64,linux/arm64'

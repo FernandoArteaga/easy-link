@@ -6,7 +6,7 @@
 	let group = $state('sign-in')
 </script>
 
-<div class="mx-auto flex h-svh max-w-96 items-center justify-center">
+<div class="mx-auto flex h-svh w-full max-w-96 items-center justify-center">
 	<Tabs value={group} onValueChange={(e) => (group = e.value)} classes="p-4" fluid composite>
 		{#snippet list()}
 			<Tabs.Control value="sign-in">Sign in</Tabs.Control>

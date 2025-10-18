@@ -1,32 +1,32 @@
 <script lang="ts">
 	import { getContext } from 'svelte'
-	import { goto } from '$app/navigation'
-	import { onSnapshot, query, orderBy } from 'firebase/firestore'
+	import { onSnapshot, orderBy, query } from 'firebase/firestore'
 	import { signOut } from 'firebase/auth'
-	import { auth } from '$lib/firebase'
-	import { handleErrorMessages } from '$lib/firestore/errors'
-	import { linkCollection } from '$lib/firestore/links'
+	import { goto } from '$app/navigation'
 	import sessionStore from '$lib/stores/session.svelte'
-	import LinkChip from '$lib/components/LinkChip.svelte'
+	import { auth } from '$lib/firebase'
 	import Placeholder from '$lib/components/Placeholder.svelte'
+	import { handleErrorMessages } from '$lib/firestore/errors'
+	import { folderCollection } from '$lib/firestore/folders'
+	import FolderChip from '$lib/components/FolderChip.svelte'
 
 	const toast = getContext('toast')
-	let links: Firestore.Doc<Firestore.Link>[] = $state([])
+	let folders: Firestore.Doc<Firestore.Folder>[] = $state([])
 	let loading = $state(true)
 
 	$effect.pre(() => {
 		if (sessionStore.user === null) return
-		const q = query(linkCollection(sessionStore.user.uid), orderBy('timestamp', 'desc'))
-		const unsubscribe = onSnapshot(
+		const q = query(folderCollection(sessionStore.user.uid), orderBy('nameLower', 'asc'))
+		const getFoldersSub = onSnapshot(
 			q,
 			(snapshot) => {
 				loading = false
-				links = snapshot.docs.map((doc) => {
+				folders = snapshot.docs.map((doc) => {
 					const data = doc.data()
 					return {
 						id: doc.id,
-						url: data.url,
-						timestamp: data.timestamp,
+						name: data.name,
+						nameLower: data.nameLower,
 					}
 				})
 			},
@@ -47,14 +47,16 @@
 				}
 			}
 		)
-		return () => unsubscribe()
+		return () => getFoldersSub()
 	})
 </script>
 
 {#if loading}
 	<Placeholder repeat={4} />
 {:else}
-	{#each links as link (link.id)}
-		<LinkChip {link} />
-	{/each}
+	<div class="space-y-4 overflow-auto">
+		{#each folders as folder (folder.id)}
+			<FolderChip {folder} />
+		{/each}
+	</div>
 {/if}

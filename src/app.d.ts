@@ -5,15 +5,6 @@ declare global {
 
 	namespace App {
 		type Themes = 'dark' | 'light'
-		type InputConstraint = Partial<{
-			pattern: string
-			min: number | string
-			max: number | string
-			required: boolean
-			step: number | 'any'
-			minlength: number
-			maxlength: number
-		}>
 	}
 
 	namespace Firestore {

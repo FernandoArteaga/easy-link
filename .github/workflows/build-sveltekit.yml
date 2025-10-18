@@ -4,7 +4,7 @@ on:
   workflow_call: {}
 
 jobs:
-  install_build:
+  build:
     name: 'Build app'
     runs-on: ubuntu-latest
     environment: ${{ inputs.env }}

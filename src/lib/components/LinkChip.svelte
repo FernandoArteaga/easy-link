@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { getContext } from 'svelte'
 	import { Copy, ExternalLink, OctagonX } from 'lucide-svelte'
-	import { concatClasses, isValidLink } from '$lib/utils/utils'
+	import { isValidLink } from '$lib/utils/utils'
 	import { deleteLink } from '$lib/firestore/links'
 	import sessionStore from '$lib/stores/session.svelte'
-	import { btnPrimary } from '$lib/utils/styles'
+	import ButtonInline from '$lib/components/ButtonInline.svelte'
+	import { handleErrorMessages } from '$lib/firestore/errors'
 
 	type Props = {
 		link: Firestore.Doc<Firestore.Link>
@@ -21,7 +22,15 @@
 	}
 
 	async function removeLink() {
-		await deleteLink(sessionStore.user!.uid, link.id)
+		try {
+			await deleteLink(sessionStore.user!.uid, link.id)
+		} catch (error) {
+			toast.create({
+				title: 'Error deleting link',
+				description: handleErrorMessages(error),
+				type: 'error',
+			})
+		}
 		toast.create({
 			description: 'Link deleted',
 			type: 'info',
@@ -30,26 +39,12 @@
 </script>
 
 <div class="flex">
-	<button class={concatClasses(btnPrimary, 'w-12 rounded-l-md')} onclick={removeLink}>
-		<OctagonX size={16} />
-	</button>
+	<ButtonInline Icon={OctagonX} onclick={removeLink} start />
 	<div class="border-surface-800 max-h-19 min-h-9.5 flex-1 overflow-x-auto border px-4 py-1.5">
 		{link.url}
 	</div>
 	{#if isValidLink(link.url)}
-		<a
-			href={link.url}
-			target="_blank"
-			rel="noopener noreferrer"
-			class={concatClasses(btnPrimary, 'w-12')}
-		>
-			<ExternalLink size={16} />
-		</a>
+		<ButtonInline Icon={ExternalLink} href={link.url} external />
 	{/if}
-	<button
-		class={concatClasses(btnPrimary, 'w-12 rounded-r-md')}
-		onclick={() => setClipboard(link.url)}
-	>
-		<Copy size={16} />
-	</button>
+	<ButtonInline Icon={Copy} onclick={() => setClipboard(link.url)} end />
 </div>

@@ -1,50 +1,91 @@
 <script lang="ts">
-	import { onDestroy } from 'svelte'
 	import '../app.css'
+	import { Toaster, createToaster } from '@skeletonlabs/skeleton-svelte'
+	import { goto } from '$app/navigation'
+	import { routeGuard } from '$lib/guard'
 	import { auth } from '$lib/firebase'
+	import type { AuthError } from 'firebase/auth'
+	import type { FirestoreError } from 'firebase/firestore'
+	import { onSnapshot, orderBy, query } from 'firebase/firestore'
+	import { handleErrorMessages } from '$lib/firestore/errors'
+	import { folderCollection } from '$lib/firestore/folders'
+	import { onAuthStateChanged, signOut } from 'firebase/auth'
+	import foldersCtx from '$lib/contexts/foldersCtx'
+	import userCtx from '$lib/contexts/userCtx'
+	import toasterCtx from '$lib/contexts/toasterCtx'
 	import sessionStore from '$lib/stores/session.svelte'
 	import themeStore from '$lib/stores/theme.svelte'
-	import { routeGuard } from '$lib/guard'
-	import { Toaster, createToaster } from '@skeletonlabs/skeleton-svelte'
-	import { setContext } from 'svelte'
-	import { onAuthStateChanged } from 'firebase/auth'
-	import activeFolderCtx from '$lib/contexts/activeFolder'
-	import userDataCtx from '$lib/contexts/userData'
-	import { ActiveFolder } from '$lib/stores/folders.svelte'
-	import { UserData } from '$lib/stores/user.svelte'
+	import { FolderStore } from '$lib/stores/folders.svelte'
+	import { UserStore } from '$lib/stores/user.svelte'
 
 	let { children, data } = $props()
 	const toaster = createToaster({
 		placement: 'bottom-end',
 		max: 5,
 	})
-	const userData = new UserData()
-	setContext('toast', toaster)
-	activeFolderCtx.setCtx(new ActiveFolder())
-	userDataCtx.setCtx(userData)
+	const userStore = new UserStore()
+	const folderStore = new FolderStore()
+	toasterCtx.setCtx(toaster)
+	userCtx.setCtx(userStore)
+	foldersCtx.setCtx(folderStore)
 
-	let unsubscribe = () => {}
+	const handleError = (error: AuthError | FirestoreError) => {
+		console.log('Error occurred:', error)
+		toaster.create({
+			title: 'Error',
+			description: handleErrorMessages(error),
+			type: 'error',
+		})
+		if (error.code === 'permission-denied') {
+			signOut(auth)
+				.then(() => {
+					goto('/login')
+				})
+				.catch((error) => {
+					console.error(error)
+				})
+		}
+	}
 
 	$effect.pre(() => routeGuard(data.pathname))
 	$effect.pre(() => {
-		unsubscribe = onAuthStateChanged(auth, (user) => {
+		let getFoldersSub = () => {}
+		const authStateSub = onAuthStateChanged(auth, (user) => {
 			if (user) {
 				sessionStore.user = {
 					uid: user.uid,
 					email: user.email,
 					displayName: user.displayName,
 				}
+				getFoldersSub = onSnapshot(
+					query(folderCollection(user.uid), orderBy('nameLower', 'asc')),
+					(snapshot) => {
+						folderStore.loading = false
+						const folderSnapshot = snapshot.docs.map((doc) => {
+							const data = doc.data()
+							return {
+								id: doc.id,
+								name: data.name,
+								nameLower: data.nameLower,
+							}
+						})
+						folderStore.folders = [{ id: 'all', name: 'All', nameLower: 'all' }, ...folderSnapshot]
+					},
+					(error) => handleError(error)
+				)
 			} else {
+				getFoldersSub()
 				sessionStore.signOut()
-				userData.user = undefined
+				userStore.user = undefined
 			}
 		})
+
+		return () => {
+			authStateSub()
+			getFoldersSub()
+		}
 	})
 	themeStore.isLight()
-
-	onDestroy(() => {
-		unsubscribe()
-	})
 </script>
 
 <Toaster {toaster} />

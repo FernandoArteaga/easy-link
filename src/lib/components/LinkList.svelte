@@ -1,22 +1,29 @@
 <script lang="ts">
-	import { getContext } from 'svelte'
 	import { goto } from '$app/navigation'
-	import { onSnapshot, query, orderBy } from 'firebase/firestore'
+	import { onSnapshot, query, orderBy, where } from 'firebase/firestore'
 	import { signOut } from 'firebase/auth'
 	import { auth } from '$lib/firebase'
 	import { handleErrorMessages } from '$lib/firestore/errors'
 	import { linkCollection } from '$lib/firestore/links'
+	import toasterCtx from '$lib/contexts/toasterCtx'
+	import foldersCtx from '$lib/contexts/foldersCtx'
 	import sessionStore from '$lib/stores/session.svelte'
 	import LinkChip from '$lib/components/LinkChip.svelte'
 	import Placeholder from '$lib/components/Placeholder.svelte'
 
-	const toast = getContext('toast')
+	const toast = toasterCtx.getCtx()
+	const foldersContext = foldersCtx.getCtx()
 	let links: Firestore.Doc<Firestore.Link>[] = $state([])
 	let loading = $state(true)
 
 	$effect.pre(() => {
 		if (sessionStore.user === null) return
-		const q = query(linkCollection(sessionStore.user.uid), orderBy('timestamp', 'desc'))
+		const qConstraints = [orderBy('timestamp', 'desc')]
+		if (foldersContext.activeFolderId !== 'all') {
+			qConstraints.push(where('folderId', '==', foldersContext.activeFolderId))
+		}
+		const q = query(linkCollection(sessionStore.user.uid), ...qConstraints)
+
 		const unsubscribe = onSnapshot(
 			q,
 			(snapshot) => {
@@ -27,6 +34,7 @@
 						id: doc.id,
 						url: data.url,
 						timestamp: data.timestamp,
+						folderId: data.folderId,
 					}
 				})
 			},

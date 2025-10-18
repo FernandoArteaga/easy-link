@@ -2,6 +2,7 @@ import type { Timestamp } from 'firebase/firestore'
 
 declare global {
 	type Nullable<T> = T | null
+	type Undefinable<T> = T | undefined
 
 	namespace App {
 		type Themes = 'dark' | 'light'
@@ -17,6 +18,7 @@ declare global {
 		type Link = {
 			url: string
 			timestamp: Timestamp
+			folderId?: string
 		}
 		type CreateLink = {
 			url: string

@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { getContext } from 'svelte'
 	import type { HTMLInputAttributes } from 'svelte/elements'
 	import { Pencil, OctagonX, Folder } from 'lucide-svelte'
 	import { deleteFolder, updateFolder } from '$lib/firestore/folders'
 	import { handleErrorMessages } from '$lib/firestore/errors'
 	import sessionStore from '$lib/stores/session.svelte'
+	import toasterCtx from '$lib/contexts/toasterCtx'
 	import ButtonInline from '$lib/components/ButtonInline.svelte'
 	import InputField from '$lib/components/InputField.svelte'
 	import Modal from '$lib/components/Modal.svelte'
@@ -14,7 +14,7 @@
 	}
 	let { folder }: Props = $props()
 
-	const toast = getContext('toast')
+	const toast = toasterCtx.getCtx()
 	let formId = 'update-folder'
 	let isModalOpen = $state(false)
 	let inputValue = $state(folder.name)

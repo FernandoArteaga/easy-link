@@ -1,75 +1,35 @@
 <script lang="ts">
-	import { getContext } from 'svelte'
-	import { onSnapshot, orderBy, query } from 'firebase/firestore'
-	import { signOut } from 'firebase/auth'
-	import { Folder, Folders, Plus } from 'lucide-svelte'
-	import { goto } from '$app/navigation'
-	import { auth } from '$lib/firebase'
-	import { createFolder, folderCollection } from '$lib/firestore/folders'
+	import { Folder, Folders, FolderTree, Plus, Check } from 'lucide-svelte'
+	import { createFolder } from '$lib/firestore/folders'
 	import { handleErrorMessages } from '$lib/firestore/errors'
 	import sessionStore from '$lib/stores/session.svelte'
-	import userDataCtx from '$lib/contexts/userData'
-	import activeFolderCtx from '$lib/contexts/activeFolder'
-	import Placeholder from '$lib/components/Placeholder.svelte'
+	import toasterCtx from '$lib/contexts/toasterCtx'
+	import userCtx from '$lib/contexts/userCtx'
+	import foldersCtx from '$lib/contexts/foldersCtx'
 	import { concatClasses } from '$lib/utils/utils'
+	import Placeholder from '$lib/components/Placeholder.svelte'
 	import Modal from '$lib/components/Modal.svelte'
 	import InputField from '$lib/components/InputField.svelte'
 	import ButtonInline from '$lib/components/ButtonInline.svelte'
 
-	const toast = getContext('toast')
+	const toast = toasterCtx.getCtx()
 	const formId = 'add-folder'
-	const userData = userDataCtx.getCtx()
-	const activeFolder = activeFolderCtx.getCtx()
-	let folders: Firestore.Doc<Firestore.Folder>[] = $state([
-		{ id: 'all', name: 'All', nameLower: 'all' },
-	])
-	let loading = $state(true)
+	const userContext = userCtx.getCtx()
+	const foldersContext = foldersCtx.getCtx()
 	let isCreateModalOpen = $state(false)
 	let inputFolder: string | undefined = $state(undefined)
 
-	$effect.pre(() => {
-		if (sessionStore.user === null) return
-		const q = query(folderCollection(sessionStore.user.uid), orderBy('nameLower', 'asc'))
-		const getFoldersSub = onSnapshot(
-			q,
-			(snapshot) => {
-				loading = false
-				folders = snapshot.docs.map((doc) => {
-					const data = doc.data()
-					return {
-						id: doc.id,
-						name: data.name,
-						nameLower: data.nameLower,
-					}
-				})
-				folders.unshift({ id: 'all', name: 'All', nameLower: 'all' })
-			},
-			(error) => {
-				toast.create({
-					title: 'Error',
-					description: handleErrorMessages(error),
-					type: 'error',
-				})
-				if (error.code === 'permission-denied') {
-					signOut(auth)
-						.then(() => {
-							goto('/login')
-						})
-						.catch((error) => {
-							console.error(error)
-						})
-				}
-			}
-		)
-		return () => getFoldersSub()
-	})
-
 	const btnFolder = 'py-1 px-2 w-auto whitespace-nowrap border-b-2 hover:border-primary-500'
 	const btnFolderActive = (folderId: string) =>
-		folderId === activeFolder.uid ? 'border-secondary-500 font-medium' : 'border-transparent'
+		folderId === foldersContext.activeFolderId
+			? 'border-secondary-500 font-medium'
+			: 'border-transparent'
 
 	const selectFolder = (folderId: string) => {
-		activeFolder.uid = folderId
+		foldersContext.activeFolderId = folderId
+	}
+	const toggleAssigningLinks = () => {
+		foldersContext.assigningLinks = !foldersContext.assigningLinks
 	}
 
 	const submit = async () => {
@@ -92,11 +52,11 @@
 	}
 </script>
 
-{#if loading}
+{#if foldersContext.loading}
 	<Placeholder repeat={4} horizontal />
 {:else}
 	<div class="flex flex-row">
-		{#if userData.canCreateFolder}
+		{#if userContext.canCreateFolder}
 			<Modal
 				bind:isOpen={isCreateModalOpen}
 				title="Add folder"
@@ -134,7 +94,7 @@
 			</Modal>
 		{/if}
 		<div class="flex flex-row overflow-x-auto overflow-y-hidden px-2">
-			{#each folders as f (f.id)}
+			{#each foldersContext.folders as f (f.id)}
 				<button
 					type="button"
 					class={concatClasses(btnFolder, btnFolderActive(f.id))}
@@ -144,6 +104,11 @@
 				</button>
 			{/each}
 		</div>
+		{#if foldersContext.assigningLinks}
+			<ButtonInline Icon={Check} onclick={toggleAssigningLinks} />
+		{:else}
+			<ButtonInline Icon={FolderTree} onclick={toggleAssigningLinks} />
+		{/if}
 		<ButtonInline Icon={Folders} href="/folders" end />
 	</div>
 {/if}

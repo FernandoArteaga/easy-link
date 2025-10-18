@@ -28,7 +28,7 @@
 <Modal
 	open={isOpen}
 	onOpenChange={(e) => (isOpen = e.open)}
-	contentBase="card bg-white dark:bg-surface-900 p-4 space-y-5 shadow-xl max-w-screen-sm min-w-96"
+	contentBase="card bg-white dark:bg-surface-900 p-4 space-y-5 shadow-xl max-w-118 w-full"
 	triggerBase="h-full"
 	{triggerClasses}
 >

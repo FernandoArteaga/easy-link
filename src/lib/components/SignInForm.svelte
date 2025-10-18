@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { getContext } from 'svelte'
 	import { AtSign, RectangleEllipsis } from 'lucide-svelte'
 	import { signInWithEmailAndPassword } from 'firebase/auth'
-	import { auth } from '$lib/firebase'
 	import { goto } from '$app/navigation'
+	import { auth } from '$lib/firebase'
 	import { handleErrorMessages } from '$lib/firestore/errors'
+	import toasterCtx from '$lib/contexts/toasterCtx'
 	import InputField from '$lib/components/InputField.svelte'
 
-	const toast = getContext('toast')
+	const toast = toasterCtx.getCtx()
 
 	let inputEmail: string = $state('')
 	let inputPwd: string = $state('')

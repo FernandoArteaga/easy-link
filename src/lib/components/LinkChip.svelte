@@ -1,17 +1,17 @@
 <script lang="ts">
-	import { getContext } from 'svelte'
 	import { Copy, ExternalLink, OctagonX } from 'lucide-svelte'
 	import { isValidLink } from '$lib/utils/utils'
 	import { deleteLink } from '$lib/firestore/links'
+	import { handleErrorMessages } from '$lib/firestore/errors'
+	import toasterCtx from '$lib/contexts/toasterCtx'
 	import sessionStore from '$lib/stores/session.svelte'
 	import ButtonInline from '$lib/components/ButtonInline.svelte'
-	import { handleErrorMessages } from '$lib/firestore/errors'
 
 	type Props = {
 		link: Firestore.Doc<Firestore.Link>
 	}
 	let { link }: Props = $props()
-	const toast = getContext('toast')
+	const toast = toasterCtx.getCtx()
 
 	async function setClipboard(text: string) {
 		await navigator.clipboard.writeText(text)

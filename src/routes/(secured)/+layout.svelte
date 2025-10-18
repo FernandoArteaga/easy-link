@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { getContext } from 'svelte'
 	import type { HTMLInputAttributes } from 'svelte/elements'
 	import { Folder, Link, Moon, Sun, House } from 'lucide-svelte'
 	import { signOut } from 'firebase/auth'
@@ -10,22 +9,23 @@
 	import { createLink } from '$lib/firestore/links'
 	import { createFolder } from '$lib/firestore/folders'
 	import { handleErrorMessages } from '$lib/firestore/errors'
-	import userDataCtx from '$lib/contexts/userData'
+	import toasterCtx from '$lib/contexts/toasterCtx'
+	import userCtx from '$lib/contexts/userCtx'
 	import sessionStore from '$lib/stores/session.svelte'
 	import themeStore from '$lib/stores/theme.svelte'
 	import QuickForm from '$lib/components/QuickForm.svelte'
 
 	let { children, data } = $props()
 
-	const toast = getContext('toast')
-	const userData = userDataCtx.getCtx()
+	const toast = toasterCtx.getCtx()
+	const userContext = userCtx.getCtx()
 	let inputLink: string | undefined = $state(undefined)
 	let inputFolder: string | undefined = $state(undefined)
 
 	$effect.pre(() => {
 		if (sessionStore.user === null) return
 		const getUserSub = onSnapshot(userDoc(sessionStore.user.uid), (snapshot) => {
-			userData.user = { ...snapshot.data() } as Firestore.Doc<Firestore.User>
+			userContext.user = { ...snapshot.data() } as Firestore.Doc<Firestore.User>
 		})
 		return () => getUserSub()
 	})
@@ -115,7 +115,7 @@
 				attr={inputAttributes}
 			/>
 		{:else if data.pathname === '/folders'}
-			{#if userData.canCreateFolder}
+			{#if userContext.canCreateFolder}
 				<QuickForm
 					placeholder="Add folder"
 					bind:value={inputFolder}

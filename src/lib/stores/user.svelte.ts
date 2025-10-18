@@ -1,4 +1,4 @@
-export class UserData {
+export class UserStore {
 	user = $state<Firestore.User | undefined>()
 	canCreateFolder = $derived.by(() => {
 		const u = this.user

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getContext } from 'svelte'
 	import type { HTMLInputAttributes } from 'svelte/elements'
-	import { Folder, Link, Moon, Sun } from 'lucide-svelte'
+	import { Folder, Link, Moon, Sun, House } from 'lucide-svelte'
 	import { signOut } from 'firebase/auth'
 	import { onSnapshot } from 'firebase/firestore'
 	import { goto } from '$app/navigation'
@@ -93,6 +93,9 @@
 {#if sessionStore.user}
 	<div class="bg-surface-50-950 sticky -top-4 z-10 pb-8">
 		<nav class="flex w-full flex-row flex-wrap items-center justify-end space-x-2 py-8">
+			<a href="/links" class={navButton}>
+				<House size={14} />
+			</a>
 			<button class={navButton} onclick={changeTheme}>
 				{#if themeStore.isLight()}
 					<Moon size={14} />

@@ -4,7 +4,7 @@
 	import { createUserWithEmailAndPassword } from 'firebase/auth'
 	import { auth } from '$lib/firebase'
 	import { goto } from '$app/navigation'
-	import { handleErrorMessages } from '$lib/firestore/authentication'
+	import { handleErrorMessages } from '$lib/firestore/errors'
 	import InputField from '$lib/components/InputField.svelte'
 
 	export const toast = getContext('toast')

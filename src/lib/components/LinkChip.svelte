@@ -5,6 +5,7 @@
 	import { deleteLink } from '$lib/firestore/links'
 	import sessionStore from '$lib/stores/session.svelte'
 	import ButtonInline from '$lib/components/ButtonInline.svelte'
+	import { handleErrorMessages } from '$lib/firestore/errors'
 
 	type Props = {
 		link: Firestore.Doc<Firestore.Link>
@@ -21,7 +22,15 @@
 	}
 
 	async function removeLink() {
-		await deleteLink(sessionStore.user!.uid, link.id)
+		try {
+			await deleteLink(sessionStore.user!.uid, link.id)
+		} catch (error) {
+			toast.create({
+				title: 'Error deleting link',
+				description: handleErrorMessages(error),
+				type: 'error',
+			})
+		}
 		toast.create({
 			description: 'Link deleted',
 			type: 'info',

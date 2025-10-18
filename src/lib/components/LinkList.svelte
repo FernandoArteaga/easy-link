@@ -1,24 +1,23 @@
 <script lang="ts">
-	import { getContext, onDestroy } from 'svelte'
+	import { getContext } from 'svelte'
+	import { goto } from '$app/navigation'
 	import { onSnapshot, query, orderBy } from 'firebase/firestore'
 	import { signOut } from 'firebase/auth'
-	import { goto } from '$app/navigation'
-	import sessionStore from '$lib/stores/session.svelte'
 	import { auth } from '$lib/firebase'
+	import { handleErrorMessages } from '$lib/firestore/errors'
+	import { linkCollection } from '$lib/firestore/links'
+	import sessionStore from '$lib/stores/session.svelte'
 	import LinkChip from '$lib/components/LinkChip.svelte'
 	import Placeholder from '$lib/components/Placeholder.svelte'
-	import { handleErrorMessages } from '$lib/firestore/authentication'
-	import { linkCollection } from '$lib/firestore/links'
 
 	const toast = getContext('toast')
 	let links: Firestore.Doc<Firestore.Link>[] = $state([])
 	let loading = $state(true)
-	let unsubscribe = () => {}
 
 	$effect.pre(() => {
 		if (sessionStore.user === null) return
 		const q = query(linkCollection(sessionStore.user.uid), orderBy('timestamp', 'desc'))
-		unsubscribe = onSnapshot(
+		const unsubscribe = onSnapshot(
 			q,
 			(snapshot) => {
 				loading = false
@@ -48,10 +47,7 @@
 				}
 			}
 		)
-	})
-
-	onDestroy(() => {
-		unsubscribe()
+		return () => unsubscribe()
 	})
 </script>
 

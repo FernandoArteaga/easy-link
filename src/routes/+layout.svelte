@@ -9,15 +9,20 @@
 	import { setContext } from 'svelte'
 	import { onAuthStateChanged } from 'firebase/auth'
 	import activeFolderCtx from '$lib/contexts/activeFolder'
+	import userDataCtx from '$lib/contexts/userData'
 	import { ActiveFolder } from '$lib/stores/folders.svelte'
+	import { UserData } from '$lib/stores/user.svelte'
 
 	let { children, data } = $props()
 	const toaster = createToaster({
 		placement: 'bottom-end',
 		max: 5,
 	})
+	const userData = new UserData()
 	setContext('toast', toaster)
 	activeFolderCtx.setCtx(new ActiveFolder())
+	userDataCtx.setCtx(userData)
+
 	let unsubscribe = () => {}
 
 	$effect.pre(() => routeGuard(data.pathname))
@@ -31,6 +36,7 @@
 				}
 			} else {
 				sessionStore.signOut()
+				userData.user = undefined
 			}
 		})
 	})

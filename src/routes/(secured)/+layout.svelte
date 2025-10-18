@@ -3,11 +3,14 @@
 	import type { HTMLInputAttributes } from 'svelte/elements'
 	import { Folder, Link, Moon, Sun } from 'lucide-svelte'
 	import { signOut } from 'firebase/auth'
+	import { onSnapshot } from 'firebase/firestore'
 	import { goto } from '$app/navigation'
 	import { auth } from '$lib/firebase'
+	import { userDoc } from '$lib/firestore/users'
 	import { createLink } from '$lib/firestore/links'
 	import { createFolder } from '$lib/firestore/folders'
-	import { handleErrorMessages } from '$lib/firestore/authentication'
+	import { handleErrorMessages } from '$lib/firestore/errors'
+	import userDataCtx from '$lib/contexts/userData'
 	import sessionStore from '$lib/stores/session.svelte'
 	import themeStore from '$lib/stores/theme.svelte'
 	import QuickForm from '$lib/components/QuickForm.svelte'
@@ -15,10 +18,17 @@
 	let { children, data } = $props()
 
 	const toast = getContext('toast')
+	const userData = userDataCtx.getCtx()
 	let inputLink: string | undefined = $state(undefined)
 	let inputFolder: string | undefined = $state(undefined)
 
-	$inspect(inputLink)
+	$effect.pre(() => {
+		if (sessionStore.user === null) return
+		const getUserSub = onSnapshot(userDoc(sessionStore.user.uid), (snapshot) => {
+			userData.user = { ...snapshot.data() } as Firestore.Doc<Firestore.User>
+		})
+		return () => getUserSub()
+	})
 
 	const handleLogout = () => {
 		signOut(auth)
@@ -53,7 +63,7 @@
 		try {
 			if (!inputFolder) return
 			const folder = inputFolder.trim()
-			if (folder.length < 2) return
+			if (folder.length < 2 || folder.length > 36) return
 			await createFolder(sessionStore.user!.uid, {
 				name: folder,
 			})
@@ -76,6 +86,7 @@
 		autocomplete: 'off',
 		spellcheck: 'false',
 		minlength: 2,
+		required: true,
 	}
 </script>
 
@@ -101,13 +112,19 @@
 				attr={inputAttributes}
 			/>
 		{:else if data.pathname === '/folders'}
-			<QuickForm
-				placeholder="Add folder"
-				bind:value={inputFolder}
-				submit={submitFolder}
-				Icon={Folder}
-				attr={inputAttributes}
-			/>
+			{#if userData.canCreateFolder}
+				<QuickForm
+					placeholder="Add folder"
+					bind:value={inputFolder}
+					submit={submitFolder}
+					Icon={Folder}
+					attr={{ ...inputAttributes, maxlength: 36 }}
+				/>
+			{:else}
+				<div class="text-center text-sm text-gray-500 dark:text-gray-400">
+					You’ve reached the maximum number of folders allowed.
+				</div>
+			{/if}
 		{/if}
 	</div>
 

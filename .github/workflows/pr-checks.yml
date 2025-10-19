@@ -21,7 +21,9 @@ jobs:
 
       - name: 'Svelte check'
         if: ${{ !cancelled() }}
-        run: pnpm check
+        run: |
+          cp .env.ci .env
+          pnpm check
 
       - name: 'Version change'
         if: ${{ !cancelled() }}

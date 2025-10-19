@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
+	import { resolve } from '$app/paths'
+	import type { QueryConstraint } from 'firebase/firestore'
 	import { onSnapshot, query, orderBy, where } from 'firebase/firestore'
 	import { signOut } from 'firebase/auth'
 	import { auth } from '$lib/firebase'
@@ -7,22 +9,23 @@
 	import { linkCollection } from '$lib/firestore/links'
 	import toasterCtx from '$lib/contexts/toasterCtx'
 	import foldersCtx from '$lib/contexts/foldersCtx'
-	import sessionStore from '$lib/stores/session.svelte'
+	import userCtx from '$lib/contexts/userCtx'
 	import LinkChip from '$lib/components/LinkChip.svelte'
 	import Placeholder from '$lib/components/Placeholder.svelte'
 
 	const toast = toasterCtx.getCtx()
+	const userStore = userCtx.getCtx()
 	const folderStore = foldersCtx.getCtx()
 	let links: Firestore.Doc<Firestore.Link>[] = $state([])
 	let loading = $state(true)
 
 	$effect.pre(() => {
-		if (sessionStore.user === null) return
-		const qConstraints = [orderBy('timestamp', 'desc')]
+		if (!userStore.isSignedIn) return
+		const qConstraints: QueryConstraint[] = [orderBy('timestamp', 'desc')]
 		if (folderStore.activeFolderId !== 'all') {
 			qConstraints.push(where('folderId', '==', folderStore.activeFolderId))
 		}
-		const q = query(linkCollection(sessionStore.user.uid), ...qConstraints)
+		const q = query(linkCollection(userStore.session!.uid), ...qConstraints)
 
 		const unsubscribe = onSnapshot(
 			q,
@@ -47,7 +50,7 @@
 				if (error.code === 'permission-denied') {
 					signOut(auth)
 						.then(() => {
-							goto('/login')
+							goto(resolve('/login'))
 						})
 						.catch((error) => {
 							console.error(error)

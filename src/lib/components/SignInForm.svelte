@@ -2,6 +2,7 @@
 	import { AtSign, RectangleEllipsis } from 'lucide-svelte'
 	import { signInWithEmailAndPassword } from 'firebase/auth'
 	import { goto } from '$app/navigation'
+	import { resolve } from '$app/paths'
 	import { auth } from '$lib/firebase'
 	import { handleErrorMessages } from '$lib/firestore/errors'
 	import toasterCtx from '$lib/contexts/toasterCtx'
@@ -17,7 +18,7 @@
 		e.preventDefault()
 		signInWithEmailAndPassword(auth, inputEmail, inputPwd)
 			.then(() => {
-				goto('/links')
+				goto(resolve('/links'))
 			})
 			.catch((error) => {
 				toast.create({

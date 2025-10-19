@@ -4,7 +4,7 @@
 	import type { Icon as LucideIcon } from 'lucide-svelte'
 
 	type Props = {
-		Icon: LucideIcon
+		Icon: typeof LucideIcon
 		onclick?: () => void
 		href?: string
 		external?: boolean

@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { Copy, ExternalLink, FolderPlus, OctagonX } from 'lucide-svelte';
-	import { isValidLink } from '$lib/utils/utils';
-	import { deleteLink, updateLink } from '$lib/firestore/links';
+	import type { FirestoreError } from 'firebase/firestore'
+	import { Copy, ExternalLink, FolderPlus, OctagonX } from 'lucide-svelte'
+	import { isValidLink } from '$lib/utils/utils'
+	import { deleteLink, updateLink } from '$lib/firestore/links'
 	import { handleErrorMessages } from '$lib/firestore/errors'
 	import toasterCtx from '$lib/contexts/toasterCtx'
 	import foldersCtx from '$lib/contexts/foldersCtx'
-	import sessionStore from '$lib/stores/session.svelte'
+	import userCtx from '$lib/contexts/userCtx'
 	import ButtonInline from '$lib/components/ButtonInline.svelte'
 	import Modal from '$lib/components/Modal.svelte'
 
@@ -14,6 +15,7 @@
 	}
 	let { link }: Props = $props()
 	const toast = toasterCtx.getCtx()
+	const userStore = userCtx.getCtx()
 	const folderStore = foldersCtx.getCtx()
 	const formId = 'assign-link-to-folder'
 	let isModalOpen = $state(false)
@@ -29,7 +31,7 @@
 
 	const assignLink = async () => {
 		try {
-			await updateLink(sessionStore.user!.uid, link.id, {
+			await updateLink(userStore.session!.uid, link.id, {
 				folderId: inputFolder,
 			})
 			isModalOpen = false
@@ -41,7 +43,7 @@
 		} catch (error) {
 			toast.create({
 				title: 'Error',
-				description: handleErrorMessages(error),
+				description: handleErrorMessages(error as FirestoreError),
 				type: 'error',
 			})
 		}
@@ -49,11 +51,11 @@
 
 	async function removeLink() {
 		try {
-			await deleteLink(sessionStore.user!.uid, link.id)
+			await deleteLink(userStore.session!.uid, link.id)
 		} catch (error) {
 			toast.create({
 				title: 'Error deleting link',
-				description: handleErrorMessages(error),
+				description: handleErrorMessages(error as FirestoreError),
 				type: 'error',
 			})
 		}
@@ -79,7 +81,15 @@
 			{/snippet}
 
 			{#snippet body()}
-				<form id={formId} class="space-y-4" onsubmit={assignLink} onchange={(e) => inputFolder = e.target.id}>
+				<form
+					id={formId}
+					class="space-y-4"
+					onsubmit={assignLink}
+					onchange={(e) => {
+						const target = e.target as HTMLInputElement
+						inputFolder = target.value
+					}}
+				>
 					{#each folderStore.folders as f (f.id)}
 						{@render radio(f.name, f.id)}
 					{/each}
@@ -105,7 +115,7 @@
 {#snippet radio(name: string, value: string)}
 	{@const checked = link.folderId === value}
 	<div class="flex items-center space-x-2">
-		<input id={value} class="radio" type="radio" name="assign-link-folder" value={value} {checked} />
+		<input id={value} class="radio" type="radio" name="assign-link-folder" {value} {checked} />
 		<label for={value}>{name}</label>
 	</div>
 {/snippet}

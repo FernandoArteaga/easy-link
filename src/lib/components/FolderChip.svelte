@@ -1,10 +1,11 @@
 <script lang="ts">
 	import type { HTMLInputAttributes } from 'svelte/elements'
+	import type { FirestoreError } from 'firebase/firestore'
 	import { Pencil, OctagonX, Folder } from 'lucide-svelte'
 	import { deleteFolder, updateFolder } from '$lib/firestore/folders'
 	import { handleErrorMessages } from '$lib/firestore/errors'
-	import sessionStore from '$lib/stores/session.svelte'
 	import toasterCtx from '$lib/contexts/toasterCtx'
+	import userCtx from '$lib/contexts/userCtx'
 	import ButtonInline from '$lib/components/ButtonInline.svelte'
 	import InputField from '$lib/components/InputField.svelte'
 	import Modal from '$lib/components/Modal.svelte'
@@ -15,6 +16,7 @@
 	let { folder }: Props = $props()
 
 	const toast = toasterCtx.getCtx()
+	const userStore = userCtx.getCtx()
 	let formId = 'update-folder'
 	let isModalOpen = $state(false)
 	let inputValue = $state(folder.name)
@@ -31,14 +33,14 @@
 		const folderName = inputValue.trim()
 		if (folderName.length < 2 || folderName.length > 36) return
 		try {
-			await updateFolder(sessionStore.user!.uid, folder.id, {
+			await updateFolder(userStore.session!.uid, folder.id, {
 				name: folderName,
 			})
 			isModalOpen = false
 		} catch (error) {
 			toast.create({
 				title: 'Error',
-				description: handleErrorMessages(error),
+				description: handleErrorMessages(error as FirestoreError),
 				type: 'error',
 			})
 		}
@@ -46,11 +48,11 @@
 
 	async function removeFolder() {
 		try {
-			await deleteFolder(sessionStore.user!.uid, folder.id)
+			await deleteFolder(userStore.session!.uid, folder.id)
 		} catch (error) {
 			toast.create({
 				title: 'Error deleting folder',
-				description: handleErrorMessages(error),
+				description: handleErrorMessages(error as FirestoreError),
 				type: 'error',
 			})
 		}

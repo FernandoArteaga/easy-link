@@ -5,8 +5,9 @@ import {
 	deleteDoc,
 	serverTimestamp,
 	type CollectionReference,
-	type DocumentReference, updateDoc
-} from 'firebase/firestore';
+	type DocumentReference,
+	updateDoc,
+} from 'firebase/firestore'
 import { firestore } from '$lib/firebase'
 
 export function linkCollection(uid: string): CollectionReference<Firestore.Link> {

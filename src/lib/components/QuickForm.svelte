@@ -9,7 +9,7 @@
 		value: string | undefined
 		submit: () => void
 		placeholder: string
-		Icon: LucideIcon
+		Icon: typeof LucideIcon
 		attr?: HTMLInputAttributes
 	}
 	let { value = $bindable(undefined), submit, placeholder, Icon, attr }: Props = $props()

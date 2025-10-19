@@ -3,6 +3,7 @@
 	import type { Snippet } from 'svelte'
 
 	type Props = {
+		isOpen: boolean
 		triggerContent: Snippet
 		triggerClasses?: string
 		title: string

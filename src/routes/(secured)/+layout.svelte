@@ -2,19 +2,19 @@
 	import type { HTMLInputAttributes } from 'svelte/elements'
 	import { Folder, Link, Moon, Sun, House } from 'lucide-svelte'
 	import type { AuthError } from 'firebase/auth'
-	import { signOut } from 'firebase/auth';
+	import { signOut } from 'firebase/auth'
 	import type { FirestoreError } from 'firebase/firestore'
 	import { onSnapshot, orderBy, query } from 'firebase/firestore'
 	import { goto } from '$app/navigation'
+	import { resolve } from '$app/paths'
 	import { auth } from '$lib/firebase'
 	import { userDoc } from '$lib/firestore/users'
 	import { createLink } from '$lib/firestore/links'
-	import { createFolder, folderCollection } from '$lib/firestore/folders';
+	import { createFolder, folderCollection } from '$lib/firestore/folders'
 	import { handleErrorMessages } from '$lib/firestore/errors'
 	import toasterCtx from '$lib/contexts/toasterCtx'
-	import userCtx from '$lib/contexts/userCtx'
 	import foldersCtx from '$lib/contexts/foldersCtx'
-	import sessionStore from '$lib/stores/session.svelte'
+	import userCtx from '$lib/contexts/userCtx'
 	import themeStore from '$lib/stores/theme.svelte'
 	import QuickForm from '$lib/components/QuickForm.svelte'
 	import Message from '$lib/components/Message.svelte'
@@ -30,8 +30,8 @@
 	const signOutUser = () => {
 		signOut(auth)
 			.then(() => {
-				sessionStore.signOut()
-				goto('/login')
+				userStore.signOut()
+				goto(resolve('/login'))
 			})
 			.catch((error) => {
 				console.error(error)
@@ -50,12 +50,12 @@
 	}
 
 	$effect.pre(() => {
-		if (sessionStore.user === null) return
-		const getUserSub = onSnapshot(userDoc(sessionStore.user.uid), (snapshot) => {
+		if (!userStore.isSignedIn) return
+		const getUserSub = onSnapshot(userDoc(userStore.session!.uid), (snapshot) => {
 			userStore.user = { ...snapshot.data() } as Firestore.Doc<Firestore.User>
 		})
 		const getFoldersSub = onSnapshot(
-			query(folderCollection(sessionStore.user.uid), orderBy('nameLower', 'asc')),
+			query(folderCollection(userStore.session!.uid), orderBy('nameLower', 'asc')),
 			(snapshot) => {
 				folderStore.loading = false
 				const folderSnapshot = snapshot.docs.map((doc) => {
@@ -81,12 +81,12 @@
 			if (!inputLink) return
 			const link = inputLink.trim()
 			if (link.length < 2) return
-			await createLink(sessionStore.user!.uid, {
+			await createLink(userStore.session!.uid, {
 				url: link.toLowerCase(),
 			})
 			inputLink = undefined
 		} catch (error) {
-			handleError(error)
+			handleError(error as FirestoreError)
 		}
 	}
 
@@ -95,12 +95,12 @@
 			if (!inputFolder) return
 			const folder = inputFolder.trim()
 			if (folder.length < 2 || folder.length > 36) return
-			await createFolder(sessionStore.user!.uid, {
+			await createFolder(userStore.session!.uid, {
 				name: folder,
 			})
 			inputFolder = undefined
 		} catch (error) {
-			handleError(error)
+			handleError(error as FirestoreError)
 		}
 	}
 
@@ -117,10 +117,10 @@
 	}
 </script>
 
-{#if sessionStore.user}
+{#if userStore.session}
 	<div class="bg-surface-50-950 sticky -top-4 z-10 pb-8">
 		<nav class="flex w-full flex-row flex-wrap items-center justify-end space-x-2 py-8">
-			<a href="/links" class={navButton}>
+			<a href={resolve('/links')} class={navButton}>
 				<House size={14} />
 			</a>
 			<button class={navButton} onclick={changeTheme}>
@@ -151,9 +151,7 @@
 					attr={{ ...inputAttributes, maxlength: 36 }}
 				/>
 			{:else}
-				<Message>
-					You’ve reached the maximum number of folders allowed.
-				</Message>
+				<Message>You’ve reached the maximum number of folders allowed.</Message>
 			{/if}
 		{/if}
 	</div>

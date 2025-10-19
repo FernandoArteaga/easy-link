@@ -1,8 +1,8 @@
 <script lang="ts">
+	import type { FirestoreError } from 'firebase/firestore'
 	import { Folder, Folders, FolderTree, Plus, Check } from 'lucide-svelte'
 	import { createFolder } from '$lib/firestore/folders'
 	import { handleErrorMessages } from '$lib/firestore/errors'
-	import sessionStore from '$lib/stores/session.svelte'
 	import toasterCtx from '$lib/contexts/toasterCtx'
 	import userCtx from '$lib/contexts/userCtx'
 	import foldersCtx from '$lib/contexts/foldersCtx'
@@ -11,7 +11,7 @@
 	import Modal from '$lib/components/Modal.svelte'
 	import InputField from '$lib/components/InputField.svelte'
 	import ButtonInline from '$lib/components/ButtonInline.svelte'
-	import Message from '$lib/components/Message.svelte';
+	import Message from '$lib/components/Message.svelte'
 
 	const toast = toasterCtx.getCtx()
 	const userStore = userCtx.getCtx()
@@ -38,7 +38,7 @@
 		const folderName = inputFolder.trim()
 		if (folderName.length < 2 || folderName.length > 36) return
 		try {
-			await createFolder(sessionStore.user!.uid, {
+			await createFolder(userStore.session!.uid, {
 				name: folderName,
 			})
 			inputFolder = undefined
@@ -46,7 +46,7 @@
 		} catch (error) {
 			toast.create({
 				title: 'Error',
-				description: handleErrorMessages(error),
+				description: handleErrorMessages(error as FirestoreError),
 				type: 'error',
 			})
 		}
@@ -113,8 +113,6 @@
 		<ButtonInline Icon={Folders} href="/folders" end />
 	</div>
 	{#if folderStore.assigningLinks}
-		<Message extraClasses="mt-4">
-			Click on a link to assign it to a folder.
-		</Message>
+		<Message extraClasses="mt-4">Click on a link to assign it to a folder.</Message>
 	{/if}
 {/if}

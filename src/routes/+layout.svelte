@@ -7,7 +7,6 @@
 	import foldersCtx from '$lib/contexts/foldersCtx'
 	import userCtx from '$lib/contexts/userCtx'
 	import toasterCtx from '$lib/contexts/toasterCtx'
-	import sessionStore from '$lib/stores/session.svelte'
 	import themeStore from '$lib/stores/theme.svelte'
 	import { FolderStore } from '$lib/stores/folders.svelte'
 	import { UserStore } from '$lib/stores/user.svelte'
@@ -23,18 +22,17 @@
 	userCtx.setCtx(userStore)
 	foldersCtx.setCtx(folderStore)
 
-	$effect.pre(() => routeGuard(data.pathname))
+	$effect.pre(() => routeGuard(data.pathname, userStore.isSignedIn))
 	$effect.pre(() => {
 		const authStateSub = onAuthStateChanged(auth, (user) => {
 			if (user) {
-				sessionStore.user = {
+				userStore.session = {
 					uid: user.uid,
 					email: user.email,
 					displayName: user.displayName,
 				}
 			} else {
-				sessionStore.signOut()
-				userStore.user = undefined
+				userStore.signOut()
 			}
 		})
 		return () => authStateSub()

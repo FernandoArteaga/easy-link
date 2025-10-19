@@ -1,16 +1,19 @@
 <script lang="ts">
 	import type { HTMLInputAttributes } from 'svelte/elements'
 	import { Folder, Link, Moon, Sun, House } from 'lucide-svelte'
-	import { signOut } from 'firebase/auth'
-	import { onSnapshot } from 'firebase/firestore'
+	import type { AuthError } from 'firebase/auth'
+	import { signOut } from 'firebase/auth';
+	import type { FirestoreError } from 'firebase/firestore'
+	import { onSnapshot, orderBy, query } from 'firebase/firestore'
 	import { goto } from '$app/navigation'
 	import { auth } from '$lib/firebase'
 	import { userDoc } from '$lib/firestore/users'
 	import { createLink } from '$lib/firestore/links'
-	import { createFolder } from '$lib/firestore/folders'
+	import { createFolder, folderCollection } from '$lib/firestore/folders';
 	import { handleErrorMessages } from '$lib/firestore/errors'
 	import toasterCtx from '$lib/contexts/toasterCtx'
 	import userCtx from '$lib/contexts/userCtx'
+	import foldersCtx from '$lib/contexts/foldersCtx'
 	import sessionStore from '$lib/stores/session.svelte'
 	import themeStore from '$lib/stores/theme.svelte'
 	import QuickForm from '$lib/components/QuickForm.svelte'
@@ -19,19 +22,12 @@
 	let { children, data } = $props()
 
 	const toast = toasterCtx.getCtx()
-	const userContext = userCtx.getCtx()
+	const userStore = userCtx.getCtx()
+	const folderStore = foldersCtx.getCtx()
 	let inputLink: string | undefined = $state(undefined)
 	let inputFolder: string | undefined = $state(undefined)
 
-	$effect.pre(() => {
-		if (sessionStore.user === null) return
-		const getUserSub = onSnapshot(userDoc(sessionStore.user.uid), (snapshot) => {
-			userContext.user = { ...snapshot.data() } as Firestore.Doc<Firestore.User>
-		})
-		return () => getUserSub()
-	})
-
-	const handleLogout = () => {
+	const signOutUser = () => {
 		signOut(auth)
 			.then(() => {
 				sessionStore.signOut()
@@ -41,6 +37,44 @@
 				console.error(error)
 			})
 	}
+
+	const handleError = (error: AuthError | FirestoreError, signOut = false) => {
+		toast.create({
+			title: 'Error',
+			description: handleErrorMessages(error),
+			type: 'error',
+		})
+		if (error.code === 'permission-denied' && signOut) {
+			signOutUser()
+		}
+	}
+
+	$effect.pre(() => {
+		if (sessionStore.user === null) return
+		const getUserSub = onSnapshot(userDoc(sessionStore.user.uid), (snapshot) => {
+			userStore.user = { ...snapshot.data() } as Firestore.Doc<Firestore.User>
+		})
+		const getFoldersSub = onSnapshot(
+			query(folderCollection(sessionStore.user.uid), orderBy('nameLower', 'asc')),
+			(snapshot) => {
+				folderStore.loading = false
+				const folderSnapshot = snapshot.docs.map((doc) => {
+					const data = doc.data()
+					return {
+						id: doc.id,
+						name: data.name,
+						nameLower: data.nameLower,
+					}
+				})
+				folderStore.folders = [{ id: 'all', name: 'All', nameLower: 'all' }, ...folderSnapshot]
+			},
+			(error) => handleError(error, true)
+		)
+		return () => {
+			getUserSub()
+			getFoldersSub()
+		}
+	})
 
 	const submitLink = async () => {
 		try {
@@ -52,11 +86,7 @@
 			})
 			inputLink = undefined
 		} catch (error) {
-			toast.create({
-				title: 'Error',
-				description: handleErrorMessages(error),
-				type: 'error',
-			})
+			handleError(error)
 		}
 	}
 
@@ -70,11 +100,7 @@
 			})
 			inputFolder = undefined
 		} catch (error) {
-			toast.create({
-				title: 'Error',
-				description: handleErrorMessages(error),
-				type: 'error',
-			})
+			handleError(error)
 		}
 	}
 
@@ -104,7 +130,7 @@
 					<Sun size={14} />
 				{/if}
 			</button>
-			<button type="button" class={navButton} onclick={handleLogout}> Sign out </button>
+			<button type="button" class={navButton} onclick={signOutUser}> Sign out </button>
 		</nav>
 
 		{#if data.pathname === '/links'}
@@ -116,7 +142,7 @@
 				attr={inputAttributes}
 			/>
 		{:else if data.pathname === '/folders'}
-			{#if userContext.canCreateFolder}
+			{#if userStore.canCreateFolder}
 				<QuickForm
 					placeholder="Add folder"
 					bind:value={inputFolder}

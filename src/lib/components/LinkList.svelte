@@ -12,15 +12,15 @@
 	import Placeholder from '$lib/components/Placeholder.svelte'
 
 	const toast = toasterCtx.getCtx()
-	const foldersContext = foldersCtx.getCtx()
+	const folderStore = foldersCtx.getCtx()
 	let links: Firestore.Doc<Firestore.Link>[] = $state([])
 	let loading = $state(true)
 
 	$effect.pre(() => {
 		if (sessionStore.user === null) return
 		const qConstraints = [orderBy('timestamp', 'desc')]
-		if (foldersContext.activeFolderId !== 'all') {
-			qConstraints.push(where('folderId', '==', foldersContext.activeFolderId))
+		if (folderStore.activeFolderId !== 'all') {
+			qConstraints.push(where('folderId', '==', folderStore.activeFolderId))
 		}
 		const q = query(linkCollection(sessionStore.user.uid), ...qConstraints)
 

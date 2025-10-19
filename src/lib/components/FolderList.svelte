@@ -14,23 +14,23 @@
 	import Message from '$lib/components/Message.svelte';
 
 	const toast = toasterCtx.getCtx()
-	const userContext = userCtx.getCtx()
-	const foldersContext = foldersCtx.getCtx()
+	const userStore = userCtx.getCtx()
+	const folderStore = foldersCtx.getCtx()
 	const formId = 'add-folder'
 	let isCreateModalOpen = $state(false)
 	let inputFolder: string | undefined = $state(undefined)
 
 	const btnFolder = 'py-1 px-2 w-auto whitespace-nowrap border-b-2 hover:border-primary-500'
 	const btnFolderActive = (folderId: string) =>
-		folderId === foldersContext.activeFolderId
+		folderId === folderStore.activeFolderId
 			? 'border-secondary-500 font-medium'
 			: 'border-transparent'
 
 	const selectFolder = (folderId: string) => {
-		foldersContext.activeFolderId = folderId
+		folderStore.activeFolderId = folderId
 	}
 	const toggleAssigningLinks = () => {
-		foldersContext.assigningLinks = !foldersContext.assigningLinks
+		folderStore.assigningLinks = !folderStore.assigningLinks
 	}
 
 	const submit = async () => {
@@ -53,11 +53,11 @@
 	}
 </script>
 
-{#if foldersContext.loading}
+{#if folderStore.loading}
 	<Placeholder repeat={4} horizontal />
 {:else}
 	<div class="flex flex-row">
-		{#if userContext.canCreateFolder}
+		{#if userStore.canCreateFolder}
 			<Modal
 				bind:isOpen={isCreateModalOpen}
 				title="Add folder"
@@ -95,7 +95,7 @@
 			</Modal>
 		{/if}
 		<div class="flex flex-row overflow-x-auto overflow-y-hidden px-2">
-			{#each foldersContext.folders as f (f.id)}
+			{#each folderStore.folders as f (f.id)}
 				<button
 					type="button"
 					class={concatClasses(btnFolder, btnFolderActive(f.id))}
@@ -105,14 +105,14 @@
 				</button>
 			{/each}
 		</div>
-		{#if foldersContext.assigningLinks}
+		{#if folderStore.assigningLinks}
 			<ButtonInline Icon={Check} onclick={toggleAssigningLinks} />
 		{:else}
 			<ButtonInline Icon={FolderTree} onclick={toggleAssigningLinks} />
 		{/if}
 		<ButtonInline Icon={Folders} href="/folders" end />
 	</div>
-	{#if foldersContext.assigningLinks}
+	{#if folderStore.assigningLinks}
 		<Message extraClasses="mt-4">
 			Click on a link to assign it to a folder.
 		</Message>

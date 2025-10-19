@@ -14,7 +14,7 @@
 	}
 	let { link }: Props = $props()
 	const toast = toasterCtx.getCtx()
-	const foldersContext = foldersCtx.getCtx()
+	const folderStore = foldersCtx.getCtx()
 	const formId = 'assign-link-to-folder'
 	let isModalOpen = $state(false)
 	let inputFolder: string = $state(link.folderId || 'all')
@@ -65,7 +65,7 @@
 </script>
 
 <div class="flex">
-	{#if foldersContext.assigningLinks}
+	{#if folderStore.assigningLinks}
 		{@render linkUrl()}
 		<Modal
 			bind:isOpen={isModalOpen}
@@ -80,7 +80,7 @@
 
 			{#snippet body()}
 				<form id={formId} class="space-y-4" onsubmit={assignLink} onchange={(e) => inputFolder = e.target.id}>
-					{#each foldersContext.folders as f (f.id)}
+					{#each folderStore.folders as f (f.id)}
 						{@render radio(f.name, f.id)}
 					{/each}
 				</form>

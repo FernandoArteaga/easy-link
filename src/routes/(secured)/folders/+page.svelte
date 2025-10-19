@@ -3,14 +3,14 @@
 	import Placeholder from '$lib/components/Placeholder.svelte'
 	import FolderChip from '$lib/components/FolderChip.svelte'
 
-	const foldersContext = foldersCtx.getCtx()
+	const folderStore = foldersCtx.getCtx()
 </script>
 
-{#if foldersContext.loading}
+{#if folderStore.loading}
 	<Placeholder repeat={4} />
 {:else}
 	<div class="space-y-4 overflow-auto">
-		{#each foldersContext.folders as folder (folder.id)}
+		{#each folderStore.folders as folder (folder.id)}
 			<FolderChip {folder} />
 		{/each}
 	</div>

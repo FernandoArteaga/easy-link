@@ -2,18 +2,10 @@ import type { Timestamp } from 'firebase/firestore'
 
 declare global {
 	type Nullable<T> = T | null
+	type Undefinable<T> = T | undefined
 
 	namespace App {
 		type Themes = 'dark' | 'light'
-		type InputConstraint = Partial<{
-			pattern: string
-			min: number | string
-			max: number | string
-			required: boolean
-			step: number | 'any'
-			minlength: number
-			maxlength: number
-		}>
 	}
 
 	namespace Firestore {
@@ -26,9 +18,13 @@ declare global {
 		type Link = {
 			url: string
 			timestamp: Timestamp
+			folderId?: string
 		}
 		type CreateLink = {
 			url: string
+		}
+		type UpdateLink = {
+			folderId: string
 		}
 
 		type Folder = {

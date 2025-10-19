@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { getContext } from 'svelte'
 	import { AtSign, RectangleEllipsis } from 'lucide-svelte'
 	import { signInWithEmailAndPassword } from 'firebase/auth'
-	import { auth } from '$lib/firebase'
 	import { goto } from '$app/navigation'
-	import { handleErrorMessages } from '$lib/firestore/authentication'
+	import { resolve } from '$app/paths'
+	import { auth } from '$lib/firebase'
+	import { handleErrorMessages } from '$lib/firestore/errors'
+	import toasterCtx from '$lib/contexts/toasterCtx'
 	import InputField from '$lib/components/InputField.svelte'
 
-	const toast = getContext('toast')
+	const toast = toasterCtx.getCtx()
 
 	let inputEmail: string = $state('')
 	let inputPwd: string = $state('')
@@ -17,7 +18,7 @@
 		e.preventDefault()
 		signInWithEmailAndPassword(auth, inputEmail, inputPwd)
 			.then(() => {
-				goto('/links')
+				goto(resolve('/links'))
 			})
 			.catch((error) => {
 				toast.create({
@@ -37,7 +38,7 @@
 			placeholder="Email"
 			autocomplete="email"
 			bind:value={inputEmail}
-			constraints={{ required: true }}
+			attr={{ required: true }}
 		>
 			{#snippet icon()}
 				<AtSign size={16} />
@@ -50,7 +51,7 @@
 			autocomplete="current-password"
 			canReveal
 			bind:value={inputPwd}
-			constraints={{ minlength: 6, maxlength: 64, required: true }}
+			attr={{ minlength: 6, maxlength: 64, required: true }}
 		>
 			{#snippet icon()}
 				<RectangleEllipsis size={16} />

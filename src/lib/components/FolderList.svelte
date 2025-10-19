@@ -1,134 +1,72 @@
 <script lang="ts">
-	import { getContext } from 'svelte'
-	import {
-		collection,
-		doc,
-		onSnapshot,
-		orderBy,
-		query,
-		runTransaction,
-		increment,
-	} from 'firebase/firestore'
-	import { signOut } from 'firebase/auth'
-	import { Folder, Plus } from 'lucide-svelte'
-	import { goto } from '$app/navigation'
-	import { auth, firestore } from '$lib/firebase'
-	import { folderCollection } from '$lib/firestore/folders'
-	import { handleErrorMessages } from '$lib/firestore/authentication'
-	import { userDoc } from '$lib/firestore/users'
-	import sessionStore from '$lib/stores/session.svelte'
-	import activeFolderCtx from '$lib/contexts/activeFolder'
-	import Placeholder from '$lib/components/Placeholder.svelte'
+	import type { FirestoreError } from 'firebase/firestore'
+	import { Folder, Folders, FolderTree, Plus, Check } from 'lucide-svelte'
+	import { createFolder } from '$lib/firestore/folders'
+	import { handleErrorMessages } from '$lib/firestore/errors'
+	import toasterCtx from '$lib/contexts/toasterCtx'
+	import userCtx from '$lib/contexts/userCtx'
+	import foldersCtx from '$lib/contexts/foldersCtx'
 	import { concatClasses } from '$lib/utils/utils'
+	import Placeholder from '$lib/components/Placeholder.svelte'
 	import Modal from '$lib/components/Modal.svelte'
 	import InputField from '$lib/components/InputField.svelte'
+	import ButtonInline from '$lib/components/ButtonInline.svelte'
+	import Message from '$lib/components/Message.svelte'
 
-	const toast = getContext('toast')
-	let formId = 'add-folder'
-	let folders: Firestore.Doc<Firestore.Folder>[] = $state([
-		{ id: 'all', name: 'All', nameLower: 'all' },
-	])
-	let userData: Firestore.User | undefined = $state()
-	let loading = $state(true)
+	const toast = toasterCtx.getCtx()
+	const userStore = userCtx.getCtx()
+	const folderStore = foldersCtx.getCtx()
+	const formId = 'add-folder'
 	let isCreateModalOpen = $state(false)
 	let inputFolder: string | undefined = $state(undefined)
-	const activeFolder = activeFolderCtx.getCtx()
-
-	$effect.pre(() => {
-		if (sessionStore.user === null) return
-		const q = query(
-			collection(firestore, 'users', sessionStore.user.uid, 'folders'),
-			orderBy('nameLower', 'asc')
-		)
-		const getFoldersSub = onSnapshot(
-			q,
-			(snapshot) => {
-				loading = false
-				folders = snapshot.docs.map((doc) => {
-					const data = doc.data()
-					return {
-						id: doc.id,
-						name: data.name,
-						nameLower: data.nameLower,
-					}
-				})
-				folders.unshift({ id: 'all', name: 'All', nameLower: 'all' })
-			},
-			(error) => {
-				toast.create({
-					title: 'Error',
-					description: handleErrorMessages(error),
-					type: 'error',
-				})
-				if (error.code === 'permission-denied') {
-					signOut(auth)
-						.then(() => {
-							goto('/login')
-						})
-						.catch((error) => {
-							console.error(error)
-						})
-				}
-			}
-		)
-		const getUserSub = onSnapshot(userDoc(sessionStore.user.uid), (snapshot) => {
-			userData = { ...snapshot.data() } as Firestore.Doc<Firestore.User>
-		})
-		return () => {
-			getFoldersSub()
-			getUserSub()
-		}
-	})
 
 	const btnFolder = 'py-1 px-2 w-auto whitespace-nowrap border-b-2 hover:border-primary-500'
 	const btnFolderActive = (folderId: string) =>
-		folderId === activeFolder.uid ? 'border-secondary-500 font-medium' : 'border-transparent'
+		folderId === folderStore.activeFolderId
+			? 'border-secondary-500 font-medium'
+			: 'border-transparent'
 
 	const selectFolder = (folderId: string) => {
-		activeFolder.uid = folderId
+		folderStore.activeFolderId = folderId
+	}
+	const toggleAssigningLinks = () => {
+		folderStore.assigningLinks = !folderStore.assigningLinks
 	}
 
 	const submit = async () => {
 		if (!inputFolder) return
 		const folderName = inputFolder.trim()
-		if (folderName.length < 2) return
+		if (folderName.length < 2 || folderName.length > 36) return
 		try {
-			const userUid = sessionStore.user!.uid
-			await runTransaction(firestore, async (transaction) => {
-				transaction.update(userDoc(userUid), {
-					totalFolders: increment(1),
-				})
-				transaction.set(doc(folderCollection(userUid)), {
-					name: folderName,
-					nameLower: folderName.toLowerCase(),
-				})
+			await createFolder(userStore.session!.uid, {
+				name: folderName,
 			})
 			inputFolder = undefined
 			isCreateModalOpen = false
 		} catch (error) {
 			toast.create({
 				title: 'Error',
-				description: handleErrorMessages(error),
+				description: handleErrorMessages(error as FirestoreError),
 				type: 'error',
 			})
 		}
 	}
 </script>
 
-{#if loading}
+{#if folderStore.loading}
 	<Placeholder repeat={4} horizontal />
 {:else}
-	<div class="flex flex-row overflow-x-auto overflow-y-hidden">
-		{#if userData && (userData.totalFolders === undefined || userData.totalFolders < 10)}
+	<div class="flex flex-row">
+		{#if userStore.canCreateFolder}
 			<Modal
 				bind:isOpen={isCreateModalOpen}
 				title="Add folder"
 				description="Create a folder to better organize your links"
-				triggerClasses={concatClasses(btnFolder, 'w-fit border-transparent')}
+				triggerClasses="p-0 flex"
 				confirmButtonFormId={formId}
 			>
 				{#snippet triggerContent()}
-					<Plus size={16} />
+					<ButtonInline Icon={Plus} start />
 				{/snippet}
 
 				{#snippet body()}
@@ -144,7 +82,7 @@
 									placeholder="e.g., Work, Personal"
 									autocomplete="email"
 									bind:value={inputFolder}
-									constraints={{ required: true, minlength: 2 }}
+									attr={{ required: true, minlength: 2, maxlength: 36 }}
 								>
 									{#snippet icon()}
 										<Folder size={16} />
@@ -156,14 +94,25 @@
 				{/snippet}
 			</Modal>
 		{/if}
-		{#each folders as f (f.id)}
-			<button
-				type="button"
-				class={concatClasses(btnFolder, btnFolderActive(f.id))}
-				onclick={() => selectFolder(f.id)}
-			>
-				{f.name}
-			</button>
-		{/each}
+		<div class="flex flex-row overflow-x-auto overflow-y-hidden px-2">
+			{#each folderStore.folders as f (f.id)}
+				<button
+					type="button"
+					class={concatClasses(btnFolder, btnFolderActive(f.id))}
+					onclick={() => selectFolder(f.id)}
+				>
+					{f.name}
+				</button>
+			{/each}
+		</div>
+		{#if folderStore.assigningLinks}
+			<ButtonInline Icon={Check} onclick={toggleAssigningLinks} />
+		{:else}
+			<ButtonInline Icon={FolderTree} onclick={toggleAssigningLinks} />
+		{/if}
+		<ButtonInline Icon={Folders} href="/folders" end />
 	</div>
+	{#if folderStore.assigningLinks}
+		<Message extraClasses="mt-4">Click on a link to assign it to a folder.</Message>
+	{/if}
 {/if}

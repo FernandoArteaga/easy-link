@@ -1,0 +1,36 @@
+name: 'PR Checks'
+on:
+  pull_request: {}
+
+jobs:
+  checks:
+    name: 'Checks'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v4
+
+      - name: 'Setup pnpm'
+        uses: ./.github/actions/setup-pnpm
+
+      - name: 'Install dependencies'
+        run: pnpm install
+
+      - name: 'Prettier & ESLint'
+        run: pnpm fmt:check
+
+      - name: 'Svelte check'
+        if: ${{ !cancelled() }}
+        run: |
+          cp .env.ci .env
+          pnpm check
+
+      - name: 'Version change'
+        if: ${{ !cancelled() }}
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          if ! grep -q "^## \[$VERSION\]" CHANGELOG.md; then
+            echo "The version '$VERSION' is not present in the CHANGELOG.md file. Please document the changes."
+            echo "⛔ The version \`$VERSION\` is not present in the \`CHANGELOG.md\` file. Please document the changes." >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi

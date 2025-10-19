@@ -1,15 +1,15 @@
-import sessionStore from '$lib/stores/session.svelte'
 import { goto } from '$app/navigation'
+import { resolve } from '$app/paths'
 
-export function routeGuard(path: string) {
+export function routeGuard(path: string, isUserAuthenticated: boolean) {
 	if (path.startsWith('/login')) {
-		if (sessionStore.user !== null) {
-			goto('/links').then()
+		if (isUserAuthenticated) {
+			goto(resolve('/links')).then()
 		}
 	}
 	if (path.startsWith('/')) {
-		if (sessionStore.user === null) {
-			goto('/login').then()
+		if (!isUserAuthenticated) {
+			goto(resolve('/login')).then()
 		}
 	}
 }

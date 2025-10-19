@@ -1,45 +1,46 @@
 <script lang="ts">
-	import { onDestroy } from 'svelte'
 	import '../app.css'
-	import { auth } from '$lib/firebase'
-	import sessionStore from '$lib/stores/session.svelte'
-	import themeStore from '$lib/stores/theme.svelte'
-	import { routeGuard } from '$lib/guard'
 	import { Toaster, createToaster } from '@skeletonlabs/skeleton-svelte'
-	import { setContext } from 'svelte'
+	import { routeGuard } from '$lib/guard'
+	import { auth } from '$lib/firebase'
 	import { onAuthStateChanged } from 'firebase/auth'
-	import activeFolderCtx from '$lib/contexts/activeFolder'
-	import { ActiveFolder } from '$lib/stores/folders.svelte'
+	import foldersCtx from '$lib/contexts/foldersCtx'
+	import userCtx from '$lib/contexts/userCtx'
+	import toasterCtx from '$lib/contexts/toasterCtx'
+	import themeStore from '$lib/stores/theme.svelte'
+	import { FolderStore } from '$lib/stores/folders.svelte'
+	import { UserStore } from '$lib/stores/user.svelte'
 
 	let { children, data } = $props()
 	const toaster = createToaster({
 		placement: 'bottom-end',
 		max: 5,
 	})
-	setContext('toast', toaster)
-	activeFolderCtx.setCtx(new ActiveFolder())
-	let unsubscribe = () => {}
+	const userStore = new UserStore()
+	const folderStore = new FolderStore()
+	toasterCtx.setCtx(toaster)
+	userCtx.setCtx(userStore)
+	foldersCtx.setCtx(folderStore)
 
-	$effect.pre(() => routeGuard(data.pathname))
+	$effect.pre(() => routeGuard(data.pathname, userStore.isSignedIn))
 	$effect.pre(() => {
-		unsubscribe = onAuthStateChanged(auth, (user) => {
+		const authStateSub = onAuthStateChanged(auth, (user) => {
 			if (user) {
-				sessionStore.user = {
+				userStore.session = {
 					uid: user.uid,
 					email: user.email,
 					displayName: user.displayName,
 				}
 			} else {
-				sessionStore.signOut()
+				userStore.signOut()
 			}
 		})
+		return () => authStateSub()
 	})
 	themeStore.isLight()
-
-	onDestroy(() => {
-		unsubscribe()
-	})
 </script>
 
 <Toaster {toaster} />
-{@render children()}
+<div class="mx-auto flex max-w-9/10 flex-col justify-center sm:max-w-xl">
+	{@render children()}
+</div>

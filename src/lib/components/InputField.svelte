@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
-	import type { FullAutoFill, HTMLInputTypeAttribute } from 'svelte/elements'
+	import type { FullAutoFill, HTMLInputAttributes, HTMLInputTypeAttribute } from 'svelte/elements'
 	import { Eye, EyeOff } from 'lucide-svelte'
 	import { concatClasses, randomInputID } from '$lib/utils/utils'
 
@@ -11,7 +11,7 @@
 		placeholder: string
 		autocomplete?: FullAutoFill
 		icon?: Snippet
-		constraints?: App.InputConstraint
+		attr?: HTMLInputAttributes
 		canReveal?: boolean
 		disabled?: boolean
 	}
@@ -22,7 +22,7 @@
 		placeholder,
 		autocomplete = 'off',
 		icon,
-		constraints,
+		attr,
 		canReveal = false,
 		disabled = false,
 	}: Props = $props()
@@ -48,7 +48,7 @@
 		{autocomplete}
 		bind:value
 		{disabled}
-		{...constraints}
+		{...attr}
 	/>
 
 	{#if canReveal && value}

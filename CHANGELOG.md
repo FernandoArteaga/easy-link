@@ -6,10 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 
 ## [Unreleased]
 
+## [1.2.1] - 2025-10-19
+### Added
+- New page for managing folders.
+- Option to assign links to folder.
+
 ## [1.2.0] - 2025-10-15
 ### Added
 - Folders feature to organize links.
-- New page for managing folders.
 
 ## [1.1.2] - 2025-04-04
 ### Changed

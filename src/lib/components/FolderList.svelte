@@ -11,11 +11,12 @@
 	import Modal from '$lib/components/Modal.svelte'
 	import InputField from '$lib/components/InputField.svelte'
 	import ButtonInline from '$lib/components/ButtonInline.svelte'
+	import Message from '$lib/components/Message.svelte';
 
 	const toast = toasterCtx.getCtx()
-	const formId = 'add-folder'
 	const userContext = userCtx.getCtx()
 	const foldersContext = foldersCtx.getCtx()
+	const formId = 'add-folder'
 	let isCreateModalOpen = $state(false)
 	let inputFolder: string | undefined = $state(undefined)
 
@@ -111,4 +112,9 @@
 		{/if}
 		<ButtonInline Icon={Folders} href="/folders" end />
 	</div>
+	{#if foldersContext.assigningLinks}
+		<Message extraClasses="mt-4">
+			Click on a link to assign it to a folder.
+		</Message>
+	{/if}
 {/if}

@@ -14,6 +14,7 @@
 	import sessionStore from '$lib/stores/session.svelte'
 	import themeStore from '$lib/stores/theme.svelte'
 	import QuickForm from '$lib/components/QuickForm.svelte'
+	import Message from '$lib/components/Message.svelte'
 
 	let { children, data } = $props()
 
@@ -124,9 +125,9 @@
 					attr={{ ...inputAttributes, maxlength: 36 }}
 				/>
 			{:else}
-				<div class="text-center text-sm text-gray-500 dark:text-gray-400">
+				<Message>
 					You’ve reached the maximum number of folders allowed.
-				</div>
+				</Message>
 			{/if}
 		{/if}
 	</div>

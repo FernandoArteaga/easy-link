@@ -23,6 +23,9 @@ declare global {
 		type CreateLink = {
 			url: string
 		}
+		type UpdateLink = {
+			folderId: string
+		}
 
 		type Folder = {
 			name: string

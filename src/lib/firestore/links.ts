@@ -5,8 +5,8 @@ import {
 	deleteDoc,
 	serverTimestamp,
 	type CollectionReference,
-	type DocumentReference,
-} from 'firebase/firestore'
+	type DocumentReference, updateDoc
+} from 'firebase/firestore';
 import { firestore } from '$lib/firebase'
 
 export function linkCollection(uid: string): CollectionReference<Firestore.Link> {
@@ -21,6 +21,12 @@ export async function createLink(uid: string, link: Firestore.CreateLink) {
 	await addDoc(linkCollection(uid), {
 		url: link.url,
 		timestamp: serverTimestamp(),
+	})
+}
+
+export async function updateLink(userUid: string, uid: string, link: Firestore.UpdateLink) {
+	await updateDoc(linkDoc(userUid, uid), {
+		folderId: link.folderId,
 	})
 }
 

@@ -25,6 +25,10 @@ jobs:
           cp .env.ci .env
           pnpm check
 
+      - name: 'Build app'
+        if: ${{ !cancelled() }}
+        run: pnpm build
+
       - name: 'Version change'
         if: ${{ !cancelled() }}
         run: |

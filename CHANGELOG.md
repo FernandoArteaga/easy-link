@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 
 ### Changed
 - Simplify folder creation security rules by assuming user document always exists.
+- Unify GHA workflow for tagged releases to a single workflow file.
 
 ## [1.2.2] - 2025-10-19
 ### Changed

@@ -13,6 +13,7 @@ declare global {
 
 		type User = {
 			totalFolders: number
+			lastLogin: Timestamp
 		}
 
 		type Link = {

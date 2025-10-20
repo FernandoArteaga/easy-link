@@ -10,6 +10,7 @@
 	import themeStore from '$lib/stores/theme.svelte'
 	import { FolderStore } from '$lib/stores/folders.svelte'
 	import { UserStore } from '$lib/stores/user.svelte'
+	import { updateUserLastLogin } from '$lib/firestore/users'
 
 	let { children, data } = $props()
 	const toaster = createToaster({
@@ -24,8 +25,9 @@
 
 	$effect.pre(() => routeGuard(data.pathname, userStore.isSignedIn))
 	$effect.pre(() => {
-		const authStateSub = onAuthStateChanged(auth, (user) => {
+		const authStateSub = onAuthStateChanged(auth, async (user) => {
 			if (user) {
+				await updateUserLastLogin(user.uid)
 				userStore.session = {
 					uid: user.uid,
 					email: user.email,

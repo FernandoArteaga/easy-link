@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 
 ## [Unreleased]
 
+## [1.2.3] - 2025-10-20
+### Added
+- Create user document on signup to initialize `totalFolders` field.
+- Add `lastLogin` field to user document that updates on each login.
+
+### Changed
+- Simplify folder creation security rules by assuming user document always exists.
+- Unify GHA workflow for tagged releases to a single workflow file.
+
 ## [1.2.2] - 2025-10-19
 ### Changed
 - Include in the Firebase workflows a new job to deploy Firestore rules.

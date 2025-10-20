@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: 'Build'
+    name: 'Build app'
     uses: ./.github/workflows/build-sveltekit.yml
 
   deploy:

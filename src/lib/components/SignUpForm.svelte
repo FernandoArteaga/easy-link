@@ -7,6 +7,7 @@
 	import { handleErrorMessages } from '$lib/firestore/errors'
 	import toasterCtx from '$lib/contexts/toasterCtx'
 	import InputField from '$lib/components/InputField.svelte'
+	import { createUser } from '$lib/firestore/users'
 
 	const toast = toasterCtx.getCtx()
 
@@ -18,8 +19,9 @@
 	let submit = (e: SubmitEvent) => {
 		e.preventDefault()
 		createUserWithEmailAndPassword(auth, inputEmail, inputPwd)
-			.then(() => {
-				goto(resolve('/links'))
+			.then(async (credentials) => {
+				await createUser(credentials.user.uid)
+				await goto(resolve('/links'))
 			})
 			.catch((error) => {
 				toast.create({

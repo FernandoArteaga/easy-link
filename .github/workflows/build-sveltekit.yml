@@ -1,11 +1,10 @@
-name: 'Build sveltekit app'
-
+name: 'Build SvelteKit app'
 on:
   workflow_call: {}
 
 jobs:
   build:
-    name: 'Build app'
+    name: 'Build the-easy-link'
     runs-on: ubuntu-latest
     environment: ${{ inputs.env }}
     steps:

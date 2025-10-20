@@ -1,6 +1,5 @@
 import type { CollectionReference, DocumentReference } from 'firebase/firestore'
-import { doc, updateDoc, increment, runTransaction } from 'firebase/firestore'
-import { collection } from 'firebase/firestore'
+import { doc, updateDoc, increment, runTransaction, collection } from 'firebase/firestore'
 import { firestore } from '$lib/firebase'
 import { userDoc } from '$lib/firestore/users'
 

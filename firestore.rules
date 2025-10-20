@@ -13,23 +13,14 @@ service cloud.firestore {
     }
 
     match /users/{uid} {
-      allow read, update: if ownsDoc(uid);
+      allow read, write: if ownsDoc(uid);
     }
     match /users/{uid}/links/{document=**} {
       allow read, write: if ownsDoc(uid);
     }
     match /users/{uid}/folders/{document=**} {
       allow read, update, delete: if ownsDoc(uid);
-      allow create: if ownsDoc(uid) && (!userDoc().data.keys().hasAny(['totalFolders']) || userDoc().data.totalFolders < 10);
-    }
-    match /users/{uid}/folders/{document=**} {
-      allow read, update, delete: if ownsDoc(uid);
-      allow create: if ownsDoc(uid) &&
-        (
-          userDoc() == null ||
-          !('totalFolders' in userDoc().data) ||
-          userDoc().data.totalFolders < 10
-        );
+      allow create: if ownsDoc(uid) && userDoc().data.totalFolders < 10;
     }
   }
 }

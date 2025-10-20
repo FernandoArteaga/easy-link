@@ -58,5 +58,4 @@ jobs:
           credentials_json: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
 
       - name: 'Deploy Security Rules'
-        if: needs.changes.outputs.firestore-rules == 'true'
         run: firebase deploy --only firestore:rules --non-interactive --project ${{ env.PROJECT_ID }}

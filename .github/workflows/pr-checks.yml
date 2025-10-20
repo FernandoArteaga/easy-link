@@ -3,8 +3,8 @@ on:
   pull_request: {}
 
 jobs:
-  checks:
-    name: 'Checks'
+  code:
+    name: 'Code quality'
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
@@ -34,3 +34,47 @@ jobs:
             echo "⛔ The version \`$VERSION\` is not present in the \`CHANGELOG.md\` file. Please document the changes." >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
+
+  changes:
+    name: 'Code changes'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      firebase: ${{ steps.filter.outputs.firebase }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            firebase:
+              - 'firebase.json'
+              - 'firestore.rules'
+              - 'firestore.indexes.json'
+
+  firebase:
+    name: 'Validate Firebase services'
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.firebase == 'true'
+    env:
+      PROJECT_ID: the-easy-link
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            firebase.json
+            firestore.rules
+            firestore.indexes.json
+
+      - name: 'Install Firebase CLI'
+        run: npm install -g firebase-tools
+        shell: bash
+
+      - name: 'Authenticate Firebase CLI'
+        uses: google-github-actions/auth@v3
+        with:
+          credentials_json: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+
+      - name: 'Validate Firestore'
+        run: firebase deploy --only firestore --non-interactive --project ${{ env.PROJECT_ID }} --dry-run

@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 
 ## [Unreleased]
 
+## [1.2.2] - 2025-10-19
+### Changed
+- Include in the Firebase workflows a new job to deploy Firestore rules.
+- Validate the Firestore rules in PRs to prevent invalid rules from being merged.
+
+### Fixed
+- Fixed folder creation security rules that incorrectly denied creation when the actor had no `user` document.
+
 ## [1.2.1] - 2025-10-19
 ### Added
 - New page for managing folders.

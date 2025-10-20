@@ -1,6 +1,12 @@
 name: 'Deploy to Firebase Hosting preview channel'
 on:
-  pull_request: {}
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'static/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'CHANGELOG.md'
 
 jobs:
   build:

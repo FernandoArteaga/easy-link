@@ -8,8 +8,8 @@ service cloud.firestore {
     function ownsDoc(uid) {
       return isAuthenticated() && request.auth.uid == uid;
     }
-    function userData() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    function userDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid));
     }
 
     match /users/{uid} {
@@ -20,7 +20,16 @@ service cloud.firestore {
     }
     match /users/{uid}/folders/{document=**} {
       allow read, update, delete: if ownsDoc(uid);
-      allow create: if ownsDoc(uid) && (!userData().keys().hasAny(['totalFolders']) || userData().totalFolders < 10);
+      allow create: if ownsDoc(uid) && (!userDoc().data.keys().hasAny(['totalFolders']) || userDoc().data.totalFolders < 10);
+    }
+    match /users/{uid}/folders/{document=**} {
+      allow read, update, delete: if ownsDoc(uid);
+      allow create: if ownsDoc(uid) &&
+        (
+          userDoc() == null ||
+          !('totalFolders' in userDoc().data) ||
+          userDoc().data.totalFolders < 10
+        );
     }
   }
 }

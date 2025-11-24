@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 'Setup pnpm'
         uses: ./.github/actions/setup-pnpm
@@ -64,7 +64,7 @@ jobs:
     env:
       PROJECT_ID: the-easy-link
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           sparse-checkout: |
             firebase.json

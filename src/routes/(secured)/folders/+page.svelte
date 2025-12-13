@@ -11,7 +11,7 @@
 {:else}
 	<div class="space-y-4 overflow-auto">
 		{#each folderStore.folders as folder (folder.id)}
-			{#if folder.id !== 'all' }
+			{#if folder.id !== 'all'}
 				<FolderChip {folder} />
 			{/if}
 		{/each}

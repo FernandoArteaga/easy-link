@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 - Upgrade Skeleton to version 4.
   - Refactor Modal component to use new Skeleton Dialog component.
   - Refactor the Toaster component to use new Skeleton Toast component.
+- Update GHA to use latest versions.
 
 ### Fixed
 - Make the folder tab bar full width when there are few folders to prevent layout issues.

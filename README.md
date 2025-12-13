@@ -14,7 +14,7 @@ Built with love, using:
 
 # Features
 
-- Easy to use interface
+- Easy-to-use interface
 - Save links to the cloud
 - Access your links from any device
 - Secure authentication

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths'
 	import { concatClasses } from '$lib/utils/utils'
 	import { btnPrimary } from '$lib/utils/styles'
 	import type { Icon as LucideIcon } from 'lucide-svelte'
@@ -19,7 +20,7 @@
 </script>
 
 {#if href}
-	<a class={classes} {href} {...aProps}>
+	<a class={classes} href={resolve(href)} {...aProps}>
 		<Icon size={16} />
 	</a>
 {:else}

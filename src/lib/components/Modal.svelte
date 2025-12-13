@@ -26,17 +26,16 @@
 	let confirmBtnClasses = 'btn preset-filled-secondary-500'
 </script>
 
-<Dialog
-	open={isOpen}
-	onOpenChange={(e) => (isOpen = e.open)}
->
+<Dialog open={isOpen} onOpenChange={(e) => (isOpen = e.open)}>
 	<Dialog.Trigger class={triggerClasses}>
 		{@render trigger()}
 	</Dialog.Trigger>
 	<Portal>
-		<Dialog.Backdrop class="fixed inset-0 z-50 bg-surface-50-950/50" />
-		<Dialog.Positioner class="fixed inset-0 z-50 flex justify-center items-center p-4" >
-			<Dialog.Content class="card bg-white dark:bg-surface-900 p-4 space-y-5 shadow-xl max-w-118 w-full" >
+		<Dialog.Backdrop class="bg-surface-50-950/50 fixed inset-0 z-50" />
+		<Dialog.Positioner class="fixed inset-0 z-50 flex items-center justify-center p-4">
+			<Dialog.Content
+				class="card dark:bg-surface-900 w-full max-w-118 space-y-5 bg-white p-4 shadow-xl"
+			>
 				<Dialog.Title>
 					<h2 class="h2">{title}</h2>
 				</Dialog.Title>
@@ -62,7 +61,6 @@
 						<button type="button" class={confirmBtnClasses} onclick={action}>Confirm</button>
 					{/if}
 				</footer>
-
 			</Dialog.Content>
 		</Dialog.Positioner>
 	</Portal>

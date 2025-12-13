@@ -8,7 +8,7 @@
 	import foldersCtx from '$lib/contexts/foldersCtx'
 	import userCtx from '$lib/contexts/userCtx'
 	import ButtonInline from '$lib/components/ButtonInline.svelte'
-	import DisplayTextInline from '$lib/components/DisplayTextInline.svelte';
+	import DisplayTextInline from '$lib/components/DisplayTextInline.svelte'
 	import Modal from '$lib/components/Modal.svelte'
 
 	type Props = {

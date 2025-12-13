@@ -8,6 +8,7 @@
 	import foldersCtx from '$lib/contexts/foldersCtx'
 	import userCtx from '$lib/contexts/userCtx'
 	import ButtonInline from '$lib/components/ButtonInline.svelte'
+	import DisplayTextInline from '$lib/components/DisplayTextInline.svelte';
 	import Modal from '$lib/components/Modal.svelte'
 
 	type Props = {
@@ -76,7 +77,7 @@
 			triggerClasses="p-0 flex"
 			confirmButtonFormId={formId}
 		>
-			{#snippet triggerContent()}
+			{#snippet trigger()}
 				<ButtonInline Icon={FolderPlus} end />
 			{/snippet}
 
@@ -107,9 +108,7 @@
 </div>
 
 {#snippet linkUrl()}
-	<div class="border-surface-800 max-h-19 min-h-9.5 flex-1 overflow-x-auto border px-4 py-1.5">
-		{link.url}
-	</div>
+	<DisplayTextInline>{link.url}</DisplayTextInline>
 {/snippet}
 
 {#snippet radio(name: string, value: string)}

@@ -65,7 +65,7 @@
 				triggerClasses="p-0 flex"
 				confirmButtonFormId={formId}
 			>
-				{#snippet triggerContent()}
+				{#snippet trigger()}
 					<ButtonInline Icon={Plus} start />
 				{/snippet}
 

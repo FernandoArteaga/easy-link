@@ -94,7 +94,7 @@
 				{/snippet}
 			</Modal>
 		{/if}
-		<div class="flex flex-row overflow-x-auto overflow-y-hidden px-2">
+		<div class="flex grow flex-row overflow-x-auto overflow-y-hidden px-2">
 			{#each folderStore.folders as f (f.id)}
 				<button
 					type="button"

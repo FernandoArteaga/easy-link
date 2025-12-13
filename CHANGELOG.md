@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com), and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
+### Changed
+- Don't show the "All" folder option in the folder page since this is not a real folder and cannot be managed.
+- Update Firestore indexes.
+
+### Fixed
+- Make the folder tab bar full width when there are few folders to prevent layout issues.
 
 ## [1.2.3] - 2025-10-20
 ### Added

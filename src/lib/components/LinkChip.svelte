@@ -19,7 +19,7 @@
 	const folderStore = foldersCtx.getCtx()
 	const formId = 'assign-link-to-folder'
 	let isModalOpen = $state(false)
-	let inputFolder: string = $state(link.folderId || 'all')
+	let inputFolder: string = $derived(link.folderId || 'all')
 
 	async function setClipboard(text: string) {
 		await navigator.clipboard.writeText(text)

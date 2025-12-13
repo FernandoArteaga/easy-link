@@ -13,9 +13,9 @@
 	}
 	let { Icon, onclick, href, external, start = false, end = false }: Props = $props()
 
-	const sideClass = start ? 'rounded-l-md' : end ? 'rounded-r-md' : ''
-	const classes = concatClasses(btnPrimary, sideClass, 'w-12 min-w-12')
-	const aProps = external ? { target: '_blank', rel: 'noopener noreferrer' } : {}
+	const sideClass = $derived(start ? 'rounded-l-md' : end ? 'rounded-r-md' : '')
+	const classes = $derived(concatClasses(btnPrimary, sideClass, 'w-12 min-w-12'))
+	const aProps = $derived(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})
 </script>
 
 {#if href}

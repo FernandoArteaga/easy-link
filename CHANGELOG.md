@@ -5,9 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com), and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
+
+
+## [1.3.0] - 2025-12-13
 ### Changed
 - Don't show the "All" folder option in the folder page since this is not a real folder and cannot be managed.
 - Update Firestore indexes.
+- Upgrade Skeleton to version 4.
 
 ### Fixed
 - Make the folder tab bar full width when there are few folders to prevent layout issues.

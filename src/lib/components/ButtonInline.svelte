@@ -21,6 +21,7 @@
 </script>
 
 {#if href}
+	<!--eslint-disable-next-line svelte/no-navigation-without-resolve-->
 	<a class={classes} href={external ? href : resolve(href as RouteId)} {...aProps}>
 		<Icon size={16} />
 	</a>

@@ -1,3 +1,2 @@
-pnpm check
-pnpm fmt:check
-pnpm build
+lint-staged
+gitleaks

@@ -5,20 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com), and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
+
+
+## [1.3.0] - 2025-12-13
+### Added
+- New component `DisplayTextInline` to standardize inline text.
+- GHA workflow to scan repositories for secrets using `gitleaks`.
+
 ### Changed
 - Don't show the "All" folder option in the folder page since this is not a real folder and cannot be managed.
 - Update Firestore indexes.
+- Upgrade Skeleton to version 4.
+  - Refactor the Modal component to use new the Skeleton Dialog component.
+  - Refactor the Toaster component to use the new Skeleton Toast component.
+  - Fix the use of the Skeleton Tab component.
+- Update GHA to use latest versions.
 
 ### Fixed
 - Make the folder tab bar full width when there are few folders to prevent layout issues.
 
 ## [1.2.3] - 2025-10-20
 ### Added
-- Create user document on signup to initialize `totalFolders` field.
-- Add `lastLogin` field to user document that updates on each login.
+- Create a user document on signup to initialize `totalFolders` field.
+- Add `lastLogin` field to the user document that updates on each login.
 
 ### Changed
-- Simplify folder creation security rules by assuming user document always exists.
+- Simplify folder creation security rules by assuming a user document always exists.
 - Unify GHA workflow for tagged releases to a single workflow file.
 
 ## [1.2.2] - 2025-10-19

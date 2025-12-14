@@ -16,14 +16,21 @@ Built with love, using:
 
 - Easy-to-use interface
 - Save links to the cloud
-- Access your links from any device
+- Access your links from any device in real-time
+- Organize links with tags and categories
 - Secure authentication
 
 # Development
 
+## Requirements
+
+- [Node.js](https://nodejs.org/) (version 24 or higher)
+- [pnpm](https://pnpm.io/) (version 10 or higher) as our package manager.
+- [Firebase CLI](https://firebase.google.com/docs/cli) for Firebase emulators.
+
 ## Setup
 
-We use [pnpm](https://pnpm.io/) as our package manager. To install the dependencies, run:
+To install the dependencies, run:
 
 ```bash
 pnpm install

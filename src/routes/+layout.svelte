@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css'
-	import { Toaster, createToaster } from '@skeletonlabs/skeleton-svelte'
+	import { Toast, createToaster } from '@skeletonlabs/skeleton-svelte'
 	import { routeGuard } from '$lib/guard'
 	import { auth } from '$lib/firebase'
 	import { onAuthStateChanged } from 'firebase/auth'
@@ -42,7 +42,18 @@
 	themeStore.isLight()
 </script>
 
-<Toaster {toaster} />
 <div class="mx-auto flex max-w-9/10 flex-col justify-center sm:max-w-xl">
 	{@render children()}
 </div>
+
+<Toast.Group {toaster}>
+	{#snippet children(toast)}
+		<Toast {toast}>
+			<Toast.Message>
+				<Toast.Title class="text-base font-bold">{toast.title}</Toast.Title>
+				<Toast.Description class="text-sm">{toast.description}</Toast.Description>
+			</Toast.Message>
+			<Toast.CloseTrigger />
+		</Toast>
+	{/snippet}
+</Toast.Group>

@@ -7,6 +7,7 @@
 	import toasterCtx from '$lib/contexts/toasterCtx'
 	import userCtx from '$lib/contexts/userCtx'
 	import ButtonInline from '$lib/components/ButtonInline.svelte'
+	import DisplayTextInline from '$lib/components/DisplayTextInline.svelte'
 	import InputField from '$lib/components/InputField.svelte'
 	import Modal from '$lib/components/Modal.svelte'
 
@@ -19,7 +20,7 @@
 	const userStore = userCtx.getCtx()
 	let formId = 'update-folder'
 	let isModalOpen = $state(false)
-	let inputValue = $state(folder.name)
+	let inputValue = $derived(folder.name)
 
 	const inputAttributes: HTMLInputAttributes = {
 		autocomplete: 'off',
@@ -65,17 +66,15 @@
 
 <div class="flex">
 	<ButtonInline Icon={OctagonX} onclick={removeFolder} start />
-	<div class="border-surface-800 max-h-19 min-h-9.5 flex-1 overflow-x-auto border px-4 py-1.5">
-		{folder.name}
-	</div>
+	<DisplayTextInline>{folder.name}</DisplayTextInline>
 	<Modal
 		bind:isOpen={isModalOpen}
 		title="Update folder"
 		description={`Modify the folder '${folder.name}'`}
-		triggerClasses="flex w-full"
+		triggerClasses="flex"
 		confirmButtonFormId={formId}
 	>
-		{#snippet triggerContent()}
+		{#snippet trigger()}
 			<ButtonInline Icon={Pencil} end />
 		{/snippet}
 

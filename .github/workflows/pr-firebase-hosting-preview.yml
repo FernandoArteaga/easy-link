@@ -1,4 +1,4 @@
-name: 'Deploy to Firebase Hosting preview channel'
+name: 'Deploy Firebase Hosting preview channel'
 on:
   pull_request:
     paths:

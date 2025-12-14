@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 ## [1.3.0] - 2025-12-13
 ### Added
 - New component `DisplayTextInline` to standardize inline text.
+- GHA workflow to scan repositories for secrets using `gitleaks`.
 
 ### Changed
 - Don't show the "All" folder option in the folder page since this is not a real folder and cannot be managed.

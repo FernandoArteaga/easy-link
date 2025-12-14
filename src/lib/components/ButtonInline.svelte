@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
+	import type { RouteId } from '$app/types'
 	import { concatClasses } from '$lib/utils/utils'
 	import { btnPrimary } from '$lib/utils/styles'
 	import type { Icon as LucideIcon } from 'lucide-svelte'
@@ -7,7 +8,7 @@
 	type Props = {
 		Icon: typeof LucideIcon
 		onclick?: () => void
-		href?: string
+		href?: RouteId | string
 		external?: boolean
 		start?: boolean
 		end?: boolean
@@ -20,7 +21,7 @@
 </script>
 
 {#if href}
-	<a class={classes} href={resolve(href)} {...aProps}>
+	<a class={classes} href={external ? href : resolve(href as RouteId)} {...aProps}>
 		<Icon size={16} />
 	</a>
 {:else}

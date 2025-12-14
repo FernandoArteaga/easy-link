@@ -15,8 +15,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 - Don't show the "All" folder option in the folder page since this is not a real folder and cannot be managed.
 - Update Firestore indexes.
 - Upgrade Skeleton to version 4.
-  - Refactor Modal component to use new Skeleton Dialog component.
-  - Refactor the Toaster component to use new Skeleton Toast component.
+  - Refactor the Modal component to use new the Skeleton Dialog component.
+  - Refactor the Toaster component to use the new Skeleton Toast component.
+  - Fix the use of the Skeleton Tab component.
 - Update GHA to use latest versions.
 
 ### Fixed

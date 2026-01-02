@@ -27,12 +27,12 @@
 	$effect.pre(() => {
 		const authStateSub = onAuthStateChanged(auth, async (user) => {
 			if (user) {
-				await updateUserLastLogin(user.uid)
 				userStore.session = {
 					uid: user.uid,
 					email: user.email,
 					displayName: user.displayName,
 				}
+				await updateUserLastLogin(user.uid)
 			} else {
 				userStore.signOut()
 			}

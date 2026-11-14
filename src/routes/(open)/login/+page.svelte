@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Tabs } from '@skeletonlabs/skeleton-svelte'
-	import SignInForm from '$lib/components/SignInForm.svelte'
-	import SignUpForm from '$lib/components/SignUpForm.svelte'
+	import SignInForm from '#lib/components/SignInForm.svelte'
+	import SignUpForm from '#lib/components/SignUpForm.svelte'
 </script>
 
 <div class="mx-auto flex h-svh w-full max-w-96 items-center justify-center">

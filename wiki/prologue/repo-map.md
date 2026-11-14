@@ -3,7 +3,7 @@ status: current
 description: 'Overview of the repository architecture, high-signal areas, and build instructions.'
 superseded_by: ''
 updated: '2026-11-14'
-references: ['source:package.json', 'source:svelte.config.js', 'source:firebase.json']
+references: ['source:package.json', 'source:vite.config.ts', 'source:src/env.ts', 'source:pnpm-workspace.yaml', 'source:firebase.json']
 ---
 
 # Repo Map
@@ -25,12 +25,16 @@ Deeper detail: [App architecture](../architectures/app-architecture.md), [Data m
 | `src/routes/(secured)/folders/+page.svelte` | Folder management (rename/delete).                                                                                                             |
 | `src/routes/(open)/login/+page.svelte`      | Sign in / sign up tabs.                                                                                                                        |
 | `src/routes/+page.svelte`                   | Root `/` entry; route guard redirects.                                                                                                         |
-| `src/lib/firebase.ts`                       | Firebase app init; connects Auth/Firestore emulators when `dev && PUBLIC_FIREBASE_USE_EMULATOR === 'true'`; Analytics in prod only.            |
+| `vite.config.ts` | Vite + SvelteKit config (SvelteKit 3 has no `svelte.config.js`): `adapter-static` options, `vitePreprocess`, Tailwind. |
+| `src/env.ts` | `defineEnvVars` declaration of all `PUBLIC_FIREBASE_*` vars (public + static, inlined at build). |
+| `pnpm-workspace.yaml` | pnpm 11 settings: `allowBuilds`, `engineStrict`. |
+| `lefthook.yml` | Git pre-commit hook: ESLint + Prettier on staged files, `pnpm check`. |
+| `src/lib/firebase.ts` | Firebase app init; connects Auth/Firestore emulators when `dev && PUBLIC_FIREBASE_USE_EMULATOR`; Analytics in prod only.            |
 | `src/lib/guard.ts`                          | Client-side `routeGuard(path, isAuthenticated)` redirects between `/login` and `/links`.                                                       |
 | `src/lib/firestore/`                        | Typed collection/doc refs and CRUD helpers (`users.ts`, `links.ts`, `folders.ts`) plus `errors.ts` (Firebase error code → user message).       |
 | `src/lib/stores/`                           | Svelte 5 rune stores: `UserStore`, `FolderStore` (classes, provided via context) and `theme` (module singleton, persisted in localStorage).    |
 | `src/lib/contexts/`                         | Typed `Ctx<T>` wrappers around `setContext`/`getContext` for user, folders, toaster.                                                           |
-| `src/lib/components/`                       | UI components (Skeleton v4 + Tailwind v4): `LinkList`, `LinkChip`, `FolderList`, `FolderChip`, `Modal`, `QuickForm`, `InputField`, forms, etc. |
+| `src/lib/components/`                       | UI components (Skeleton v5 + Tailwind v4): `LinkList`, `LinkChip`, `FolderList`, `FolderChip`, `Modal`, `QuickForm`, `InputField`, forms, etc. |
 | `src/lib/utils/`                            | `utils.ts` (class concat, link/domain/IP validation), `localStorage.ts`, `styles.ts`.                                                          |
 | `src/app.d.ts`                              | Global types: `Nullable`, `Undefinable`, `App.Themes`, and the `Firestore.*` document types.                                                   |
 | `firestore.rules`                           | Security rules: per-user ownership + 10-folder cap.                                                                                            |
@@ -50,7 +54,7 @@ Deeper detail: [App architecture](../architectures/app-architecture.md), [Data m
 
 ## Build and Run Path
 
-Requirements: Node ≥ 24.2, pnpm ≥ 10 (`packageManager: pnpm@10.12.1`), Firebase CLI for emulators.
+Requirements: Node ≥ 24.12 (`.nvmrc`; Firebase 13 minimum), pnpm ≥ 11 (`packageManager: pnpm@11.17.0`), Java for emulators. `firebase-tools` is a dev dependency, so `pnpm firebase-emulator:start` uses the project-pinned CLI (no global install needed).
 
 ```bash
 # Install
@@ -74,7 +78,7 @@ pnpm build
 pnpm preview
 ```
 
-There is no automated test suite; quality gates are `fmt:check`, `check`, and `build`. Copy `.env.example` to `.env` and fill in the `PUBLIC_FIREBASE_*` values (set `PUBLIC_FIREBASE_USE_EMULATOR=true` to use emulators).
+There is no automated test suite; quality gates are `fmt:check`, `check`, and `build`. Copy `.env.example` to `.env` and fill in the `PUBLIC_FIREBASE_*` values (set `PUBLIC_FIREBASE_USE_EMULATOR=true` to use emulators). Variables are declared in `src/env.ts`.
 
 ## Ignored Paths (from .wikirc)
 

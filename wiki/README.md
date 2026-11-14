@@ -29,8 +29,9 @@ The wiki is the working memory for repo analysis, architectural summaries, opera
 
 ## Project Conventions
 
-- Package manager: **pnpm** only (`npm` is blocked via `engines`). Node ≥ 24.2.
-- Formatting: Prettier — tabs, no semicolons, single quotes, `printWidth` 100, `trailingComma: es5`, Svelte + Tailwind plugins. ESLint flat config. Run `pnpm fmt` before committing (lint-staged does it automatically).
+- Package manager: **pnpm** only (`npm` is blocked via `engines`). Node ≥ 24.12 (Firebase 13 minimum), pnpm ≥ 11 (`pnpm-workspace.yaml` holds pnpm settings: `allowBuilds`, `engineStrict`).
+- Imports: `#lib/*` subpath imports (declared in `package.json` `imports`) with explicit file extensions; SvelteKit 3 removed `$lib`.
+- Formatting: Prettier — tabs, no semicolons, single quotes, `printWidth` 100, `trailingComma: es5`, Svelte + Tailwind plugins. ESLint flat config. Run `pnpm fmt` before committing (the Lefthook pre-commit hook fixes staged files automatically).
 - Svelte 5 runes everywhere (`$state`, `$derived`, `$effect.pre`, `$props`); shared state as rune classes passed through typed contexts in `src/lib/contexts/`.
 - Firestore access only through helpers in `src/lib/firestore/`; document types in the global `Firestore` namespace (`src/app.d.ts`).
 - Every PR must keep a `CHANGELOG.md` entry for the current `package.json` version; user-facing changes bump the version. See [operations/ci-and-release.md](operations/ci-and-release.md).

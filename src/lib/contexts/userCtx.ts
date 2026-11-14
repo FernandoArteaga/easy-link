@@ -1,5 +1,5 @@
 import { getContext, setContext } from 'svelte'
-import { UserStore } from '$lib/stores/user.svelte'
+import { UserStore } from '#lib/stores/user.svelte.ts'
 
 function ctx(): Ctx<UserStore> {
 	return {

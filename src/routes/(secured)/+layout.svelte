@@ -1,23 +1,23 @@
 <script lang="ts">
 	import type { HTMLInputAttributes } from 'svelte/elements'
-	import { Folder, Link, Moon, Sun, House } from 'lucide-svelte'
+	import { Folder, Link, Moon, Sun, House } from '@lucide/svelte'
 	import type { AuthError } from 'firebase/auth'
 	import { signOut } from 'firebase/auth'
 	import type { FirestoreError } from 'firebase/firestore'
 	import { onSnapshot, orderBy, query } from 'firebase/firestore'
 	import { goto } from '$app/navigation'
 	import { resolve } from '$app/paths'
-	import { auth } from '$lib/firebase'
-	import { userDoc } from '$lib/firestore/users'
-	import { createLink } from '$lib/firestore/links'
-	import { createFolder, folderCollection } from '$lib/firestore/folders'
-	import { handleErrorMessages } from '$lib/firestore/errors'
-	import toasterCtx from '$lib/contexts/toasterCtx'
-	import foldersCtx from '$lib/contexts/foldersCtx'
-	import userCtx from '$lib/contexts/userCtx'
-	import themeStore from '$lib/stores/theme.svelte'
-	import QuickForm from '$lib/components/QuickForm.svelte'
-	import Message from '$lib/components/Message.svelte'
+	import { auth } from '#lib/firebase.ts'
+	import { userDoc } from '#lib/firestore/users.ts'
+	import { createLink } from '#lib/firestore/links.ts'
+	import { createFolder, folderCollection } from '#lib/firestore/folders.ts'
+	import { handleErrorMessages } from '#lib/firestore/errors.ts'
+	import toasterCtx from '#lib/contexts/toasterCtx.ts'
+	import foldersCtx from '#lib/contexts/foldersCtx.ts'
+	import userCtx from '#lib/contexts/userCtx.ts'
+	import themeStore from '#lib/stores/theme.svelte.ts'
+	import QuickForm from '#lib/components/QuickForm.svelte'
+	import Message from '#lib/components/Message.svelte'
 
 	let { children, data } = $props()
 
@@ -31,7 +31,7 @@
 		signOut(auth)
 			.then(() => {
 				userStore.signOut()
-				goto(resolve('/login'))
+				goto(resolve('login'))
 			})
 			.catch((error) => {
 				console.error(error)
@@ -120,7 +120,7 @@
 {#if userStore.session}
 	<div class="bg-surface-50-950 sticky -top-4 z-10 pb-8">
 		<nav class="flex w-full flex-row flex-wrap items-center justify-end space-x-2 py-8">
-			<a href={resolve('/links')} class={navButton}>
+			<a href={resolve('links')} class={navButton}>
 				<House size={14} />
 			</a>
 			<button class={navButton} onclick={changeTheme}>

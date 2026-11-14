@@ -11,7 +11,7 @@ references: ['source:.github/workflows/pr-checks.yml', 'source:.github/workflows
 
 ## Local Gates
 
-- Husky `pre-commit` runs `lint-staged`: `pnpm fmt` on staged js/ts/svelte/css/md/json/yml, and `pnpm check` on js/ts/svelte.
+- Lefthook `pre-commit` (`lefthook.yml`, installed by the `lefthook` postinstall script) runs in parallel: `eslint --fix` and `prettier --write` on staged files (fixes re-staged; `wiki/`, `.claude/`, `.wiki-instructions/` excluded from Prettier), and `pnpm check` when js/ts/svelte files are staged.
 
 ## Pull Requests
 

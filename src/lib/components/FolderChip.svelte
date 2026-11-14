@@ -1,15 +1,15 @@
 <script lang="ts">
 	import type { HTMLInputAttributes } from 'svelte/elements'
 	import type { FirestoreError } from 'firebase/firestore'
-	import { Pencil, OctagonX, Folder } from 'lucide-svelte'
-	import { deleteFolder, updateFolder } from '$lib/firestore/folders'
-	import { handleErrorMessages } from '$lib/firestore/errors'
-	import toasterCtx from '$lib/contexts/toasterCtx'
-	import userCtx from '$lib/contexts/userCtx'
-	import ButtonInline from '$lib/components/ButtonInline.svelte'
-	import DisplayTextInline from '$lib/components/DisplayTextInline.svelte'
-	import InputField from '$lib/components/InputField.svelte'
-	import Modal from '$lib/components/Modal.svelte'
+	import { Pencil, OctagonX, Folder } from '@lucide/svelte'
+	import { deleteFolder, updateFolder } from '#lib/firestore/folders.ts'
+	import { handleErrorMessages } from '#lib/firestore/errors.ts'
+	import toasterCtx from '#lib/contexts/toasterCtx.ts'
+	import userCtx from '#lib/contexts/userCtx.ts'
+	import ButtonInline from '#lib/components/ButtonInline.svelte'
+	import DisplayTextInline from '#lib/components/DisplayTextInline.svelte'
+	import InputField from '#lib/components/InputField.svelte'
+	import Modal from '#lib/components/Modal.svelte'
 
 	type Props = {
 		folder: Firestore.Doc<Firestore.Folder>

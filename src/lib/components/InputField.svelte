@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
 	import type { FullAutoFill, HTMLInputAttributes, HTMLInputTypeAttribute } from 'svelte/elements'
-	import { Eye, EyeOff } from 'lucide-svelte'
-	import { concatClasses, randomInputID } from '$lib/utils/utils'
+	import { Eye, EyeOff } from '@lucide/svelte'
+	import { concatClasses, randomInputID } from '#lib/utils/utils.ts'
 
 	type Props = {
 		name: string

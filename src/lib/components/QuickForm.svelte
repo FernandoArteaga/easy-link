@@ -1,15 +1,15 @@
 <script lang="ts">
 	import type { HTMLInputAttributes } from 'svelte/elements'
-	import type { Icon as LucideIcon } from 'lucide-svelte'
-	import { CornerDownRight, Eraser } from 'lucide-svelte'
-	import { concatClasses } from '$lib/utils/utils'
-	import { btnPrimary } from '$lib/utils/styles'
+	import type { LucideIcon } from '@lucide/svelte'
+	import { CornerDownRight, Eraser } from '@lucide/svelte'
+	import { concatClasses } from '#lib/utils/utils.ts'
+	import { btnPrimary } from '#lib/utils/styles.ts'
 
 	type Props = {
 		value: string | undefined
 		submit: () => void
 		placeholder: string
-		Icon: typeof LucideIcon
+		Icon: LucideIcon
 		attr?: HTMLInputAttributes
 	}
 	let { value = $bindable(undefined), submit, placeholder, Icon, attr }: Props = $props()

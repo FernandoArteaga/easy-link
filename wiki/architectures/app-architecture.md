@@ -11,9 +11,9 @@ references: ['source:src/routes/+layout.svelte', 'source:src/routes/(secured)/+l
 
 ## Shape
 
-- **SvelteKit 2 + Svelte 5 (runes)**, built with `@sveltejs/adapter-static` into `public/` with `fallback: 'index.html'`. `ssr = false` in the root `+layout.ts`, so the whole app is a client-rendered SPA.
+- **SvelteKit 3 + Svelte 5 (runes)**, configured in `vite.config.ts` via `sveltekit({ ... })` (no `svelte.config.js`), built with `@sveltejs/adapter-static` into `public/` with `fallback: 'index.html'`. `ssr = false` in the root `+layout.ts`, so the whole app is a client-rendered SPA.
 - **No server code.** All data access goes straight from the browser to Firebase; authorisation is enforced only by [Firestore security rules](data-model.md#security-rules).
-- **UI:** Skeleton v4 (`@skeletonlabs/skeleton-svelte`) components (Dialog-based `Modal`, `Toast`, `Tabs`), Tailwind CSS v4 via `@tailwindcss/vite`, icons from `lucide-svelte`.
+- **UI:** Skeleton v5 (`@skeletonlabs/skeleton-svelte`) components (Dialog-based `Modal`, `Toast`, `Tabs`), Tailwind CSS v4 via `@tailwindcss/vite`, icons from `@lucide/svelte`. Modules under `src/lib` are imported as `#lib/<path>.<ext>`.
 
 ## Routes
 
@@ -52,7 +52,7 @@ Writes go through helpers in `src/lib/firestore/`; see [Data model](data-model.m
 
 ## Environment
 
-`src/lib/firebase.ts` reads `PUBLIC_FIREBASE_*` from `$env/static/public`. Emulators are used only when `dev` and `PUBLIC_FIREBASE_USE_EMULATOR === 'true'`. Analytics initialises only in production builds when supported.
+`src/env.ts` declares every `PUBLIC_FIREBASE_*` variable with `defineEnvVars` as `public` + `static` (inlined at build). `src/lib/firebase.ts` imports them from `$app/env/public`; `PUBLIC_FIREBASE_USE_EMULATOR` is parsed to a boolean there. Emulators are used only when `dev` and that flag is true. Analytics initialises only in production builds when supported.
 
 ## Related
 

@@ -21,3 +21,11 @@ Append-only timeline of wiki maintenance activity.
   - Pre-v1.2.3 users without a `users/{uid}` doc cannot create folders.
   - Untracked `tmp/rules.md` scratch file — keep or delete?
   - Root `README.md` lists "tags and categories" as a feature; only folders exist.
+
+## [2026-11-14] ingest | Node 26 / pnpm 11 and SvelteKit 3 upgrade
+
+- Updated repo-map, app-architecture and README conventions for: Node ≥ 24, pnpm 11 (`pnpm-workspace.yaml`), SvelteKit 3 (config in `vite.config.ts`, `src/env.ts` env declarations, `#lib` imports, `$app/env`), Skeleton 5, `@lucide/svelte`.
+- Needs human review: visual changes from Skeleton 5 theme/component redesign.
+- Node stays on 24 (not 26): firebase-tools (emulators) depends on `superstatic`, which only supports Node 20/22/24, and older firebase-tools crash on Node 26 (`SlowBuffer` removed).
+- Added `firebase-tools` as a dev dependency (emulators no longer need a global CLI). `re2` (optional native dep of `superstatic`) build is disabled; only needed for regex rewrites in `firebase.json`.
+- Replaced Husky + lint-staged with Lefthook (`lefthook.yml`, mirrors neat-web-app); updated ci-and-release local gates and repo-map.

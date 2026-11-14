@@ -1,4 +1,4 @@
-import { dev } from '$app/environment'
+import { dev } from '$app/env'
 import {
 	PUBLIC_FIREBASE_API_KEY,
 	PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -8,7 +8,7 @@ import {
 	PUBLIC_FIREBASE_APP_ID,
 	PUBLIC_FIREBASE_MEASUREMENT_ID,
 	PUBLIC_FIREBASE_USE_EMULATOR,
-} from '$env/static/public'
+} from '$app/env/public'
 import type { FirebaseApp } from 'firebase/app'
 import { initializeApp, getApps } from 'firebase/app'
 import { getAnalytics, isSupported } from 'firebase/analytics'
@@ -42,7 +42,7 @@ if (getApps().length > 0) {
 const auth = getAuth(app)
 const firestore = getFirestore()
 
-if (dev && PUBLIC_FIREBASE_USE_EMULATOR === 'true') {
+if (dev && PUBLIC_FIREBASE_USE_EMULATOR) {
 	connectAuthEmulator(auth, 'http://localhost:9099')
 	connectFirestoreEmulator(firestore, 'localhost', 9080)
 }

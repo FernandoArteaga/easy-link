@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { AtSign, RectangleEllipsis } from 'lucide-svelte'
+	import { AtSign, RectangleEllipsis } from '@lucide/svelte'
 	import { createUserWithEmailAndPassword } from 'firebase/auth'
 	import { goto } from '$app/navigation'
 	import { resolve } from '$app/paths'
-	import { auth } from '$lib/firebase'
-	import { handleErrorMessages } from '$lib/firestore/errors'
-	import toasterCtx from '$lib/contexts/toasterCtx'
-	import InputField from '$lib/components/InputField.svelte'
-	import { createUser } from '$lib/firestore/users'
+	import { auth } from '#lib/firebase.ts'
+	import { handleErrorMessages } from '#lib/firestore/errors.ts'
+	import toasterCtx from '#lib/contexts/toasterCtx.ts'
+	import InputField from '#lib/components/InputField.svelte'
+	import { createUser } from '#lib/firestore/users.ts'
 
 	const toast = toasterCtx.getCtx()
 
@@ -21,7 +21,7 @@
 		createUserWithEmailAndPassword(auth, inputEmail, inputPwd)
 			.then(async (credentials) => {
 				await createUser(credentials.user.uid)
-				await goto(resolve('/links'))
+				await goto(resolve('links'))
 			})
 			.catch((error) => {
 				toast.create({

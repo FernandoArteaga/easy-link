@@ -1,5 +1,5 @@
 import { getContext, setContext } from 'svelte'
-import { FolderStore } from '$lib/stores/folders.svelte'
+import { FolderStore } from '#lib/stores/folders.svelte.ts'
 
 function ctx(): Ctx<FolderStore> {
 	return {

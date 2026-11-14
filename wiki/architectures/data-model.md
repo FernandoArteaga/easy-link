@@ -4,15 +4,7 @@ description: 'Firestore data model: collections, document fields, security rules
 superseded_by: ''
 created: '2026-11-14'
 tags: ['firestore', 'data-model', 'security']
-references:
-  [
-    'source:src/app.d.ts',
-    'source:firestore.rules',
-    'source:firestore.indexes.json',
-    'source:src/lib/firestore/links.ts',
-    'source:src/lib/firestore/folders.ts',
-    'source:src/lib/firestore/users.ts',
-  ]
+references: ['source:src/app.d.ts', 'source:firestore.rules', 'source:firestore.indexes.json', 'source:src/lib/firestore/links.ts', 'source:src/lib/firestore/folders.ts', 'source:src/lib/firestore/users.ts']
 ---
 
 # Data Model

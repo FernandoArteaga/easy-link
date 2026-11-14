@@ -4,15 +4,7 @@ description: 'CI checks, preview deploys, versioning rules, and the tag-driven p
 superseded_by: ''
 created: '2026-11-14'
 tags: ['ci', 'release', 'github-actions', 'firebase']
-references:
-  [
-    'source:.github/workflows/pr-checks.yml',
-    'source:.github/workflows/firebase-services-deploy.yml',
-    'source:.github/workflows/build-sveltekit.yml',
-    'source:.github/workflows/pr-firebase-hosting-preview.yml',
-    'source:.github/workflows/secrets-scan.yml',
-    'source:.github/dependabot.yml',
-  ]
+references: ['source:.github/workflows/pr-checks.yml', 'source:.github/workflows/firebase-services-deploy.yml', 'source:.github/workflows/build-sveltekit.yml', 'source:.github/workflows/pr-firebase-hosting-preview.yml', 'source:.github/workflows/secrets-scan.yml', 'source:.github/dependabot.yml']
 ---
 
 # CI and Release

@@ -4,15 +4,7 @@ description: 'Client-side architecture: routing, auth flow, state (stores + cont
 superseded_by: ''
 created: '2026-11-14'
 tags: ['architecture', 'sveltekit', 'firebase']
-references:
-  [
-    'source:src/routes/+layout.svelte',
-    'source:src/routes/(secured)/+layout.svelte',
-    'source:src/lib/guard.ts',
-    'source:src/lib/firebase.ts',
-    'source:src/lib/stores/user.svelte.ts',
-    'source:src/lib/stores/folders.svelte.ts',
-  ]
+references: ['source:src/routes/+layout.svelte', 'source:src/routes/(secured)/+layout.svelte', 'source:src/lib/guard.ts', 'source:src/lib/firebase.ts', 'source:src/lib/stores/user.svelte.ts', 'source:src/lib/stores/folders.svelte.ts']
 ---
 
 # App Architecture

@@ -4,13 +4,7 @@ description: 'Decision record: cap each user at 10 folders using a transactional
 superseded_by: ''
 created: '2026-11-14'
 tags: ['decision', 'firestore', 'folders']
-references:
-  [
-    'source:firestore.rules',
-    'source:src/lib/firestore/folders.ts',
-    'source:src/lib/stores/user.svelte.ts',
-    'source:CHANGELOG.md',
-  ]
+references: ['source:firestore.rules', 'source:src/lib/firestore/folders.ts', 'source:src/lib/stores/user.svelte.ts', 'source:CHANGELOG.md']
 ---
 
 # Decision: 10-Folder Limit per User

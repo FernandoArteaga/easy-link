@@ -1,6 +1,6 @@
 import type { DocumentReference } from 'firebase/firestore'
 import { setDoc, serverTimestamp, updateDoc, doc } from 'firebase/firestore'
-import { firestore } from '$lib/firebase'
+import { firestore } from '#lib/firebase.ts'
 
 export function userDoc(uid: string): DocumentReference<Firestore.User> {
 	return doc(firestore, 'users', uid) as DocumentReference<Firestore.User>

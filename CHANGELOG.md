@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com), and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
+### Changed
+- Require pnpm 11+ and Node.js 24.12+; pnpm settings moved to `pnpm-workspace.yaml`.
+- Upgrade to SvelteKit 3, Vite 8, Skeleton 5, Firebase 13, ESLint 10 and TypeScript 6.
+  - Move Svelte config into `vite.config.ts` and declare env vars in `src/env.ts`.
+  - Replace `$lib` imports with `#lib` subpath imports.
+  - Replace deprecated `lucide-svelte` with `@lucide/svelte`.
+- Add `firebase-tools` as a dev dependency so the emulators use a project-pinned CLI.
+- Replace Husky and lint-staged with Lefthook (`lefthook.yml`): staged files get ESLint and Prettier fixes, plus `pnpm check`.
+
+### Fixed
+- Restore input groups after Skeleton 5 removed `input-group`/`ig-*` (now `field-group`).
+- Size icons with Skeleton 5 classes instead of the Lucide `size` prop.
+- Give the modal Cancel button a valid style (`preset-ghost-primary` doesn't exist).
 
 
 ## [1.3.0] - 2025-12-13

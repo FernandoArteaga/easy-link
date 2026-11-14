@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { AtSign, RectangleEllipsis } from 'lucide-svelte'
+	import { AtSign, RectangleEllipsis } from '@lucide/svelte'
 	import { signInWithEmailAndPassword } from 'firebase/auth'
 	import { goto } from '$app/navigation'
 	import { resolve } from '$app/paths'
-	import { auth } from '$lib/firebase'
-	import { handleErrorMessages } from '$lib/firestore/errors'
-	import toasterCtx from '$lib/contexts/toasterCtx'
-	import InputField from '$lib/components/InputField.svelte'
+	import { auth } from '#lib/firebase.ts'
+	import { handleErrorMessages } from '#lib/firestore/errors.ts'
+	import toasterCtx from '#lib/contexts/toasterCtx.ts'
+	import InputField from '#lib/components/InputField.svelte'
 
 	const toast = toasterCtx.getCtx()
 
@@ -18,7 +18,7 @@
 		e.preventDefault()
 		signInWithEmailAndPassword(auth, inputEmail, inputPwd)
 			.then(() => {
-				goto(resolve('/links'))
+				goto(resolve('links'))
 			})
 			.catch((error) => {
 				toast.create({
@@ -41,7 +41,7 @@
 			attr={{ required: true }}
 		>
 			{#snippet icon()}
-				<AtSign size={16} />
+				<AtSign class="size-elem-base" />
 			{/snippet}
 		</InputField>
 		<InputField
@@ -54,7 +54,7 @@
 			attr={{ minlength: 6, maxlength: 64, required: true }}
 		>
 			{#snippet icon()}
-				<RectangleEllipsis size={16} />
+				<RectangleEllipsis class="size-elem-base" />
 			{/snippet}
 		</InputField>
 		<button type="submit" class="btn preset-filled-primary-500 w-full" {disabled}> Submit </button>

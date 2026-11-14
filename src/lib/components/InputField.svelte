@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
 	import type { FullAutoFill, HTMLInputAttributes, HTMLInputTypeAttribute } from 'svelte/elements'
-	import { Eye, EyeOff } from 'lucide-svelte'
-	import { concatClasses, randomInputID } from '$lib/utils/utils'
+	import { Eye, EyeOff } from '@lucide/svelte'
+	import { concatClasses, randomInputID } from '#lib/utils/utils.ts'
 
 	type Props = {
 		name: string
@@ -28,20 +28,30 @@
 	}: Props = $props()
 
 	const inputID = randomInputID()
-	let revealClass = $derived(canReveal && value ? 'pr-8' : '')
+	let showReveal = $derived(canReveal && !!value)
+	// Literal class names so Tailwind can detect them
+	let gridCols = $derived(
+		icon
+			? showReveal
+				? 'grid-cols-[auto_1fr_auto]'
+				: 'grid-cols-[auto_1fr]'
+			: showReveal
+				? 'grid-cols-[1fr_auto]'
+				: 'grid-cols-1'
+	)
 
 	let toggleReveal = () => {
 		type = type === 'text' ? 'password' : 'text'
 	}
 </script>
 
-<div class="input-group relative flex">
+<div class={concatClasses('field-group gap-0', gridCols)}>
 	{#if icon}
-		<div class="ig-cell preset-tonal">{@render icon?.()}</div>
+		<label class="label label-text preset-tonal" for={inputID}>{@render icon?.()}</label>
 	{/if}
 	<input
 		id={inputID}
-		class={concatClasses('ig-input', revealClass)}
+		class="input"
 		{name}
 		{type}
 		{placeholder}
@@ -51,12 +61,12 @@
 		{...attr}
 	/>
 
-	{#if canReveal && value}
-		<button class="ig-btn preset" type="button" onclick={toggleReveal}>
+	{#if showReveal}
+		<button class="btn preset-tonal" type="button" onclick={toggleReveal}>
 			{#if type === 'text'}
-				<EyeOff size={16} />
+				<EyeOff />
 			{:else}
-				<Eye size={16} />
+				<Eye />
 			{/if}
 		</button>
 	{/if}

@@ -24,9 +24,9 @@ Built with love, using:
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/) (version 24 or higher)
-- [pnpm](https://pnpm.io/) (version 10 or higher) as our package manager.
-- [Firebase CLI](https://firebase.google.com/docs/cli) for Firebase emulators.
+- [Node.js](https://nodejs.org/) (version 24.12 or higher)
+- [pnpm](https://pnpm.io/) (version 11 or higher) as our package manager.
+- Java (JDK 21 or higher) for the Firebase emulators. The [Firebase CLI](https://firebase.google.com/docs/cli) is installed as a dev dependency.
 
 ## Setup
 

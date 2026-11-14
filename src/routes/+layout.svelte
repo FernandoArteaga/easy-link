@@ -1,16 +1,16 @@
 <script lang="ts">
 	import '../app.css'
 	import { Toast, createToaster } from '@skeletonlabs/skeleton-svelte'
-	import { routeGuard } from '$lib/guard'
-	import { auth } from '$lib/firebase'
+	import { routeGuard } from '#lib/guard.ts'
+	import { auth } from '#lib/firebase.ts'
 	import { onAuthStateChanged } from 'firebase/auth'
-	import foldersCtx from '$lib/contexts/foldersCtx'
-	import userCtx from '$lib/contexts/userCtx'
-	import toasterCtx from '$lib/contexts/toasterCtx'
-	import themeStore from '$lib/stores/theme.svelte'
-	import { FolderStore } from '$lib/stores/folders.svelte'
-	import { UserStore } from '$lib/stores/user.svelte'
-	import { updateUserLastLogin } from '$lib/firestore/users'
+	import foldersCtx from '#lib/contexts/foldersCtx.ts'
+	import userCtx from '#lib/contexts/userCtx.ts'
+	import toasterCtx from '#lib/contexts/toasterCtx.ts'
+	import themeStore from '#lib/stores/theme.svelte.ts'
+	import { FolderStore } from '#lib/stores/folders.svelte.ts'
+	import { UserStore } from '#lib/stores/user.svelte.ts'
+	import { updateUserLastLogin } from '#lib/firestore/users.ts'
 
 	let { children, data } = $props()
 	const toaster = createToaster({

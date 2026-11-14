@@ -1,15 +1,15 @@
 <script lang="ts">
 	import type { FirestoreError } from 'firebase/firestore'
-	import { Copy, ExternalLink, FolderPlus, OctagonX } from 'lucide-svelte'
-	import { isValidLink } from '$lib/utils/utils'
-	import { deleteLink, updateLink } from '$lib/firestore/links'
-	import { handleErrorMessages } from '$lib/firestore/errors'
-	import toasterCtx from '$lib/contexts/toasterCtx'
-	import foldersCtx from '$lib/contexts/foldersCtx'
-	import userCtx from '$lib/contexts/userCtx'
-	import ButtonInline from '$lib/components/ButtonInline.svelte'
-	import DisplayTextInline from '$lib/components/DisplayTextInline.svelte'
-	import Modal from '$lib/components/Modal.svelte'
+	import { Copy, ExternalLink, FolderPlus, OctagonX } from '@lucide/svelte'
+	import { isValidLink } from '#lib/utils/utils.ts'
+	import { deleteLink, updateLink } from '#lib/firestore/links.ts'
+	import { handleErrorMessages } from '#lib/firestore/errors.ts'
+	import toasterCtx from '#lib/contexts/toasterCtx.ts'
+	import foldersCtx from '#lib/contexts/foldersCtx.ts'
+	import userCtx from '#lib/contexts/userCtx.ts'
+	import ButtonInline from '#lib/components/ButtonInline.svelte'
+	import DisplayTextInline from '#lib/components/DisplayTextInline.svelte'
+	import Modal from '#lib/components/Modal.svelte'
 
 	type Props = {
 		link: Firestore.Doc<Firestore.Link>

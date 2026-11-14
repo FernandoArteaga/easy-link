@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
-	import { concatClasses } from '$lib/utils/utils'
+	import { concatClasses } from '#lib/utils/utils.ts'
 
 	type Props = {
 		children: Snippet

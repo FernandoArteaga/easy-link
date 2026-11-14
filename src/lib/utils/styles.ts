@@ -1,4 +1,4 @@
-import { concatClasses } from '$lib/utils/utils'
+import { concatClasses } from '#lib/utils/utils.ts'
 
 const btnBase = 'flex items-center justify-center cursor-pointer'
 

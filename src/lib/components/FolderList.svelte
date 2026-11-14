@@ -1,17 +1,17 @@
 <script lang="ts">
 	import type { FirestoreError } from 'firebase/firestore'
-	import { Folder, Folders, FolderTree, Plus, Check } from 'lucide-svelte'
-	import { createFolder } from '$lib/firestore/folders'
-	import { handleErrorMessages } from '$lib/firestore/errors'
-	import toasterCtx from '$lib/contexts/toasterCtx'
-	import userCtx from '$lib/contexts/userCtx'
-	import foldersCtx from '$lib/contexts/foldersCtx'
-	import { concatClasses } from '$lib/utils/utils'
-	import Placeholder from '$lib/components/Placeholder.svelte'
-	import Modal from '$lib/components/Modal.svelte'
-	import InputField from '$lib/components/InputField.svelte'
-	import ButtonInline from '$lib/components/ButtonInline.svelte'
-	import Message from '$lib/components/Message.svelte'
+	import { Folder, Folders, FolderTree, Plus, Check } from '@lucide/svelte'
+	import { createFolder } from '#lib/firestore/folders.ts'
+	import { handleErrorMessages } from '#lib/firestore/errors.ts'
+	import toasterCtx from '#lib/contexts/toasterCtx.ts'
+	import userCtx from '#lib/contexts/userCtx.ts'
+	import foldersCtx from '#lib/contexts/foldersCtx.ts'
+	import { concatClasses } from '#lib/utils/utils.ts'
+	import Placeholder from '#lib/components/Placeholder.svelte'
+	import Modal from '#lib/components/Modal.svelte'
+	import InputField from '#lib/components/InputField.svelte'
+	import ButtonInline from '#lib/components/ButtonInline.svelte'
+	import Message from '#lib/components/Message.svelte'
 
 	const toast = toasterCtx.getCtx()
 	const userStore = userCtx.getCtx()
@@ -85,7 +85,7 @@
 									attr={{ required: true, minlength: 2, maxlength: 36 }}
 								>
 									{#snippet icon()}
-										<Folder size={16} />
+										<Folder class="size-elem-base" />
 									{/snippet}
 								</InputField>
 							</div>
@@ -110,7 +110,7 @@
 		{:else}
 			<ButtonInline Icon={FolderTree} onclick={toggleAssigningLinks} />
 		{/if}
-		<ButtonInline Icon={Folders} href="/folders" end />
+		<ButtonInline Icon={Folders} href="folders" end />
 	</div>
 	{#if folderStore.assigningLinks}
 		<Message extraClasses="mt-4">Click on a link to assign it to a folder.</Message>

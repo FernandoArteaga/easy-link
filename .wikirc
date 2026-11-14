@@ -1,0 +1,32 @@
+wiki_dir = "wiki"
+# Match this to the repository's default branch (main or master).
+default_diff = "main...HEAD"
+log_lines = 10
+
+# Detection thresholds
+duplicate_threshold = 0.7
+stale_days = 30
+
+# Context loading: default wiki-engine context to --summarize mode
+context_summarize = false
+
+# Watch mode
+watch_interval = 0
+
+# Lint severity gate: minimum severity that fails lint with exit 1
+# (error | warn | info). Issues below the gate are still printed.
+fail_severity = "warn"
+
+# Duplicate detection: pages with similarity above this threshold (0.0-1.0)
+# are flagged. Set to 0 to disable.
+# Stale detection: pages whose last git commit is older than this many days
+# are flagged (falls back to file mtime outside git). Set to 0 to disable.
+# Watch: polling interval in seconds for wiki-engine watch (0 disables
+# continuous watch; --once always works).
+
+ignore = [
+  "wiki/",
+  "bin/",
+  "*.log",
+  "*.tmp",
+]

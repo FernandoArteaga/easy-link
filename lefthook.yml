@@ -1,0 +1,20 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: check
+      glob: '*.{js,ts,svelte}'
+      run: pnpm check
+
+    - name: eslint
+      glob: '*.{js,ts,svelte}'
+      run: pnpm exec eslint --fix {staged_files}
+      stage_fixed: true
+
+    - name: prettier
+      glob: '*.{js,ts,svelte,css,scss,postcss,md,json,yaml,yml}'
+      exclude:
+        - '.claude/**'
+        - '.wiki-instructions/**'
+        - 'wiki/**'
+      run: pnpm exec prettier --write {staged_files}
+      stage_fixed: true

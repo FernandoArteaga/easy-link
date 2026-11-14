@@ -1,6 +1,6 @@
 import type { CollectionReference, DocumentReference } from 'firebase/firestore'
 import { doc, collection, addDoc, deleteDoc, serverTimestamp, updateDoc } from 'firebase/firestore'
-import { firestore } from '$lib/firebase'
+import { firestore } from '#lib/firebase.ts'
 
 export function linkCollection(uid: string): CollectionReference<Firestore.Link> {
 	return collection(firestore, 'users', uid, 'links') as CollectionReference<Firestore.Link>

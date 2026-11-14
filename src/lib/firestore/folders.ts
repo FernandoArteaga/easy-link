@@ -1,7 +1,7 @@
 import type { CollectionReference, DocumentReference } from 'firebase/firestore'
 import { doc, updateDoc, increment, runTransaction, collection } from 'firebase/firestore'
-import { firestore } from '$lib/firebase'
-import { userDoc } from '$lib/firestore/users'
+import { firestore } from '#lib/firebase.ts'
+import { userDoc } from '#lib/firestore/users.ts'
 
 export function folderCollection(uid: string) {
 	return collection(firestore, 'users', uid, 'folders') as CollectionReference<Firestore.Folder>

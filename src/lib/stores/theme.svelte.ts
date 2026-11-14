@@ -1,5 +1,5 @@
-import { browser } from '$app/environment'
-import { readFromLocalStorage, saveToLocalStorage } from '$lib/utils/localStorage'
+import { browser } from '$app/env'
+import { readFromLocalStorage, saveToLocalStorage } from '#lib/utils/localStorage.ts'
 
 const themeStorageKey = 'theme'
 

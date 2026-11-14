@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { resolve } from '$app/paths'
-	import type { RouteId } from '$app/types'
-	import { concatClasses } from '$lib/utils/utils'
-	import { btnPrimary } from '$lib/utils/styles'
-	import type { Icon as LucideIcon } from 'lucide-svelte'
+	import type { Path } from '$app/types'
+	import { concatClasses } from '#lib/utils/utils.ts'
+	import { btnPrimary } from '#lib/utils/styles.ts'
+	import type { LucideIcon } from '@lucide/svelte'
 
 	type Props = {
-		Icon: typeof LucideIcon
+		Icon: LucideIcon
 		onclick?: () => void
-		href?: RouteId | string
+		href?: Path | string
 		external?: boolean
 		start?: boolean
 		end?: boolean
@@ -22,11 +22,11 @@
 
 {#if href}
 	<!--eslint-disable-next-line svelte/no-navigation-without-resolve-->
-	<a class={classes} href={external ? href : resolve(href as RouteId)} {...aProps}>
-		<Icon size={16} />
+	<a class={classes} href={external ? href : resolve(href as Path)} {...aProps}>
+		<Icon class="size-elem-base" />
 	</a>
 {:else}
 	<button class={classes} {onclick}>
-		<Icon size={16} />
+		<Icon class="size-elem-base" />
 	</button>
 {/if}

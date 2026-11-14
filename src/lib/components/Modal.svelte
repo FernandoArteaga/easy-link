@@ -50,7 +50,7 @@
 					{@render body()}
 				{/if}
 				<footer class="flex justify-end gap-4">
-					<button type="button" class="btn preset-ghost-primary" onclick={() => (isOpen = false)}>
+					<button type="button" class="btn hover:preset-tonal" onclick={() => (isOpen = false)}>
 						Cancel
 					</button>
 					{#if confirmButtonFormId}

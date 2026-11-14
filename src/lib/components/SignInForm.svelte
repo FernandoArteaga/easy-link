@@ -41,7 +41,7 @@
 			attr={{ required: true }}
 		>
 			{#snippet icon()}
-				<AtSign size={16} />
+				<AtSign class="size-elem-base" />
 			{/snippet}
 		</InputField>
 		<InputField
@@ -54,7 +54,7 @@
 			attr={{ minlength: 6, maxlength: 64, required: true }}
 		>
 			{#snippet icon()}
-				<RectangleEllipsis size={16} />
+				<RectangleEllipsis class="size-elem-base" />
 			{/snippet}
 		</InputField>
 		<button type="submit" class="btn preset-filled-primary-500 w-full" {disabled}> Submit </button>

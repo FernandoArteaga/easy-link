@@ -121,13 +121,13 @@
 	<div class="bg-surface-50-950 sticky -top-4 z-10 pb-8">
 		<nav class="flex w-full flex-row flex-wrap items-center justify-end space-x-2 py-8">
 			<a href={resolve('links')} class={navButton}>
-				<House size={14} />
+				<House />
 			</a>
 			<button class={navButton} onclick={changeTheme}>
 				{#if themeStore.isLight()}
-					<Moon size={14} />
+					<Moon />
 				{:else}
-					<Sun size={14} />
+					<Sun />
 				{/if}
 			</button>
 			<button type="button" class={navButton} onclick={signOutUser}> Sign out </button>

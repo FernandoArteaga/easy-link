@@ -14,6 +14,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 - Add `firebase-tools` as a dev dependency so the emulators use a project-pinned CLI.
 - Replace Husky and lint-staged with Lefthook (`lefthook.yml`): staged files get ESLint and Prettier fixes, plus `pnpm check`.
 
+### Fixed
+- Restore input groups after Skeleton 5 removed `input-group`/`ig-*` (now `field-group`).
+- Size icons with Skeleton 5 classes instead of the Lucide `size` prop.
+- Give the modal Cancel button a valid style (`preset-ghost-primary` doesn't exist).
+
 
 ## [1.3.0] - 2025-12-13
 ### Added

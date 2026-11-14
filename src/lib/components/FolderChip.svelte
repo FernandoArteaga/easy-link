@@ -93,7 +93,7 @@
 							attr={inputAttributes}
 						>
 							{#snippet icon()}
-								<Folder size={16} />
+								<Folder class="size-elem-base" />
 							{/snippet}
 						</InputField>
 					</div>

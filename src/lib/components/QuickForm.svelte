@@ -16,23 +16,23 @@
 </script>
 
 <form class="w-full" onsubmit={submit}>
-	<div class="input-group grid-cols-[auto_1fr_auto]">
+	<div class="field-group grid-cols-[auto_1fr_auto] gap-0">
 		{#if value}
 			<button
 				type="button"
-				class={concatClasses(btnPrimary, 'ig-cell')}
+				class={concatClasses(btnPrimary, 'btn')}
 				onclick={() => (value = undefined)}
 			>
-				<Eraser size={16} />
+				<Eraser />
 			</button>
 		{:else}
-			<div class="ig-cell preset-tonal">
-				<Icon size={16} />
-			</div>
+			<span class="label label-text preset-tonal">
+				<Icon class="size-elem-base" />
+			</span>
 		{/if}
-		<input bind:value name="input-value" class="ig-input" type="text" {placeholder} {...attr} />
-		<button class="ig-btn preset-filled-secondary-500" type="submit">
-			<CornerDownRight size={16} />
+		<input bind:value name="input-value" class="input" type="text" {placeholder} {...attr} />
+		<button class="btn preset-filled-secondary-500" type="submit">
+			<CornerDownRight />
 		</button>
 	</div>
 </form>

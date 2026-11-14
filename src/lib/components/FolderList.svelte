@@ -85,7 +85,7 @@
 									attr={{ required: true, minlength: 2, maxlength: 36 }}
 								>
 									{#snippet icon()}
-										<Folder size={16} />
+										<Folder class="size-elem-base" />
 									{/snippet}
 								</InputField>
 							</div>

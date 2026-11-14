@@ -23,10 +23,10 @@
 {#if href}
 	<!--eslint-disable-next-line svelte/no-navigation-without-resolve-->
 	<a class={classes} href={external ? href : resolve(href as Path)} {...aProps}>
-		<Icon size={16} />
+		<Icon class="size-elem-base" />
 	</a>
 {:else}
 	<button class={classes} {onclick}>
-		<Icon size={16} />
+		<Icon class="size-elem-base" />
 	</button>
 {/if}

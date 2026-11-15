@@ -48,7 +48,8 @@ export async function restoreLink(userUid: string, link: Firestore.Doc<Firestore
 	const { id, ...data } = link
 	await setDoc(linkDoc(userUid, id), {
 		url: data.url,
-		timestamp: data.timestamp,
+		// A link deleted before its server timestamp resolved has `null` locally
+		timestamp: data.timestamp ?? serverTimestamp(),
 		...(data.folderId ? { folderId: data.folderId } : {}),
 		...(data.title ? { title: data.title } : {}),
 	})

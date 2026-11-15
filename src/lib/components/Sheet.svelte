@@ -53,7 +53,9 @@
 						{title}
 					</Dialog.Title>
 					{#if description}
-						<Dialog.Description class="text-ink-muted mt-1 text-[15px] leading-[22px] font-medium">
+						<Dialog.Description
+							class="text-ink-muted mt-1 text-[15px] leading-[22px] font-medium [overflow-wrap:anywhere]"
+						>
 							{description}
 						</Dialog.Description>
 					{/if}

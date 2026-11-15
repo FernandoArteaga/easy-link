@@ -43,6 +43,7 @@
 						url: data.url,
 						timestamp: data.timestamp,
 						folderId: data.folderId,
+						title: data.title,
 					}
 				})
 			},

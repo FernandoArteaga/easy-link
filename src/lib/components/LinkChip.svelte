@@ -243,7 +243,7 @@
 						bind:group={inputFolder}
 						class="border-line-control checked:border-violet size-[22px] flex-none appearance-none rounded-full border-2 checked:bg-[radial-gradient(circle,var(--violet-600)_0_5px,transparent_6px)]"
 					/>
-					{f.id === 'all' ? 'All (no folder)' : f.name}
+					<span class="min-w-0 truncate">{f.id === 'all' ? 'All (no folder)' : f.name}</span>
 				</label>
 			{/each}
 		</form>

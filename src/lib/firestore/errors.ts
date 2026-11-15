@@ -30,6 +30,8 @@ export function handleErrorMessages(error: AuthError | FirestoreError): string {
 			return NETWORK
 		case 'auth/user-disabled':
 			return 'This account has been disabled.'
+		case 'resource-exhausted':
+			return 'You’ve reached the limit of 10 folders.'
 		case 'permission-denied':
 			return 'You do not have permission to perform this action.'
 		default:

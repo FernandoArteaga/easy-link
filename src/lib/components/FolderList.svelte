@@ -49,6 +49,19 @@
 		role="tablist"
 		aria-label="Folders"
 	>
+		{#if userStore.canCreateFolder}
+			<button
+				type="button"
+				class={concatClasses(
+					chip,
+					'text-violet-text shadow-[inset_0_0_0_1.5px_var(--line-control)]'
+				)}
+				onclick={() => (isCreateOpen = true)}
+			>
+				<Plus size={16} aria-hidden="true" />
+				New
+			</button>
+		{/if}
 		{#each folderStore.folders as f (f.id)}
 			{@const active = f.id === folderStore.activeFolderId}
 			<button
@@ -64,19 +77,6 @@
 				{f.name}
 			</button>
 		{/each}
-		{#if userStore.canCreateFolder}
-			<button
-				type="button"
-				class={concatClasses(
-					chip,
-					'text-violet-text shadow-[inset_0_0_0_1.5px_var(--line-control)]'
-				)}
-				onclick={() => (isCreateOpen = true)}
-			>
-				<Plus size={16} aria-hidden="true" />
-				New
-			</button>
-		{/if}
 	</div>
 	<Sheet
 		bind:isOpen={isCreateOpen}

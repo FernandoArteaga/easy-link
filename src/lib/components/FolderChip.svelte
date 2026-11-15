@@ -49,7 +49,7 @@
 		const uid = userStore.session!.uid
 		const deleted = { ...folder }
 		try {
-			await deleteFolder(uid, folder.id)
+			if (!(await deleteFolder(uid, folder.id))) return
 			toast.create({
 				description: 'Folder deleted',
 				type: 'info',
@@ -67,12 +67,6 @@
 </script>
 
 <div class="flex min-h-15 items-center gap-3 pr-2 pl-4">
-	<span
-		class="bg-violet-soft text-violet-text grid size-9 flex-none place-items-center rounded-sm"
-		aria-hidden="true"
-	>
-		<Folder size={18} />
-	</span>
 	<span class="min-w-0 flex-1 truncate text-[15px] leading-5 font-bold">{folder.name}</span>
 	<IconButton Icon={Pencil} label={`Rename ${folder.name}`} onclick={() => (isOpen = true)} />
 	<IconButton

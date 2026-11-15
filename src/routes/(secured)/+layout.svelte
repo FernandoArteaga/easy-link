@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { HTMLInputAttributes } from 'svelte/elements'
-	import { ArrowLeft, Folders, Link, LogOut, Moon, Sun } from '@lucide/svelte'
+	import { ArrowLeft, Folder, Folders, Link, LogOut, Moon, Sun } from '@lucide/svelte'
 	import type { AuthError } from 'firebase/auth'
 	import { signOut } from 'firebase/auth'
 	import type { FirestoreError } from 'firebase/firestore'
@@ -10,7 +10,7 @@
 	import { auth } from '#lib/firebase.ts'
 	import { userDoc } from '#lib/firestore/users.ts'
 	import { createLink } from '#lib/firestore/links.ts'
-	import { folderCollection } from '#lib/firestore/folders.ts'
+	import { createFolder, folderCollection } from '#lib/firestore/folders.ts'
 	import { handleErrorMessages } from '#lib/firestore/errors.ts'
 	import toasterCtx from '#lib/contexts/toasterCtx.ts'
 	import foldersCtx from '#lib/contexts/foldersCtx.ts'
@@ -26,6 +26,7 @@
 	const userStore = userCtx.getCtx()
 	const folderStore = foldersCtx.getCtx()
 	let inputLink: string | undefined = $state(undefined)
+	let inputFolder: string | undefined = $state(undefined)
 
 	const signOutUser = () => {
 		signOut(auth)
@@ -89,6 +90,18 @@
 		}
 	}
 
+	const submitFolder = async () => {
+		if (!inputFolder) return
+		const name = inputFolder.trim()
+		if (name.length < 2 || name.length > 36) return
+		try {
+			await createFolder(userStore.session!.uid, { name })
+			inputFolder = undefined
+		} catch (error) {
+			handleError(error as FirestoreError)
+		}
+	}
+
 	const changeTheme = () => {
 		themeStore.theme = themeStore.theme === 'light' ? 'dark' : 'light'
 	}
@@ -98,10 +111,6 @@
 		spellcheck: 'false',
 		minlength: 2,
 		required: true,
-		// Not type="url": it would reject schemeless links and plain text, which save today
-		inputmode: 'url',
-		autocapitalize: 'off',
-		autocorrect: 'off',
 	}
 </script>
 
@@ -135,18 +144,39 @@
 	<main class="flex flex-1 flex-col gap-4 pt-2 pb-4">
 		{@render children()}
 	</main>
-	{#if data.pathname === '/links'}
+	{#if data.pathname === '/links' || data.pathname === '/folders'}
 		<div
 			class="from-bg sticky bottom-0 z-10 bg-linear-to-t from-70% to-transparent px-4 pt-3 pb-[calc(16px+env(safe-area-inset-bottom))]"
 		>
-			<AddBar
-				placeholder="Paste a link"
-				submitLabel="Save link"
-				bind:value={inputLink}
-				onsubmit={submitLink}
-				Icon={Link}
-				attr={inputAttributes}
-			/>
+			{#if data.pathname === '/links'}
+				<AddBar
+					placeholder="Paste a link"
+					submitLabel="Save link"
+					bind:value={inputLink}
+					onsubmit={submitLink}
+					Icon={Link}
+					attr={{
+						...inputAttributes,
+						// Not type="url": it would reject schemeless links and plain text, which save today
+						inputmode: 'url',
+						autocapitalize: 'off',
+						autocorrect: 'off',
+					}}
+				/>
+			{:else if userStore.canCreateFolder}
+				<AddBar
+					placeholder="New folder name"
+					submitLabel="Create folder"
+					bind:value={inputFolder}
+					onsubmit={submitFolder}
+					Icon={Folder}
+					attr={{ ...inputAttributes, maxlength: 36 }}
+				/>
+			{:else}
+				<p class="text-ink-muted py-4 text-center text-sm font-medium">
+					You’ve reached the limit of 10 folders.
+				</p>
+			{/if}
 		</div>
 	{/if}
 {/if}

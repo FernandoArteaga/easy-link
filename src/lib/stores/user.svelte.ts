@@ -1,3 +1,5 @@
+import { FOLDER_LIMIT } from '#lib/firestore/folders.ts'
+
 interface SessionUser {
 	uid: string
 	email: Nullable<string>
@@ -9,7 +11,7 @@ export class UserStore {
 	authReady = $state(false)
 	canCreateFolder = $derived.by(() => {
 		const u = this.user
-		return !!u && (u.totalFolders === undefined || u.totalFolders < 10)
+		return !!u && (u.totalFolders === undefined || u.totalFolders < FOLDER_LIMIT)
 	})
 	isSignedIn = $derived.by(() => {
 		return this.session !== undefined

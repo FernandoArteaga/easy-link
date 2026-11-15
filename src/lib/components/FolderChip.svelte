@@ -1,105 +1,101 @@
 <script lang="ts">
-	import type { HTMLInputAttributes } from 'svelte/elements'
+	import { untrack } from 'svelte'
 	import type { FirestoreError } from 'firebase/firestore'
-	import { Pencil, OctagonX, Folder } from '@lucide/svelte'
-	import { deleteFolder, updateFolder } from '#lib/firestore/folders.ts'
+	import { Pencil, Trash2, Folder } from '@lucide/svelte'
+	import { deleteFolder, restoreFolder, updateFolder } from '#lib/firestore/folders.ts'
 	import { handleErrorMessages } from '#lib/firestore/errors.ts'
 	import toasterCtx from '#lib/contexts/toasterCtx.ts'
 	import userCtx from '#lib/contexts/userCtx.ts'
-	import ButtonInline from '#lib/components/ButtonInline.svelte'
-	import DisplayTextInline from '#lib/components/DisplayTextInline.svelte'
+	import IconButton from '#lib/components/IconButton.svelte'
 	import InputField from '#lib/components/InputField.svelte'
-	import Modal from '#lib/components/Modal.svelte'
+	import Sheet from '#lib/components/Sheet.svelte'
 
 	type Props = {
 		folder: Firestore.Doc<Firestore.Folder>
 	}
 	let { folder }: Props = $props()
-
 	const toast = toasterCtx.getCtx()
 	const userStore = userCtx.getCtx()
-	let formId = 'update-folder'
-	let isModalOpen = $state(false)
-	let inputValue = $derived(folder.name)
+	const formId = $derived(`rename-folder-${folder.id}`)
+	let isOpen = $state(false)
+	let inputValue = $state('')
+	// Prefill on every open, so a cancelled rename isn't kept for next time
+	$effect.pre(() => {
+		if (isOpen) untrack(() => (inputValue = folder.name))
+	})
 
-	const inputAttributes: HTMLInputAttributes = {
-		autocomplete: 'off',
-		spellcheck: 'false',
-		minlength: 2,
-		required: true,
+	const showError = (error: unknown) => {
+		toast.create({
+			description: handleErrorMessages(error as FirestoreError),
+			type: 'error',
+		})
 	}
 
-	const submitUpdateFolder = async () => {
-		if (!inputValue) return
+	const submitRename = async (e: SubmitEvent) => {
+		e.preventDefault()
 		const folderName = inputValue.trim()
 		if (folderName.length < 2 || folderName.length > 36) return
 		try {
 			await updateFolder(userStore.session!.uid, folder.id, {
 				name: folderName,
 			})
-			isModalOpen = false
+			isOpen = false
 		} catch (error) {
-			toast.create({
-				title: 'Error',
-				description: handleErrorMessages(error as FirestoreError),
-				type: 'error',
-			})
+			showError(error)
 		}
 	}
 
 	async function removeFolder() {
+		const uid = userStore.session!.uid
+		const deleted = { ...folder }
 		try {
-			await deleteFolder(userStore.session!.uid, folder.id)
+			await deleteFolder(uid, folder.id)
 			toast.create({
 				description: 'Folder deleted',
 				type: 'info',
+				action: {
+					label: 'Undo',
+					onClick: () => {
+						restoreFolder(uid, deleted).catch(showError)
+					},
+				},
 			})
 		} catch (error) {
-			toast.create({
-				title: 'Error deleting folder',
-				description: handleErrorMessages(error as FirestoreError),
-				type: 'error',
-			})
+			showError(error)
 		}
 	}
 </script>
 
-<div class="flex">
-	<ButtonInline Icon={OctagonX} onclick={removeFolder} start />
-	<DisplayTextInline>{folder.name}</DisplayTextInline>
-	<Modal
-		bind:isOpen={isModalOpen}
-		title="Update folder"
-		description={`Modify the folder '${folder.name}'`}
-		triggerClasses="flex"
-		confirmButtonFormId={formId}
+<div class="flex min-h-15 items-center gap-3 pr-2 pl-4">
+	<span
+		class="bg-violet-soft text-violet-text grid size-9 flex-none place-items-center rounded-sm"
+		aria-hidden="true"
 	>
-		{#snippet trigger()}
-			<ButtonInline Icon={Pencil} end />
-		{/snippet}
-
-		{#snippet body()}
-			<form id={formId} class="space-y-4" onsubmit={submitUpdateFolder}>
-				<div>
-					<label for={`folder-name-${folder.id}`} class="text-sm text-gray-700 dark:text-gray-300">
-						Folder Name
-					</label>
-					<div class="mt-1">
-						<InputField
-							id={`folder-name-${folder.id}`}
-							type="text"
-							name={folder.id}
-							placeholder="Update folder name"
-							bind:value={inputValue}
-							attr={inputAttributes}
-						>
-							{#snippet icon()}
-								<Folder class="size-elem-base" />
-							{/snippet}
-						</InputField>
-					</div>
-				</div>
-			</form>
-		{/snippet}
-	</Modal>
+		<Folder size={18} />
+	</span>
+	<span class="min-w-0 flex-1 truncate text-[15px] leading-5 font-bold">{folder.name}</span>
+	<IconButton Icon={Pencil} label={`Rename ${folder.name}`} onclick={() => (isOpen = true)} />
+	<IconButton
+		Icon={Trash2}
+		label={`Delete ${folder.name}`}
+		variant="danger"
+		onclick={removeFolder}
+	/>
 </div>
+
+<Sheet bind:isOpen title="Rename folder" confirmLabel="Save" confirmFormId={formId}>
+	<form id={formId} onsubmit={submitRename}>
+		<InputField
+			id={`folder-name-${folder.id}`}
+			label="Folder name"
+			type="text"
+			name={folder.id}
+			bind:value={inputValue}
+			attr={{ required: true, minlength: 2, maxlength: 36, spellcheck: 'false' }}
+		>
+			{#snippet icon()}
+				<Folder size={20} class="flex-none" aria-hidden="true" />
+			{/snippet}
+		</InputField>
+	</form>
+</Sheet>

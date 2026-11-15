@@ -18,6 +18,7 @@
 	import themeStore from '#lib/stores/theme.svelte.ts'
 	import QuickForm from '#lib/components/QuickForm.svelte'
 	import Message from '#lib/components/Message.svelte'
+	import { normalizeLink } from '#lib/utils/utils.ts'
 
 	let { children, data } = $props()
 
@@ -82,7 +83,7 @@
 			const link = inputLink.trim()
 			if (link.length < 2) return
 			await createLink(userStore.session!.uid, {
-				url: link.toLowerCase(),
+				url: normalizeLink(link),
 			})
 			inputLink = undefined
 		} catch (error) {

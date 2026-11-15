@@ -26,3 +26,21 @@ export function isValidIp(ip: string) {
 	const ipv4Regex = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/
 	return ipv4Regex.test(ip)
 }
+
+/**
+ * Lower-cases only the case-insensitive parts of a link (scheme and host), keeping the path,
+ * query and hash as typed. Text that isn't a recognisable link is returned unchanged.
+ */
+export function normalizeLink(link: string): string {
+	const withScheme = /^([a-z][a-z\d+.-]*:\/\/)([^/?#]*)(.*)$/is.exec(link)
+	if (withScheme) {
+		const [, scheme, authority, rest] = withScheme
+		// Keep any user:password@ as typed; only the host (and port) is case-insensitive
+		const at = authority.lastIndexOf('@') + 1
+		return scheme.toLowerCase() + authority.slice(0, at) + authority.slice(at).toLowerCase() + rest
+	}
+	const split = link.search(/[/?#]/)
+	const head = split === -1 ? link : link.slice(0, split)
+	if (!isValidDomain(head) && !isValidIp(head)) return link
+	return head.toLowerCase() + link.slice(head.length)
+}

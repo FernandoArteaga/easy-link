@@ -13,6 +13,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
   - Replace deprecated `lucide-svelte` with `@lucide/svelte`.
 - Add `firebase-tools` as a dev dependency so the emulators use a project-pinned CLI.
 - Replace Husky and lint-staged with Lefthook (`lefthook.yml`): staged files get ESLint and Prettier fixes, plus `pnpm check`.
+- New mobile-first look from the Easy Link design system (`design-system/`): warm light and true dark themes, Manrope and JetBrains Mono, replacing the Skeleton "terminus" theme.
+  - App bar with logo and icon buttons (manage folders, theme, sign out), all with labels and tooltips.
+  - Links as cards: bold domain and mono path (or title and URL), each truncated to one line; tapping opens the link.
+  - Folders as scrolling chips, with a "New" chip that opens the add-folder sheet.
+  - Add link / add folder bar docked at the bottom, in thumb reach.
+  - Bottom sheets instead of centred modals, with buttons named by what they do.
+  - Sign-in page with logo, headline and a Sign in / Sign up switch; fields have visible labels.
+  - One-line pill toasts, bottom centre; empty states and skeleton loaders.
+- Delete, open and move to folder live in each link's "More" sheet. The organize mode toggle is removed; "Move to folder" replaces it.
+
+### Added
+- Optional link titles, set from the More sheet ("Add title" / "Edit title").
+- Undo on the "Link deleted" and "Folder deleted" toasts.
 
 ### Fixed
 - Restore input groups after Skeleton 5 removed `input-group`/`ig-*` (now `field-group`).

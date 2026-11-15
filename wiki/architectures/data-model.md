@@ -27,6 +27,7 @@ All data is per-user, nested under `users/{uid}`. Types live in the global `Fire
 | `url`       | string    | Trimmed on create; `normalizeLink` lower-cases only scheme + host (path/query/hash keep case); min length 2. Not required to be a valid URL — `isValidLink` (URL, domain, or IPv4) only controls whether the "open externally" action is shown. |
 | `timestamp` | Timestamp | `serverTimestamp()` on create; list sorted desc.                                                                                                                                        |
 | `folderId`  | string?   | Optional; set when assigned to a folder, **deleted** (`deleteField()`) when set to "No folder". Never `'all'`.                                                                                                                                    |
+| `title`     | string?   | Optional display title (≤ 80 chars, client-enforced), set via `updateLinkTitle`. Trimmed; an empty title **deletes** the field, so it is never `""`. The card shows title + URL when set, domain + path otherwise. |
 
 ### `users/{uid}/folders/{folderId}` — `Firestore.Folder`
 
@@ -36,6 +37,13 @@ All data is per-user, nested under `users/{uid}`. Types live in the global `Fire
 | `nameLower` | string | Lower-cased copy, used for ordering. |
 
 `'all'` is a **synthetic folder id** that exists only in `FolderStore`; it is never written to Firestore and means "no folder filter". Previously, assigning a link to "All" wrote `folderId: 'all'`; the client treats that legacy value as unassigned.
+
+## Undo (restore helpers)
+
+Deletes run immediately; the toast's Undo re-creates the doc with its **original id**:
+
+- `restoreLink(uid, link)` — `setDoc` with the original `url`, `timestamp`, and `folderId` / `title` when present.
+- `restoreFolder(uid, folder)` — transaction: `totalFolders +1` and `set` with the original `name` / `nameLower`. Its links come back under it because folder delete never touches the links' `folderId`.
 
 ## Write Helpers
 

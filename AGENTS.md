@@ -46,6 +46,7 @@ There is no test suite. Before finishing a change, run `pnpm fmt:check`, `pnpm c
 | Shared state                                          | `src/lib/stores/` (rune classes) exposed via `src/lib/contexts/`         |
 | Document types                                        | global `Firestore` namespace in `src/app.d.ts`                           |
 | Security rules / indexes                              | `firestore.rules`, `firestore.indexes.json`                              |
+| Visual reference (tokens, component specs, previews)  | `design-system/`; tokens live in `src/app.css` as Tailwind theme         |
 
 ## Rules for Agents
 

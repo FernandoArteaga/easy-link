@@ -34,3 +34,10 @@ Append-only timeline of wiki maintenance activity.
 
 - data-model: `url` keeps path/query/hash case (`normalizeLink`); `folderId` is deleted for "No folder", never `'all'` (legacy `'all'` values treated as unassigned).
 - Auth guard now waits for `UserStore.authReady` (first `onAuthStateChanged`).
+
+## [2026-11-14] ingest | #96 restyle to the Easy Link design system
+
+- app-architecture: UI layer is now design tokens + Tailwind `@theme inline`; Skeleton CSS dropped (Dialog/Toast behaviour only); new primitives; routes table; organize mode removed; toaster placement; `data-theme`.
+- data-model: optional link `title` (`updateLinkTitle`), Undo via `restoreLink` / `restoreFolder`.
+- repo-map: component list.
+- Needs human review: `design-system/` is a designer export (minified CSS, ignored by Prettier); decide whether it stays in the repo long term.

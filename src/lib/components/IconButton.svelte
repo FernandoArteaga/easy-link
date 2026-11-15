@@ -15,6 +15,7 @@
 		variant?: 'default' | 'tonal' | 'save' | 'danger'
 		size?: 'md' | 'sm'
 		type?: HTMLButtonAttributes['type']
+		class?: string
 	}
 	let {
 		Icon,
@@ -25,6 +26,7 @@
 		variant = 'default',
 		size = 'md',
 		type = 'button',
+		class: className = '',
 	}: Props = $props()
 
 	const variants = {
@@ -37,7 +39,8 @@
 		concatClasses(
 			'inline-grid flex-none place-items-center rounded-full transition-colors',
 			size === 'sm' ? 'size-9' : 'size-tap',
-			variants[variant]
+			variants[variant],
+			className
 		)
 	)
 	const iconSize = $derived(size === 'sm' ? 18 : 20)

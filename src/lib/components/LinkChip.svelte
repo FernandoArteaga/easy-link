@@ -161,25 +161,16 @@
 	class="bg-surface shadow-card border-card-border flex min-w-0 items-center gap-3 rounded-lg border py-3 pr-2 pl-3"
 >
 	{@render tile()}
-	{#if canOpen}
-		<a
-			class="flex min-w-0 flex-1 flex-col gap-0.5"
-			{href}
-			target="_blank"
-			rel="noopener noreferrer"
-		>
-			{@render lines()}
-		</a>
-	{:else}
-		<button type="button" class="flex min-w-0 flex-1 flex-col gap-0.5 text-left" onclick={copy}>
-			{@render lines()}
-		</button>
-	{/if}
+	<!-- Tapping the card copies; opening is the explicit Open button -->
+	<button type="button" class="flex min-w-0 flex-1 flex-col gap-0.5 text-left" onclick={copy}>
+		{@render lines()}
+	</button>
 	<div class="flex flex-none items-center">
 		{#if canOpen}
 			<IconButton Icon={ExternalLink} label="Open in new tab" {href} external />
 		{/if}
-		<IconButton Icon={Copy} label="Copy link" onclick={copy} />
+		<!-- Touch screens copy by tapping the card -->
+		<IconButton Icon={Copy} label="Copy link" onclick={copy} class="pointer-coarse:hidden" />
 		<IconButton Icon={EllipsisVertical} label="More actions" onclick={() => (isOpen = true)} />
 	</div>
 </div>

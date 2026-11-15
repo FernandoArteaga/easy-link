@@ -279,13 +279,15 @@
 	text-decoration: none;
 	color: inherit;
 }
-.el-card__domain {
+.el-card__domain,
+.el-card__title {
 	font: 700 15px/20px var(--font-sans);
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
-.el-card__path {
+.el-card__path,
+.el-card__url {
 	font: 400 13px/18px var(--font-mono);
 	color: var(--ink-muted);
 	white-space: nowrap;

@@ -1,0 +1,28 @@
+<!-- @dsCard height=300 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:var(--bg);height:300px;overflow:hidden}
+.c{position:relative;width:960px;height:300px}
+svg{position:absolute;left:0;top:0}
+.v{fill:var(--violet-600)} .vs{fill:var(--violet-soft)} .m{fill:var(--mint-400)} .s2{fill:var(--surface-2)} .ink{fill:var(--ink)}
+.ring{fill:none;stroke-width:28} .ring.v2{stroke:var(--violet-600)} .ring.s{stroke:var(--surface)}
+.pill{fill:var(--violet-soft)}
+.t{position:absolute;left:48px;bottom:44px;max-width:440px}
+h1{margin:0;font:800 104px/0.92 var(--font-sans);letter-spacing:-.04em;color:var(--ink)}
+p{margin:16px 0 0;font:600 14px/20px var(--font-sans);color:var(--ink-muted)}
+</style></head><body><div class="c">
+<svg width="960" height="300" viewBox="0 0 960 300" aria-hidden="true">
+<!-- blocks: violet-600 slab 200x300 (bleeds top/bottom), mint-400 disc r=60 (radius-full), violet-soft 160x132 radius-lg, ink 96x96 radius-xl
+     arrangement: one tall slab with satellites, right of x=480
+     pattern: soft friendly large radii (radius-xl / radius-full in the README) -> two interlocked pill rings, the chain from the app icon, built from radius-full
+     scales: gaps space-6 (24) / space-4 (16); radii radius-lg 18, radius-xl 28, radius-full -->
+<rect class="vs" x="504" y="24" width="160" height="132" rx="18"/>
+<rect class="v" x="688" y="-20" width="200" height="340" rx="28"/>
+<circle class="m" cx="584" cy="232" r="60"/>
+<rect class="ink" x="904" y="200" width="96" height="96" rx="28"/>
+<rect class="ring s" x="720" y="60" width="150" height="76" rx="38" transform="rotate(-35 795 98)"/>
+<rect class="ring s" x="770" y="140" width="150" height="76" rx="38" transform="rotate(-35 845 178)" style="stroke:var(--mint-400)"/>
+</svg>
+<div class="t"><h1>Easy Link</h1><p>Save a link on one device, open it on another.</p></div>
+</div></body></html>

@@ -1,0 +1,74 @@
+/* Easy Link — generated from tokens.json */
+:root,
+[data-theme='light'] {
+	--bg: #f5f4f0;
+	--surface: #ffffff;
+	--surface-2: #ecebe6;
+	--line: #e2e0d9;
+	--line-control: #8a867b;
+	--ink: #16151a;
+	--ink-muted: #5f5d66;
+	--violet-600: #5b45e0;
+	--on-violet: #ffffff;
+	--violet-soft: #ebe7ff;
+	--violet-text: #4b35d1;
+	--mint-400: #3ddc97;
+	--on-mint: #06281a;
+	--mint-soft: #d7f6e7;
+	--mint-text: #0a7448;
+	--danger: #c8372f;
+	--on-danger: #ffffff;
+	--danger-soft: #fde8e6;
+	--scrim: rgba(22, 21, 26, 0.4);
+	--toast-bg: #16151a;
+	--toast-ink: #f1f0f4;
+	--shadow-card: 0 1px 2px rgba(22, 21, 26, 0.06), 0 1px 1px rgba(22, 21, 26, 0.04);
+	--shadow-float: 0 8px 24px rgba(22, 21, 26, 0.12), 0 2px 6px rgba(22, 21, 26, 0.08);
+	--shadow-sheet: 0 -8px 32px rgba(22, 21, 26, 0.16);
+}
+[data-theme='dark'],
+.dark {
+	--bg: #0f0f12;
+	--surface: #18181d;
+	--surface-2: #232329;
+	--line: #2d2d35;
+	--line-control: #76768a;
+	--ink: #f1f0f4;
+	--ink-muted: #a09fab;
+	--violet-600: #6a55f0;
+	--on-violet: #ffffff;
+	--violet-soft: #26213f;
+	--violet-text: #b4a9ff;
+	--mint-400: #3ddc97;
+	--on-mint: #06281a;
+	--mint-soft: #12301f;
+	--mint-text: #5fe6ab;
+	--danger: #ff7a70;
+	--on-danger: #16151a;
+	--danger-soft: #3a1a18;
+	--scrim: rgba(0, 0, 0, 0.6);
+	--toast-bg: #f1f0f4;
+	--toast-ink: #16151a;
+	--shadow-card: none;
+	--shadow-float: 0 8px 24px rgba(0, 0, 0, 0.5);
+	--shadow-sheet: 0 -8px 32px rgba(0, 0, 0, 0.6);
+}
+:root {
+	--space-1: 4px;
+	--space-2: 8px;
+	--space-3: 12px;
+	--space-4: 16px;
+	--space-5: 20px;
+	--space-6: 24px;
+	--space-8: 32px;
+	--radius-sm: 8px;
+	--radius-md: 12px;
+	--radius-lg: 18px;
+	--radius-xl: 28px;
+	--radius-full: 999px;
+	--tap: 44px;
+	--bar: 56px;
+	--content-max: 560px;
+	--font-sans: Manrope, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}

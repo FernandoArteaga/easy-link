@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 - Refreshing or opening a secured page directly (e.g. `/folders`) no longer redirects to `/links`; routes are guarded only after Firebase Auth restores the session.
 - Error toasts show friendly messages for more Firebase codes and a generic message instead of raw Firebase text.
 - Choosing "No folder" for a link removes its `folderId` instead of writing `'all'` to Firestore.
+- Cancelling the folder picker no longer saves the cancelled choice on the next confirm.
 - Saved links keep the case of their path, query and hash; only the scheme and host are lower-cased.
 - "Folder Name" labels in the folder modals are linked to their inputs.
 - "Link deleted" / "Folder deleted" toasts no longer appear when the delete fails.

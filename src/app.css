@@ -1,8 +1,163 @@
 @import 'tailwindcss';
-@import '@skeletonlabs/skeleton-svelte';
-@import '@skeletonlabs/skeleton';
-@import '@skeletonlabs/skeleton/themes/terminus';
-
-@plugin '@tailwindcss/forms';
 
 @variant dark (&:where(.dark, .dark *));
+
+/* Easy Link tokens (design-system/tokens.css). Light is the default; dark follows `.dark` / data-theme. */
+:root,
+[data-theme='light'] {
+	--bg: #f5f4f0;
+	--surface: #ffffff;
+	--surface-2: #ecebe6;
+	--line: #e2e0d9;
+	--line-control: #8a867b;
+	--ink: #16151a;
+	--ink-muted: #5f5d66;
+	--violet-600: #5b45e0;
+	--on-violet: #ffffff;
+	--violet-soft: #ebe7ff;
+	--violet-text: #4b35d1;
+	--mint-400: #3ddc97;
+	--on-mint: #06281a;
+	--mint-soft: #d7f6e7;
+	--mint-text: #0a7448;
+	--danger: #c8372f;
+	--on-danger: #ffffff;
+	--danger-soft: #fde8e6;
+	--scrim: rgba(22, 21, 26, 0.4);
+	--toast-bg: #16151a;
+	--toast-ink: #f1f0f4;
+	--shadow-card: 0 1px 2px rgba(22, 21, 26, 0.06), 0 1px 1px rgba(22, 21, 26, 0.04);
+	--shadow-float: 0 8px 24px rgba(22, 21, 26, 0.12), 0 2px 6px rgba(22, 21, 26, 0.08);
+	--shadow-sheet: 0 -8px 32px rgba(22, 21, 26, 0.16);
+	/* Cards and groups: no border in light */
+	--card-border: transparent;
+	color-scheme: light;
+}
+
+[data-theme='dark'],
+.dark {
+	--bg: #0f0f12;
+	--surface: #18181d;
+	--surface-2: #232329;
+	--line: #2d2d35;
+	--line-control: #76768a;
+	--ink: #f1f0f4;
+	--ink-muted: #a09fab;
+	--violet-600: #6a55f0;
+	--on-violet: #ffffff;
+	--violet-soft: #26213f;
+	--violet-text: #b4a9ff;
+	--mint-400: #3ddc97;
+	--on-mint: #06281a;
+	--mint-soft: #12301f;
+	--mint-text: #5fe6ab;
+	--danger: #ff7a70;
+	--on-danger: #16151a;
+	--danger-soft: #3a1a18;
+	--scrim: rgba(0, 0, 0, 0.6);
+	--toast-bg: #f1f0f4;
+	--toast-ink: #16151a;
+	--shadow-card: none;
+	--shadow-float: 0 8px 24px rgba(0, 0, 0, 0.5);
+	--shadow-sheet: 0 -8px 32px rgba(0, 0, 0, 0.6);
+	--card-border: var(--line);
+	color-scheme: dark;
+}
+
+@theme inline {
+	--color-bg: var(--bg);
+	--color-surface: var(--surface);
+	--color-surface-2: var(--surface-2);
+	--color-line: var(--line);
+	--color-line-control: var(--line-control);
+	--color-card-border: var(--card-border);
+	--color-ink: var(--ink);
+	--color-ink-muted: var(--ink-muted);
+	--color-violet: var(--violet-600);
+	--color-on-violet: var(--on-violet);
+	--color-violet-soft: var(--violet-soft);
+	--color-violet-text: var(--violet-text);
+	--color-mint: var(--mint-400);
+	--color-on-mint: var(--on-mint);
+	--color-mint-soft: var(--mint-soft);
+	--color-mint-text: var(--mint-text);
+	--color-danger: var(--danger);
+	--color-on-danger: var(--on-danger);
+	--color-danger-soft: var(--danger-soft);
+	--color-scrim: var(--scrim);
+	--color-toast-bg: var(--toast-bg);
+	--color-toast-ink: var(--toast-ink);
+
+	--radius-sm: 8px;
+	--radius-md: 12px;
+	--radius-lg: 18px;
+	--radius-xl: 28px;
+
+	--shadow-card: var(--shadow-card);
+	--shadow-float: var(--shadow-float);
+	--shadow-sheet: var(--shadow-sheet);
+
+	--font-sans: Manrope, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+	--spacing-tap: 44px;
+	--spacing-bar: 56px;
+	--container-content: 560px;
+
+	--animate-sheet-up: sheet-up 200ms ease-out;
+	--animate-skel: skel 1.4s ease-in-out infinite;
+
+	@keyframes sheet-up {
+		from {
+			translate: 0 100%;
+		}
+	}
+	@keyframes skel {
+		50% {
+			opacity: 0.55;
+		}
+	}
+}
+
+@layer base {
+	:focus-visible {
+		outline: 2px solid var(--violet-text);
+		outline-offset: 2px;
+	}
+	button:not(:disabled),
+	[role='button']:not(:disabled) {
+		cursor: pointer;
+	}
+}
+
+/* Zag toast positioning (from skeleton-common toast.css, without Skeleton presets) */
+[data-scope='toast'][data-part='root'] {
+	translate: var(--x) var(--y);
+	scale: var(--scale);
+	z-index: var(--z-index);
+	height: var(--height);
+	opacity: var(--opacity);
+	will-change: translate, opacity, scale;
+	transition:
+		translate 400ms,
+		scale 400ms,
+		opacity 400ms;
+	transition-timing-function: cubic-bezier(0.21, 1.02, 0.73, 1);
+
+	&[data-state='closed'] {
+		transition:
+			translate 400ms,
+			scale 400ms,
+			opacity 200ms;
+		transition-timing-function: cubic-bezier(0.06, 0.71, 0.55, 1);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation: none !important;
+		transition-duration: 0.01ms !important;
+	}
+}

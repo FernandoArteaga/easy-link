@@ -1,5 +1,13 @@
 import type { CollectionReference, DocumentReference } from 'firebase/firestore'
-import { doc, collection, addDoc, deleteDoc, serverTimestamp, updateDoc } from 'firebase/firestore'
+import {
+	doc,
+	collection,
+	addDoc,
+	deleteDoc,
+	serverTimestamp,
+	updateDoc,
+	deleteField,
+} from 'firebase/firestore'
 import { firestore } from '#lib/firebase.ts'
 
 export function linkCollection(uid: string): CollectionReference<Firestore.Link> {
@@ -19,7 +27,7 @@ export async function createLink(uid: string, link: Firestore.CreateLink) {
 
 export async function updateLink(userUid: string, uid: string, link: Firestore.UpdateLink) {
 	await updateDoc(linkDoc(userUid, uid), {
-		folderId: link.folderId,
+		folderId: link.folderId ?? deleteField(),
 	})
 }
 

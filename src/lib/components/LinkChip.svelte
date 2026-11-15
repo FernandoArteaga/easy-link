@@ -33,12 +33,12 @@
 	const assignLink = async () => {
 		try {
 			await updateLink(userStore.session!.uid, link.id, {
-				folderId: inputFolder,
+				// 'all' is client-only: remove the field instead of writing it
+				folderId: inputFolder === 'all' ? undefined : inputFolder,
 			})
 			isModalOpen = false
-			inputFolder = 'all'
 			toast.create({
-				description: 'Link assigned to folder',
+				description: inputFolder === 'all' ? 'Link removed from folder' : 'Link assigned to folder',
 				type: 'info',
 			})
 		} catch (error) {
@@ -53,6 +53,10 @@
 	async function removeLink() {
 		try {
 			await deleteLink(userStore.session!.uid, link.id)
+			toast.create({
+				description: 'Link deleted',
+				type: 'info',
+			})
 		} catch (error) {
 			toast.create({
 				title: 'Error deleting link',
@@ -60,10 +64,6 @@
 				type: 'error',
 			})
 		}
-		toast.create({
-			description: 'Link deleted',
-			type: 'info',
-		})
 	}
 </script>
 
@@ -92,7 +92,7 @@
 					}}
 				>
 					{#each folderStore.folders as f (f.id)}
-						{@render radio(f.name, f.id)}
+						{@render radio(f.id === 'all' ? 'No folder' : f.name, f.id)}
 					{/each}
 				</form>
 			{/snippet}
@@ -112,7 +112,7 @@
 {/snippet}
 
 {#snippet radio(name: string, value: string)}
-	{@const checked = link.folderId === value}
+	{@const checked = (link.folderId ?? 'all') === value}
 	<div class="flex items-center space-x-2">
 		<input id={value} class="radio" type="radio" name="assign-link-folder" {value} {checked} />
 		<label for={value}>{name}</label>

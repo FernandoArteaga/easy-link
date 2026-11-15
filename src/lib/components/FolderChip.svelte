@@ -50,6 +50,10 @@
 	async function removeFolder() {
 		try {
 			await deleteFolder(userStore.session!.uid, folder.id)
+			toast.create({
+				description: 'Folder deleted',
+				type: 'info',
+			})
 		} catch (error) {
 			toast.create({
 				title: 'Error deleting folder',
@@ -57,10 +61,6 @@
 				type: 'error',
 			})
 		}
-		toast.create({
-			description: 'Folder deleted',
-			type: 'info',
-		})
 	}
 </script>
 

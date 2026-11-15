@@ -25,7 +25,8 @@ declare global {
 			url: string
 		}
 		type UpdateLink = {
-			folderId: string
+			/** Omit to remove the link from its folder */
+			folderId?: string
 		}
 
 		type Folder = {

@@ -41,3 +41,9 @@ Append-only timeline of wiki maintenance activity.
 - data-model: optional link `title` (`updateLinkTitle`), Undo via `restoreLink` / `restoreFolder`.
 - repo-map: component list.
 - Needs human review: `design-system/` is a designer export (minified CSS, ignored by Prettier); decide whether it stays in the repo long term.
+
+## [2026-11-14] ingest | #96 restyle review changes
+
+- `app-architecture`: back button on `/folders`, "+ New" chip first, card tap copies with an Open button, content 720px / sheets 560px.
+- `data-model`: `isValidLink` accepts schemeless links with a path; folder transactions read first so `totalFolders` can't drift.
+- `decisions/folder-limit`: limit now `FOLDER_LIMIT` in `folders.ts`; noted that rules don't verify the counter.

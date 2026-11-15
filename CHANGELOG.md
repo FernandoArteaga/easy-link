@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com), and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
+
+## [1.4.0] - 2026-11-14
 ### Changed
 - Require pnpm 11+ and Node.js 24.12+; pnpm settings moved to `pnpm-workspace.yaml`.
 - Upgrade to SvelteKit 3, Vite 8, Skeleton 5, Firebase 13, ESLint 10 and TypeScript 6.
@@ -14,10 +16,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 - Add `firebase-tools` as a dev dependency so the emulators use a project-pinned CLI.
 - Replace Husky and lint-staged with Lefthook (`lefthook.yml`): staged files get ESLint and Prettier fixes, plus `pnpm check`.
 - New mobile-first look from the Easy Link design system (`design-system/`): warm light and true dark themes, Manrope and JetBrains Mono, replacing the Skeleton "terminus" theme.
-  - App bar with logo and icon buttons (manage folders, theme, sign out), all with labels and tooltips.
-  - Links as cards: bold domain and mono path (or title and URL), each truncated to one line; tapping opens the link.
-  - Folders as scrolling chips, with a "New" chip that opens the add-folder sheet.
+  - App bar with logo and icon buttons (manage folders, theme, sign out), all with labels and tooltips; the folders screen has a back button.
+  - Links as cards: the URL on one line, or the title with the URL under it, each truncated; a globe icon marks links and a "T" icon plain text.
+  - Tapping a card copies it. Links get an Open in new tab button; the Copy button is hidden on touch screens, where tapping already copies.
+  - Folders as scrolling chips, led by a "New" chip that opens the add-folder sheet. Folder rows show just the name.
   - Add link / add folder bar docked at the bottom, in thumb reach.
+  - Content up to 720px wide on desktop; sheets stay 560px.
   - Bottom sheets instead of centred modals, with buttons named by what they do.
   - Sign-in page with logo, headline and a Sign in / Sign up switch; fields have visible labels.
   - One-line pill toasts, bottom centre; empty states and skeleton loaders.
@@ -28,9 +32,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com), and this 
 - Undo on the "Link deleted" and "Folder deleted" toasts.
 
 ### Fixed
-- Restore input groups after Skeleton 5 removed `input-group`/`ig-*` (now `field-group`).
-- Size icons with Skeleton 5 classes instead of the Lucide `size` prop.
-- Give the modal Cancel button a valid style (`preset-ghost-primary` doesn't exist).
+- Links saved without a scheme but with a path (`github.com/a/b`) can be opened; they were treated as plain text.
+- The folder count no longer drifts from the real number of folders: a repeated delete (double tap, another tab) counted twice and simultaneous creates could pass the 10-folder limit. Creating at the limit shows the limit message instead of a permission error.
 - Refreshing or opening a secured page directly (e.g. `/folders`) no longer redirects to `/links`; routes are guarded only after Firebase Auth restores the session.
 - Error toasts show friendly messages for more Firebase codes and a generic message instead of raw Firebase text.
 - Choosing "No folder" for a link removes its `folderId` instead of writing `'all'` to Firestore.

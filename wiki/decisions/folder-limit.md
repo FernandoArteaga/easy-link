@@ -18,7 +18,7 @@ Folders were introduced in v1.2.0 to organise links. With no backend code, any l
 - Keep a `totalFolders` counter on `users/{uid}`.
 - `createFolder` / `deleteFolder` update the counter and the folder doc in a single `runTransaction`.
 - Rules allow folder **create** only when `userDoc().data.totalFolders < 10`.
-- The UI mirrors the limit via `UserStore.canCreateFolder` and hides the add-folder form, showing a message instead.
+- The UI mirrors the limit via `FOLDER_LIMIT` (`src/lib/firestore/folders.ts`), used by `UserStore.canCreateFolder` to hide the add-folder form and by `createFolder` / `restoreFolder` to refuse at the cap.
 
 ## History
 
@@ -29,7 +29,8 @@ Folders were introduced in v1.2.0 to organise links. With no backend code, any l
 
 - Users created before v1.2.3 without a user doc cannot create folders until the doc exists (`updateUserLastLogin` uses `updateDoc`, which does not create it).
 - The counter is only as correct as the transactions; rules do not verify that the increment matches a folder create.
-- Changing the limit requires editing both `firestore.rules` and `UserStore.canCreateFolder`.
+- Changing the limit requires editing both `firestore.rules` and `FOLDER_LIMIT`.
+- The rules don't verify the counter: the owner can write `users/{uid}.totalFolders` directly, and folder create doesn't check that it was incremented. Tightening needs a rules change and deploy.
 
 ## Related
 

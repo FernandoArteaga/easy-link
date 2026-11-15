@@ -101,3 +101,13 @@ CHANGELOG `[Unreleased]` Changed/Added entries; wiki app-architecture (UI layer,
 removed), data-model (`title` field, `updateLinkTitle`, restore helpers), log entry. `design-system/`
 committed as the reference and added to `.prettierignore` (its exported CSS is minified and would fail
 `pnpm fmt:check`).
+
+## Changes after review (2026-11-14)
+
+The user's review changed these points of the design above:
+
+- **LinkCard:** no letter tile. Links show a globe icon, plain text a "T" (Lucide `Type`); no favicon service, so saved domains aren't sent to a third party. Without a title the card shows the URL (no scheme or `www.`) on one line, not a bold domain + path.
+- **Tap:** tapping the card copies, everywhere. Links get an explicit Open in new tab button; the Copy button is hidden on touch screens (`pointer: coarse`).
+- **Folders screen:** back button to `/links` in the app bar; add bar stays docked at the bottom; rows drop the folder tile.
+- **FolderChips:** the "+ New" chip comes first.
+- **Width:** page content up to 720px on desktop; sheets stay 560px.

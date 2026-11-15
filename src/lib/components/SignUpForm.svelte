@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { AtSign, RectangleEllipsis } from '@lucide/svelte'
+	import { Lock, Mail } from '@lucide/svelte'
 	import { createUserWithEmailAndPassword } from 'firebase/auth'
 	import { goto } from '$app/navigation'
 	import { resolve } from '$app/paths'
@@ -7,6 +7,7 @@
 	import { handleErrorMessages } from '#lib/firestore/errors.ts'
 	import toasterCtx from '#lib/contexts/toasterCtx.ts'
 	import InputField from '#lib/components/InputField.svelte'
+	import { btn } from '#lib/utils/styles.ts'
 	import { createUser } from '#lib/firestore/users.ts'
 
 	const toast = toasterCtx.getCtx()
@@ -25,7 +26,6 @@
 			})
 			.catch((error) => {
 				toast.create({
-					title: 'Error',
 					description: handleErrorMessages(error),
 					type: 'error',
 				})
@@ -33,46 +33,48 @@
 	}
 </script>
 
-<div class="flex flex-col items-center space-y-4">
-	<form class="w-full space-y-4" onsubmit={submit}>
+<div>
+	<form class="flex w-full flex-col gap-4" onsubmit={submit}>
 		<InputField
 			name="email"
 			type="email"
-			placeholder="Email"
+			label="Email"
+			placeholder="you@example.com"
 			autocomplete="email"
 			bind:value={inputEmail}
 			attr={{ required: true }}
 		>
 			{#snippet icon()}
-				<AtSign class="size-elem-base" />
+				<Mail size={20} class="flex-none" aria-hidden="true" />
 			{/snippet}
 		</InputField>
 		<InputField
 			name="new-password"
 			type="password"
-			placeholder="Password"
+			label="Password"
 			autocomplete="new-password"
 			canReveal
 			bind:value={inputPwd}
 			attr={{ minlength: 6, maxlength: 64, required: true }}
 		>
 			{#snippet icon()}
-				<RectangleEllipsis class="size-elem-base" />
+				<Lock size={20} class="flex-none" aria-hidden="true" />
 			{/snippet}
 		</InputField>
 		<InputField
 			name="confirm-password"
 			type="password"
-			placeholder="Confirm password"
+			label="Confirm password"
 			autocomplete="new-password"
 			canReveal
 			bind:value={inputConfirmPwd}
 			attr={{ minlength: 6, maxlength: 64, required: true }}
 		>
 			{#snippet icon()}
-				<RectangleEllipsis class="size-elem-base" />
+				<Lock size={20} class="flex-none" aria-hidden="true" />
 			{/snippet}
 		</InputField>
-		<button type="submit" class="btn preset-filled-primary-500 w-full" {disabled}> Submit </button>
+		<button type="submit" class="{btn('primary', true)} mt-2 h-13" {disabled}>Create account</button
+		>
 	</form>
 </div>

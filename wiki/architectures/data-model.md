@@ -24,9 +24,9 @@ All data is per-user, nested under `users/{uid}`. Types live in the global `Fire
 
 | Field       | Type      | Notes                                                                                                                                                                                   |
 | ----------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `url`       | string    | Trimmed and **lower-cased** on create; min length 2. Not required to be a valid URL — `isValidLink` (URL, domain, or IPv4) only controls whether the "open externally" action is shown. |
+| `url`       | string    | Trimmed on create; `normalizeLink` lower-cases only scheme + host (path/query/hash keep case); min length 2. Not required to be a valid URL — `isValidLink` (URL, domain, or IPv4) only controls whether the "open externally" action is shown. |
 | `timestamp` | Timestamp | `serverTimestamp()` on create; list sorted desc.                                                                                                                                        |
-| `folderId`  | string?   | Optional; set when the link is assigned to a folder.                                                                                                                                    |
+| `folderId`  | string?   | Optional; set when assigned to a folder, **deleted** (`deleteField()`) when set to "No folder". Never `'all'`.                                                                                                                                    |
 
 ### `users/{uid}/folders/{folderId}` — `Firestore.Folder`
 
@@ -35,12 +35,12 @@ All data is per-user, nested under `users/{uid}`. Types live in the global `Fire
 | `name`      | string | 2–36 chars (client-enforced).        |
 | `nameLower` | string | Lower-cased copy, used for ordering. |
 
-`'all'` is a **synthetic folder id** that exists only in `FolderStore`; it is never written to Firestore and means "no folder filter".
+`'all'` is a **synthetic folder id** that exists only in `FolderStore`; it is never written to Firestore and means "no folder filter". Previously, assigning a link to "All" wrote `folderId: 'all'`; the client treats that legacy value as unassigned.
 
 ## Write Helpers
 
 - `createUser`, `updateUserLastLogin` — `users.ts`.
-- `createLink`, `updateLink` (sets `folderId` only), `deleteLink` — `links.ts`.
+- `createLink`, `updateLink` (sets `folderId`, or deletes it when omitted), `deleteLink` — `links.ts`.
 - `createFolder` / `deleteFolder` — run in a transaction that also `increment(±1)`s `users/{uid}.totalFolders`. `updateFolder` rewrites `name` + `nameLower`.
 - Deleting a folder does **not** clear `folderId` on links that referenced it.
 

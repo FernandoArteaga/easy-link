@@ -24,7 +24,7 @@ references: ['source:src/routes/+layout.svelte', 'source:src/routes/(secured)/+l
 | `/links`   | `(secured)` | Folder tab bar (`FolderList`) + live link list (`LinkList`). Quick-add link form in layout. |
 | `/folders` | `(secured)` | Rename/delete folders (`FolderChip`). Quick-add folder form in layout when under the cap.   |
 
-Route groups are layout-only; protection is not by group but by `routeGuard` in [src/lib/guard.ts](../../src/lib/guard.ts): unauthenticated users on any path go to `/login`; authenticated users on `/login` go to `/links`. The `(secured)` layout additionally renders nothing unless `userStore.session` is set.
+Route groups are layout-only; protection is not by group but by `routeGuard` in [src/lib/guard.ts](../../src/lib/guard.ts): unauthenticated users on any path go to `/login`; authenticated users on `/login` go to `/links`. The guard is a no-op until `userStore.authReady` (set on the first `onAuthStateChanged`), and the root layout shows a spinner until then, so a refresh keeps the current route. The `(secured)` layout additionally renders nothing unless `userStore.session` is set.
 
 ## Auth Flow
 

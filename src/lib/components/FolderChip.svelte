@@ -81,11 +81,12 @@
 		{#snippet body()}
 			<form id={formId} class="space-y-4" onsubmit={submitUpdateFolder}>
 				<div>
-					<label for="folderName" class="text-sm text-gray-700 dark:text-gray-300">
+					<label for={`folder-name-${folder.id}`} class="text-sm text-gray-700 dark:text-gray-300">
 						Folder Name
 					</label>
 					<div class="mt-1">
 						<InputField
+							id={`folder-name-${folder.id}`}
 							type="text"
 							name={folder.id}
 							placeholder="Update folder name"

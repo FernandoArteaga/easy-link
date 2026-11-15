@@ -72,15 +72,15 @@
 				{#snippet body()}
 					<form id={formId} class="space-y-4" onsubmit={submit}>
 						<div>
-							<label for="folderName" class="text-sm text-gray-700 dark:text-gray-300">
+							<label for="new-folder-name" class="text-sm text-gray-700 dark:text-gray-300">
 								Folder Name
 							</label>
 							<div class="mt-1">
 								<InputField
+									id="new-folder-name"
 									type="text"
 									name="folderName"
 									placeholder="e.g., Work, Personal"
-									autocomplete="email"
 									bind:value={inputFolder}
 									attr={{ required: true, minlength: 2, maxlength: 36 }}
 								>

@@ -5,6 +5,8 @@
 	import { concatClasses, randomInputID } from '#lib/utils/utils.ts'
 
 	type Props = {
+		/** Input id, for an external <label for>; random when omitted */
+		id?: string
 		name: string
 		type: HTMLInputTypeAttribute
 		value?: string | number
@@ -16,6 +18,7 @@
 		disabled?: boolean
 	}
 	let {
+		id,
 		value = $bindable(undefined),
 		name,
 		type,
@@ -27,7 +30,8 @@
 		disabled = false,
 	}: Props = $props()
 
-	const inputID = randomInputID()
+	const fallbackID = randomInputID()
+	let inputID = $derived(id ?? fallbackID)
 	let showReveal = $derived(canReveal && !!value)
 	// Literal class names so Tailwind can detect them
 	let gridCols = $derived(

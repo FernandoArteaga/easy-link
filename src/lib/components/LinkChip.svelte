@@ -20,7 +20,11 @@
 	const folderStore = foldersCtx.getCtx()
 	const formId = 'assign-link-to-folder'
 	let isModalOpen = $state(false)
-	let inputFolder: string = $derived(link.folderId || 'all')
+	let inputFolder: string = $state('all')
+	// Reset the choice each time the modal opens, so a cancelled pick isn't saved later
+	$effect.pre(() => {
+		if (isModalOpen) inputFolder = link.folderId ?? 'all'
+	})
 
 	async function setClipboard(text: string) {
 		await navigator.clipboard.writeText(text)

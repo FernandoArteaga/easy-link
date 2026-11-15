@@ -34,7 +34,7 @@ Deeper detail: [App architecture](../architectures/app-architecture.md), [Data m
 | `src/lib/firestore/`                        | Typed collection/doc refs and CRUD helpers (`users.ts`, `links.ts`, `folders.ts`) plus `errors.ts` (Firebase error code → user message).       |
 | `src/lib/stores/`                           | Svelte 5 rune stores: `UserStore`, `FolderStore` (classes, provided via context) and `theme` (module singleton, persisted in localStorage).    |
 | `src/lib/contexts/`                         | Typed `Ctx<T>` wrappers around `setContext`/`getContext` for user, folders, toaster.                                                           |
-| `src/lib/components/`                       | UI components (Skeleton v5 + Tailwind v4): `LinkList`, `LinkChip`, `FolderList`, `FolderChip`, `Modal`, `QuickForm`, `InputField`, forms, etc. |
+| `src/lib/components/`                       | UI components (Tailwind v4 + design tokens): `LinkList`, `LinkChip`, `FolderList`, `FolderChip`, `Sheet`, `AddBar`, `IconButton`, `InputField`, forms, etc. |
 | `src/lib/utils/`                            | `utils.ts` (class concat, link/domain/IP validation), `localStorage.ts`, `styles.ts`.                                                          |
 | `src/app.d.ts`                              | Global types: `Nullable`, `Undefinable`, `App.Themes`, and the `Firestore.*` document types.                                                   |
 | `firestore.rules`                           | Security rules: per-user ownership + 10-folder cap.                                                                                            |

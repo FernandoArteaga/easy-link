@@ -6,3 +6,7 @@ CHANGELOG.md
 
 # Wiki (wiki-engine needs single-line front matter lists)
 wiki/
+
+# Design system export (generated, minified)
+design-system/
+.superpowers/

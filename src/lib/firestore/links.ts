@@ -1,5 +1,14 @@
 import type { CollectionReference, DocumentReference } from 'firebase/firestore'
-import { doc, collection, addDoc, deleteDoc, serverTimestamp, updateDoc } from 'firebase/firestore'
+import {
+	doc,
+	collection,
+	addDoc,
+	setDoc,
+	deleteDoc,
+	serverTimestamp,
+	updateDoc,
+	deleteField,
+} from 'firebase/firestore'
 import { firestore } from '#lib/firebase.ts'
 
 export function linkCollection(uid: string): CollectionReference<Firestore.Link> {
@@ -19,10 +28,29 @@ export async function createLink(uid: string, link: Firestore.CreateLink) {
 
 export async function updateLink(userUid: string, uid: string, link: Firestore.UpdateLink) {
 	await updateDoc(linkDoc(userUid, uid), {
-		folderId: link.folderId,
+		folderId: link.folderId ?? deleteField(),
 	})
 }
 
 export async function deleteLink(userUid: string, uid: string) {
 	await deleteDoc(linkDoc(userUid, uid))
+}
+
+export async function updateLinkTitle(userUid: string, uid: string, title: string | undefined) {
+	const trimmed = title?.trim()
+	await updateDoc(linkDoc(userUid, uid), {
+		title: trimmed ? trimmed : deleteField(),
+	})
+}
+
+/** Re-creates a deleted link with its original id and fields (Undo) */
+export async function restoreLink(userUid: string, link: Firestore.Doc<Firestore.Link>) {
+	const { id, ...data } = link
+	await setDoc(linkDoc(userUid, id), {
+		url: data.url,
+		// A link deleted before its server timestamp resolved has `null` locally
+		timestamp: data.timestamp ?? serverTimestamp(),
+		...(data.folderId ? { folderId: data.folderId } : {}),
+		...(data.title ? { title: data.title } : {}),
+	})
 }

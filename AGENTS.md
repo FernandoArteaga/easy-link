@@ -46,6 +46,7 @@ There is no test suite. Before finishing a change, run `pnpm fmt:check`, `pnpm c
 | Shared state                                          | `src/lib/stores/` (rune classes) exposed via `src/lib/contexts/`         |
 | Document types                                        | global `Firestore` namespace in `src/app.d.ts`                           |
 | Security rules / indexes                              | `firestore.rules`, `firestore.indexes.json`                              |
+| Visual reference (tokens, component specs, previews)  | `design-system/`; tokens live in `src/app.css` as Tailwind theme         |
 
 ## Rules for Agents
 
@@ -55,7 +56,7 @@ There is no test suite. Before finishing a change, run `pnpm fmt:check`, `pnpm c
 - **State:** add shared state as a rune class in `src/lib/stores/` and expose it through a typed `Ctx<T>` in `src/lib/contexts/`.
 - **Firestore:** go through helpers in `src/lib/firestore/`; add/extend types in `src/app.d.ts`. Realtime reads use `onSnapshot` inside `$effect.pre` and must return the unsubscribe.
 - **Data model changes:** if you add a query with a new filter/order combination, add the composite index to `firestore.indexes.json`. If you add a collection or field that needs protection, update `firestore.rules`.
-- **Limits are duplicated:** the 10-folder cap lives in both `firestore.rules` and `UserStore.canCreateFolder` — change both ([decision](wiki/decisions/folder-limit.md)).
+- **Limits are duplicated:** the 10-folder cap lives in both `firestore.rules` and `FOLDER_LIMIT` in `src/lib/firestore/folders.ts` (used by `UserStore.canCreateFolder` and the folder transactions) — change both ([decision](wiki/decisions/folder-limit.md)).
 - **`'all'` folder id is synthetic** — client-only, never write it to Firestore.
 - **Errors:** map new Firebase error codes in `src/lib/firestore/errors.ts`; surface them via the toaster context.
 - **Versioning:** CI fails unless `CHANGELOG.md` has a `## [x.y.z]` heading matching `package.json` `version`. For user-facing changes, bump the version and add Added/Changed/Fixed entries ([CI and release](wiki/operations/ci-and-release.md)).

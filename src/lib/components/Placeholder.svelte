@@ -1,13 +1,22 @@
 <script lang="ts">
 	type Props = {
+		variant?: 'card' | 'chip' | 'row'
 		repeat?: number
-		horizontal?: boolean
 	}
-	let { repeat = 1, horizontal = false }: Props = $props()
+	let { variant = 'card', repeat = 1 }: Props = $props()
+	const shapes = {
+		card: 'h-[66px] w-full rounded-lg',
+		chip: 'h-9 w-20 flex-none rounded-full',
+		row: 'h-15 w-full rounded-md',
+	}
 </script>
 
-<div class="grid gap-4 {horizontal ? 'auto-cols-fr grid-flow-col' : 'grid-cols-1'}">
+<div
+	class={variant === 'chip' ? 'flex gap-2 overflow-hidden' : 'flex flex-col gap-3'}
+	role="status"
+	aria-label="Loading"
+>
 	{#each { length: repeat }}
-		<div class="placeholder h-10 animate-pulse"></div>
+		<div class="bg-surface-2 animate-skel {shapes[variant]}"></div>
 	{/each}
 </div>

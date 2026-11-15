@@ -20,12 +20,15 @@ declare global {
 			url: string
 			timestamp: Timestamp
 			folderId?: string
+			/** Optional display title; absent when not set (never an empty string) */
+			title?: string
 		}
 		type CreateLink = {
 			url: string
 		}
 		type UpdateLink = {
-			folderId: string
+			/** Omit to remove the link from its folder */
+			folderId?: string
 		}
 
 		type Folder = {

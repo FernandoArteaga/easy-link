@@ -13,18 +13,18 @@ references: ['source:src/routes/+layout.svelte', 'source:src/routes/(secured)/+l
 
 - **SvelteKit 3 + Svelte 5 (runes)**, configured in `vite.config.ts` via `sveltekit({ ... })` (no `svelte.config.js`), built with `@sveltejs/adapter-static` into `public/` with `fallback: 'index.html'`. `ssr = false` in the root `+layout.ts`, so the whole app is a client-rendered SPA.
 - **No server code.** All data access goes straight from the browser to Firebase; authorisation is enforced only by [Firestore security rules](data-model.md#security-rules).
-- **UI:** Skeleton v5 (`@skeletonlabs/skeleton-svelte`) components (Dialog-based `Modal`, `Toast`, `Tabs`), Tailwind CSS v4 via `@tailwindcss/vite`, icons from `@lucide/svelte`. Modules under `src/lib` are imported as `#lib/<path>.<ext>`.
+- **UI:** the Easy Link design system (`design-system/`, the visual reference) implemented with Tailwind CSS v4: its tokens are CSS variables in `src/app.css` (light on `:root`/`[data-theme=light]`, dark on `[data-theme=dark]`/`.dark`) exposed through `@theme inline` (`bg-surface`, `text-ink-muted`, `bg-violet`, `shadow-card`, `rounded-lg`, …). Skeleton CSS is not loaded; `@skeletonlabs/skeleton-svelte` `Dialog` (wrapped by `Sheet`) and `Toast` are used for behaviour only, and the Zag toast positioning rules are copied into `app.css`. Shared primitives: `IconButton` (always `label`ed), `Sheet` (bottom sheet, centred ≥ 640px, max 560px wide; page content max 720px), `InputField` (labelled field), `AddBar` (docked add form), `EmptyState`, `Placeholder` (skeletons); button classes from `btn()` in `src/lib/utils/styles.ts`. Icons from `@lucide/svelte`. Modules under `src/lib` are imported as `#lib/<path>.<ext>`.
 
 ## Routes
 
 | Route      | Group       | Purpose                                                                                     |
 | ---------- | ----------- | ------------------------------------------------------------------------------------------- |
 | `/`        | —           | Entry; guard redirects to `/login` or `/links`.                                             |
-| `/login`   | `(open)`    | Sign in / sign up tabs (email + password).                                                  |
-| `/links`   | `(secured)` | Folder tab bar (`FolderList`) + live link list (`LinkList`). Quick-add link form in layout. |
-| `/folders` | `(secured)` | Rename/delete folders (`FolderChip`). Quick-add folder form in layout when under the cap.   |
+| `/login`   | `(open)`    | Logo, headline, Sign in / Sign up segmented switch (email + password).                      |
+| `/links`   | `(secured)` | Folder chips (`FolderList`, "+ New" first) + live link cards (`LinkList` → `LinkChip`: tap copies, Open button for links, Copy button hidden on touch screens, More / Move / Title sheet). Add bar docked in the layout. |
+| `/folders` | `(secured)` | Back button in the app bar, "N of 10" and grouped folder rows (`FolderChip`: rename sheet, delete with Undo). Add bar docked in the layout when under the cap. |
 
-Route groups are layout-only; protection is not by group but by `routeGuard` in [src/lib/guard.ts](../../src/lib/guard.ts): unauthenticated users on any path go to `/login`; authenticated users on `/login` go to `/links`. The `(secured)` layout additionally renders nothing unless `userStore.session` is set.
+Route groups are layout-only; protection is not by group but by `routeGuard` in [src/lib/guard.ts](../../src/lib/guard.ts): unauthenticated users on any path go to `/login`; authenticated users on `/login` go to `/links`. The guard is a no-op until `userStore.authReady` (set on the first `onAuthStateChanged`), and the root layout shows a spinner until then, so a refresh keeps the current route. The `(secured)` layout additionally renders nothing unless `userStore.session` is set.
 
 ## Auth Flow
 
@@ -37,9 +37,9 @@ Route groups are layout-only; protection is not by group but by `routeGuard` in 
 
 - **Class stores with runes**, instantiated once in the root layout and shared via typed contexts (`src/lib/contexts/*Ctx.ts`, each exposing `setCtx`/`getCtx` with a private `Symbol` key):
   - `UserStore` — `session`, `user` (Firestore doc), derived `isSignedIn`, derived `canCreateFolder` (`totalFolders < 10`).
-  - `FolderStore` — `folders` (always prefixed with a synthetic `{ id: 'all' }` entry), `activeFolderId`, `assigningLinks` toggle, `loading`.
-  - Toaster — `createToaster({ placement: 'bottom-end', max: 5 })`.
-- **Theme** — module-level singleton (`theme.svelte.ts`) persisted in localStorage, toggles the `dark` class on `<html>`; defaults to system preference.
+  - `FolderStore` — `folders` (always prefixed with a synthetic `{ id: 'all' }` entry), `activeFolderId`, `loading`. (The organize-mode `assigningLinks` toggle was removed; links move via their More sheet.)
+  - Toaster — `createToaster({ placement: 'bottom', offsets: { bottom: '96px', … }, max: 3 })`, above the dock. Toasts are one line (`description` only, no `title`); deletes pass `action: { label: 'Undo', onClick }`.
+- **Theme** — module-level singleton (`theme.svelte.ts`) persisted in localStorage, toggles the `dark` class and sets `data-theme` on `<html>`; defaults to system preference.
 
 ## Realtime Subscriptions
 

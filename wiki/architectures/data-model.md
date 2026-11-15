@@ -17,16 +17,17 @@ All data is per-user, nested under `users/{uid}`. Types live in the global `Fire
 
 | Field          | Type      | Notes                                                                                      |
 | -------------- | --------- | ------------------------------------------------------------------------------------------ |
-| `totalFolders` | number    | Counter maintained transactionally on folder create/delete. Initialised to `0` on sign-up. |
+| `totalFolders` | number    | Counter maintained transactionally on folder create/delete/restore; each transaction reads first, so a repeated delete or restore isn't counted twice and concurrent creates retry. Initialised to `0` on sign-up. |
 | `lastLogin`    | Timestamp | `serverTimestamp()` on every auth state change to signed-in.                               |
 
 ### `users/{uid}/links/{linkId}` — `Firestore.Link`
 
 | Field       | Type      | Notes                                                                                                                                                                                   |
 | ----------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `url`       | string    | Trimmed and **lower-cased** on create; min length 2. Not required to be a valid URL — `isValidLink` (URL, domain, or IPv4) only controls whether the "open externally" action is shown. |
+| `url`       | string    | Trimmed on create; `normalizeLink` lower-cases only scheme + host (path/query/hash keep case); min length 2. Not required to be a valid URL — `isValidLink` (a URL, or a domain/IPv4 optionally followed by a path) only controls the Open action and the card icon (globe vs. text). |
 | `timestamp` | Timestamp | `serverTimestamp()` on create; list sorted desc.                                                                                                                                        |
-| `folderId`  | string?   | Optional; set when the link is assigned to a folder.                                                                                                                                    |
+| `folderId`  | string?   | Optional; set when assigned to a folder, **deleted** (`deleteField()`) when set to "No folder". Never `'all'`.                                                                                                                                    |
+| `title`     | string?   | Optional display title (≤ 80 chars, client-enforced), set via `updateLinkTitle`. Trimmed; an empty title **deletes** the field, so it is never `""`. The card shows title + URL when set, domain + path otherwise. |
 
 ### `users/{uid}/folders/{folderId}` — `Firestore.Folder`
 
@@ -35,13 +36,20 @@ All data is per-user, nested under `users/{uid}`. Types live in the global `Fire
 | `name`      | string | 2–36 chars (client-enforced).        |
 | `nameLower` | string | Lower-cased copy, used for ordering. |
 
-`'all'` is a **synthetic folder id** that exists only in `FolderStore`; it is never written to Firestore and means "no folder filter".
+`'all'` is a **synthetic folder id** that exists only in `FolderStore`; it is never written to Firestore and means "no folder filter". Previously, assigning a link to "All" wrote `folderId: 'all'`; the client treats that legacy value as unassigned.
+
+## Undo (restore helpers)
+
+Deletes run immediately; the toast's Undo re-creates the doc with its **original id**:
+
+- `restoreLink(uid, link)` — `setDoc` with the original `url`, `timestamp`, and `folderId` / `title` when present.
+- `restoreFolder(uid, folder)` — transaction: no-op if the folder already exists, refuses at `FOLDER_LIMIT`, else `totalFolders +1` and `set` with the original `name` / `nameLower`. Its links come back under it because folder delete never touches the links' `folderId`.
 
 ## Write Helpers
 
 - `createUser`, `updateUserLastLogin` — `users.ts`.
-- `createLink`, `updateLink` (sets `folderId` only), `deleteLink` — `links.ts`.
-- `createFolder` / `deleteFolder` — run in a transaction that also `increment(±1)`s `users/{uid}.totalFolders`. `updateFolder` rewrites `name` + `nameLower`.
+- `createLink`, `updateLink` (sets `folderId`, or deletes it when omitted), `deleteLink` — `links.ts`.
+- `createFolder` / `deleteFolder` — run in a transaction that also `increment(±1)`s `users/{uid}.totalFolders`. `createFolder` reads the user doc and throws `resource-exhausted` at `FOLDER_LIMIT`; `deleteFolder` resolves `false` (no decrement) when the folder is already gone. `updateFolder` rewrites `name` + `nameLower`.
 - Deleting a folder does **not** clear `folderId` on links that referenced it.
 
 ## Security Rules

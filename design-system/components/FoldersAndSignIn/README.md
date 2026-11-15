@@ -1,0 +1,1 @@
+Left: Manage folders as one grouped list with counts and a docked "New folder name" bar, with the limit shown as "7 of 10". Right: sign in with a headline, segmented Sign in / Sign up, labelled fields and a full-width primary.

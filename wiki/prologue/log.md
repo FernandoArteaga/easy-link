@@ -29,3 +29,21 @@ Append-only timeline of wiki maintenance activity.
 - Node stays on 24 (not 26): firebase-tools (emulators) depends on `superstatic`, which only supports Node 20/22/24, and older firebase-tools crash on Node 26 (`SlowBuffer` removed).
 - Added `firebase-tools` as a dev dependency (emulators no longer need a global CLI). `re2` (optional native dep of `superstatic`) build is disabled; only needed for regex rewrites in `firebase.json`.
 - Replaced Husky + lint-staged with Lefthook (`lefthook.yml`, mirrors neat-web-app); updated ci-and-release local gates and repo-map.
+
+## [2026-11-14] ingest | #96 bug fixes
+
+- data-model: `url` keeps path/query/hash case (`normalizeLink`); `folderId` is deleted for "No folder", never `'all'` (legacy `'all'` values treated as unassigned).
+- Auth guard now waits for `UserStore.authReady` (first `onAuthStateChanged`).
+
+## [2026-11-14] ingest | #96 restyle to the Easy Link design system
+
+- app-architecture: UI layer is now design tokens + Tailwind `@theme inline`; Skeleton CSS dropped (Dialog/Toast behaviour only); new primitives; routes table; organize mode removed; toaster placement; `data-theme`.
+- data-model: optional link `title` (`updateLinkTitle`), Undo via `restoreLink` / `restoreFolder`.
+- repo-map: component list.
+- Needs human review: `design-system/` is a designer export (minified CSS, ignored by Prettier); decide whether it stays in the repo long term.
+
+## [2026-11-14] ingest | #96 restyle review changes
+
+- `app-architecture`: back button on `/folders`, "+ New" chip first, card tap copies with an Open button, content 720px / sheets 560px.
+- `data-model`: `isValidLink` accepts schemeless links with a path; folder transactions read first so `totalFolders` can't drift.
+- `decisions/folder-limit`: limit now `FOLDER_LIMIT` in `folders.ts`; noted that rules don't verify the counter.

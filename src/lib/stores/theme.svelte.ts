@@ -6,6 +6,7 @@ const themeStorageKey = 'theme'
 const setBrowserTheme = (theme: App.Themes) => {
 	if (browser) {
 		document.documentElement.classList.toggle('dark', theme === 'dark')
+		document.documentElement.dataset.theme = theme
 	}
 }
 const systemTheme = (): App.Themes => {

@@ -26,9 +26,9 @@
 	--scrim: rgba(22, 21, 26, 0.4);
 	--toast-bg: #16151a;
 	--toast-ink: #f1f0f4;
-	--shadow-card: 0 1px 2px rgba(22, 21, 26, 0.06), 0 1px 1px rgba(22, 21, 26, 0.04);
-	--shadow-float: 0 8px 24px rgba(22, 21, 26, 0.12), 0 2px 6px rgba(22, 21, 26, 0.08);
-	--shadow-sheet: 0 -8px 32px rgba(22, 21, 26, 0.16);
+	--el-shadow-card: 0 1px 2px rgba(22, 21, 26, 0.06), 0 1px 1px rgba(22, 21, 26, 0.04);
+	--el-shadow-float: 0 8px 24px rgba(22, 21, 26, 0.12), 0 2px 6px rgba(22, 21, 26, 0.08);
+	--el-shadow-sheet: 0 -8px 32px rgba(22, 21, 26, 0.16);
 	/* Cards and groups: no border in light */
 	--card-border: transparent;
 	color-scheme: light;
@@ -57,9 +57,9 @@
 	--scrim: rgba(0, 0, 0, 0.6);
 	--toast-bg: #f1f0f4;
 	--toast-ink: #16151a;
-	--shadow-card: none;
-	--shadow-float: 0 8px 24px rgba(0, 0, 0, 0.5);
-	--shadow-sheet: 0 -8px 32px rgba(0, 0, 0, 0.6);
+	--el-shadow-card: none;
+	--el-shadow-float: 0 8px 24px rgba(0, 0, 0, 0.5);
+	--el-shadow-sheet: 0 -8px 32px rgba(0, 0, 0, 0.6);
 	--card-border: var(--line);
 	color-scheme: dark;
 }
@@ -93,9 +93,9 @@
 	--radius-lg: 18px;
 	--radius-xl: 28px;
 
-	--shadow-card: var(--shadow-card);
-	--shadow-float: var(--shadow-float);
-	--shadow-sheet: var(--shadow-sheet);
+	--shadow-card: var(--el-shadow-card);
+	--shadow-float: var(--el-shadow-float);
+	--shadow-sheet: var(--el-shadow-sheet);
 
 	--font-sans: Manrope, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 	--font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;

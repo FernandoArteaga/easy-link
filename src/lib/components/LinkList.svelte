@@ -11,13 +11,18 @@
 	import foldersCtx from '#lib/contexts/foldersCtx.ts'
 	import userCtx from '#lib/contexts/userCtx.ts'
 	import LinkChip from '#lib/components/LinkChip.svelte'
+	import { Link } from '@lucide/svelte'
 	import Placeholder from '#lib/components/Placeholder.svelte'
+	import EmptyState from '#lib/components/EmptyState.svelte'
 
 	const toast = toasterCtx.getCtx()
 	const userStore = userCtx.getCtx()
 	const folderStore = foldersCtx.getCtx()
 	let links: Firestore.Doc<Firestore.Link>[] = $state([])
 	let loading = $state(true)
+	const activeFolderName = $derived(
+		folderStore.folders.find((f) => f.id === folderStore.activeFolderId)?.name ?? 'this folder'
+	)
 
 	$effect.pre(() => {
 		if (!userStore.isSignedIn) return
@@ -43,7 +48,6 @@
 			},
 			(error) => {
 				toast.create({
-					title: 'Error',
 					description: handleErrorMessages(error),
 					type: 'error',
 				})
@@ -63,9 +67,19 @@
 </script>
 
 {#if loading}
-	<Placeholder repeat={4} />
+	<div class="px-4"><Placeholder variant="card" repeat={4} /></div>
+{:else if links.length === 0}
+	<EmptyState
+		Icon={Link}
+		title={folderStore.activeFolderId === 'all'
+			? 'No links yet'
+			: `No links in ${activeFolderName} yet`}
+		hint="Paste a link in the bar below to save it here."
+	/>
 {:else}
-	{#each links as link (link.id)}
-		<LinkChip {link} />
-	{/each}
+	<ul class="flex flex-col gap-3 px-4">
+		{#each links as link (link.id)}
+			<li><LinkChip {link} /></li>
+		{/each}
+	</ul>
 {/if}

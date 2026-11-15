@@ -176,6 +176,9 @@
 		</button>
 	{/if}
 	<div class="flex flex-none items-center">
+		{#if canOpen}
+			<IconButton Icon={ExternalLink} label="Open in new tab" {href} external />
+		{/if}
 		<IconButton Icon={Copy} label="Copy link" onclick={copy} />
 		<IconButton Icon={EllipsisVertical} label="More actions" onclick={() => (isOpen = true)} />
 	</div>
@@ -302,10 +305,7 @@
 		<span class="text-ink-muted truncate font-mono text-[13px] leading-[18px]">{parts.display}</span
 		>
 	{:else}
-		<span class="truncate text-[15px] leading-5 font-bold">{parts.domain}</span>
-		{#if parts.path}
-			<span class="text-ink-muted truncate font-mono text-[13px] leading-[18px]">{parts.path}</span>
-		{/if}
+		<span class="truncate font-mono text-sm leading-5">{parts.display}</span>
 	{/if}
 {/snippet}
 

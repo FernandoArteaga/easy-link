@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { HTMLInputAttributes } from 'svelte/elements'
-	import { Folder, Folders, Link, LogOut, Moon, Sun } from '@lucide/svelte'
+	import { ArrowLeft, Folders, Link, LogOut, Moon, Sun } from '@lucide/svelte'
 	import type { AuthError } from 'firebase/auth'
 	import { signOut } from 'firebase/auth'
 	import type { FirestoreError } from 'firebase/firestore'
@@ -10,7 +10,7 @@
 	import { auth } from '#lib/firebase.ts'
 	import { userDoc } from '#lib/firestore/users.ts'
 	import { createLink } from '#lib/firestore/links.ts'
-	import { createFolder, folderCollection } from '#lib/firestore/folders.ts'
+	import { folderCollection } from '#lib/firestore/folders.ts'
 	import { handleErrorMessages } from '#lib/firestore/errors.ts'
 	import toasterCtx from '#lib/contexts/toasterCtx.ts'
 	import foldersCtx from '#lib/contexts/foldersCtx.ts'
@@ -18,7 +18,7 @@
 	import themeStore from '#lib/stores/theme.svelte.ts'
 	import AddBar from '#lib/components/AddBar.svelte'
 	import IconButton from '#lib/components/IconButton.svelte'
-	import { normalizeLink } from '#lib/utils/utils.ts'
+	import { concatClasses, normalizeLink } from '#lib/utils/utils.ts'
 
 	let { children, data } = $props()
 
@@ -26,7 +26,6 @@
 	const userStore = userCtx.getCtx()
 	const folderStore = foldersCtx.getCtx()
 	let inputLink: string | undefined = $state(undefined)
-	let inputFolder: string | undefined = $state(undefined)
 
 	const signOutUser = () => {
 		signOut(auth)
@@ -90,20 +89,6 @@
 		}
 	}
 
-	const submitFolder = async () => {
-		try {
-			if (!inputFolder) return
-			const folder = inputFolder.trim()
-			if (folder.length < 2 || folder.length > 36) return
-			await createFolder(userStore.session!.uid, {
-				name: folder,
-			})
-			inputFolder = undefined
-		} catch (error) {
-			handleError(error as FirestoreError)
-		}
-	}
-
 	const changeTheme = () => {
 		themeStore.theme = themeStore.theme === 'light' ? 'dark' : 'light'
 	}
@@ -113,11 +98,23 @@
 		spellcheck: 'false',
 		minlength: 2,
 		required: true,
+		// Not type="url": it would reject schemeless links and plain text, which save today
+		inputmode: 'url',
+		autocapitalize: 'off',
+		autocorrect: 'off',
 	}
 </script>
 
 {#if userStore.session}
-	<header class="h-bar flex items-center gap-1 pr-2 pl-4">
+	<header
+		class={concatClasses(
+			'h-bar flex items-center gap-1 pr-2',
+			data.pathname === '/folders' ? 'pl-1' : 'pl-4'
+		)}
+	>
+		{#if data.pathname === '/folders'}
+			<IconButton Icon={ArrowLeft} label="Back to links" href="links" />
+		{/if}
 		<a
 			href={resolve('links')}
 			class="text-ink mr-auto flex items-center gap-2.5 rounded-md text-lg leading-none font-extrabold tracking-[-0.02em]"
@@ -138,39 +135,18 @@
 	<main class="flex flex-1 flex-col gap-4 pt-2 pb-4">
 		{@render children()}
 	</main>
-	<div
-		class="from-bg sticky bottom-0 z-10 bg-linear-to-t from-70% to-transparent px-4 pt-3 pb-[calc(16px+env(safe-area-inset-bottom))]"
-	>
-		{#if data.pathname === '/links'}
+	{#if data.pathname === '/links'}
+		<div
+			class="from-bg sticky bottom-0 z-10 bg-linear-to-t from-70% to-transparent px-4 pt-3 pb-[calc(16px+env(safe-area-inset-bottom))]"
+		>
 			<AddBar
 				placeholder="Paste a link"
 				submitLabel="Save link"
 				bind:value={inputLink}
 				onsubmit={submitLink}
 				Icon={Link}
-				attr={{
-					...inputAttributes,
-					// Not type="url": it would reject schemeless links and plain text, which save today
-					inputmode: 'url',
-					autocapitalize: 'off',
-					autocorrect: 'off',
-				}}
+				attr={inputAttributes}
 			/>
-		{:else if data.pathname === '/folders'}
-			{#if userStore.canCreateFolder}
-				<AddBar
-					placeholder="New folder name"
-					submitLabel="Create folder"
-					bind:value={inputFolder}
-					onsubmit={submitFolder}
-					Icon={Folder}
-					attr={{ ...inputAttributes, maxlength: 36 }}
-				/>
-			{:else}
-				<p class="text-ink-muted py-4 text-center text-sm font-medium">
-					You’ve reached the limit of 10 folders.
-				</p>
-			{/if}
-		{/if}
-	</div>
+		</div>
+	{/if}
 {/if}

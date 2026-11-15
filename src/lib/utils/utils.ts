@@ -4,8 +4,13 @@ export function concatClasses(...classes: string[]) {
 
 export const randomInputID = () => Math.random().toString(36).substring(2)
 
+/** A full URL, or a schemeless one whose host is a domain or IP ("github.com/a/b") */
 export function isValidLink(link: string) {
-	return isValidUrl(link) || isValidDomain(link) || isValidIp(link)
+	if (isValidUrl(link)) return true
+	if (/\s/.test(link)) return false
+	const split = link.search(/[/?#]/)
+	const head = split === -1 ? link : link.slice(0, split)
+	return isValidDomain(head) || isValidIp(head)
 }
 
 export function isValidUrl(url: string) {

@@ -303,10 +303,9 @@
 		>
 	{:else}
 		<span class="truncate text-[15px] leading-5 font-bold">{parts.domain}</span>
-		<!-- Keep the second line so cards with and without a path have the same height -->
-		<span class="text-ink-muted truncate font-mono text-[13px] leading-[18px]">
-			{parts.path || ' '}
-		</span>
+		{#if parts.path}
+			<span class="text-ink-muted truncate font-mono text-[13px] leading-[18px]">{parts.path}</span>
+		{/if}
 	{/if}
 {/snippet}
 

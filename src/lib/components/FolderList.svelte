@@ -45,7 +45,7 @@
 	<div class="px-4 py-1"><Placeholder variant="chip" repeat={4} /></div>
 {:else}
 	<div
-		class="flex snap-x snap-proximity [scrollbar-width:none] gap-2 overflow-x-auto px-4 py-1 [&::-webkit-scrollbar]:hidden"
+		class="flex snap-x snap-proximity scroll-px-4 [scrollbar-width:none] gap-2 overflow-x-auto px-4 py-1 [&::-webkit-scrollbar]:hidden"
 		role="tablist"
 		aria-label="Folders"
 	>

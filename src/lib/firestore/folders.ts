@@ -38,3 +38,16 @@ export async function deleteFolder(userUid: string, uid: string) {
 		transaction.delete(folderDoc(userUid, uid))
 	})
 }
+
+/** Re-creates a deleted folder with its original id (Undo); its links still point at that id */
+export async function restoreFolder(userUid: string, folder: Firestore.Doc<Firestore.Folder>) {
+	await runTransaction(firestore, async (transaction) => {
+		transaction.update(userDoc(userUid), {
+			totalFolders: increment(1),
+		})
+		transaction.set(folderDoc(userUid, folder.id), {
+			name: folder.name,
+			nameLower: folder.nameLower,
+		})
+	})
+}

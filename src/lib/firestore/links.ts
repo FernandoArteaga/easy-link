@@ -3,6 +3,7 @@ import {
 	doc,
 	collection,
 	addDoc,
+	setDoc,
 	deleteDoc,
 	serverTimestamp,
 	updateDoc,
@@ -33,4 +34,22 @@ export async function updateLink(userUid: string, uid: string, link: Firestore.U
 
 export async function deleteLink(userUid: string, uid: string) {
 	await deleteDoc(linkDoc(userUid, uid))
+}
+
+export async function updateLinkTitle(userUid: string, uid: string, title: string | undefined) {
+	const trimmed = title?.trim()
+	await updateDoc(linkDoc(userUid, uid), {
+		title: trimmed ? trimmed : deleteField(),
+	})
+}
+
+/** Re-creates a deleted link with its original id and fields (Undo) */
+export async function restoreLink(userUid: string, link: Firestore.Doc<Firestore.Link>) {
+	const { id, ...data } = link
+	await setDoc(linkDoc(userUid, id), {
+		url: data.url,
+		timestamp: data.timestamp,
+		...(data.folderId ? { folderId: data.folderId } : {}),
+		...(data.title ? { title: data.title } : {}),
+	})
 }

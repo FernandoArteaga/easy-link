@@ -44,3 +44,18 @@ export function normalizeLink(link: string): string {
 	if (!isValidDomain(head) && !isValidIp(head)) return link
 	return head.toLowerCase() + link.slice(head.length)
 }
+
+/**
+ * Splits a saved link for display: `domain` (host without `www.`), `path` (everything after the host)
+ * and `display` (the link without scheme and `www.`). Text that isn't a link is all `domain`.
+ */
+export function splitLink(link: string): { domain: string; path: string; display: string } {
+	const display = link.replace(/^[a-z][a-z\d+.-]*:\/\//i, '').replace(/^www\./i, '')
+	const split = display.search(/[/?#]/)
+	if (split === -1) return { domain: display, path: '', display }
+	const head = display.slice(0, split)
+	if (!isValidUrl(link) && !isValidDomain(head) && !isValidIp(head)) {
+		return { domain: display, path: '', display }
+	}
+	return { domain: head, path: display.slice(split), display }
+}

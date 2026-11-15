@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { HTMLInputAttributes } from 'svelte/elements'
-	import { Folder, Link, Moon, Sun, House } from '@lucide/svelte'
+	import { Folder, Folders, Link, LogOut, Moon, Sun } from '@lucide/svelte'
 	import type { AuthError } from 'firebase/auth'
 	import { signOut } from 'firebase/auth'
 	import type { FirestoreError } from 'firebase/firestore'
@@ -16,8 +16,8 @@
 	import foldersCtx from '#lib/contexts/foldersCtx.ts'
 	import userCtx from '#lib/contexts/userCtx.ts'
 	import themeStore from '#lib/stores/theme.svelte.ts'
-	import QuickForm from '#lib/components/QuickForm.svelte'
-	import Message from '#lib/components/Message.svelte'
+	import AddBar from '#lib/components/AddBar.svelte'
+	import IconButton from '#lib/components/IconButton.svelte'
 	import { normalizeLink } from '#lib/utils/utils.ts'
 
 	let { children, data } = $props()
@@ -41,7 +41,6 @@
 
 	const handleError = (error: AuthError | FirestoreError, signOut = false) => {
 		toast.create({
-			title: 'Error',
 			description: handleErrorMessages(error),
 			type: 'error',
 		})
@@ -109,7 +108,6 @@
 		themeStore.theme = themeStore.theme === 'light' ? 'dark' : 'light'
 	}
 
-	const navButton = 'btn btn-sm preset-filled w-fit min-w-20 h-6'
 	const inputAttributes: HTMLInputAttributes = {
 		autocomplete: 'off',
 		spellcheck: 'false',
@@ -119,43 +117,60 @@
 </script>
 
 {#if userStore.session}
-	<div class="bg-surface-50-950 sticky -top-4 z-10 pb-8">
-		<nav class="flex w-full flex-row flex-wrap items-center justify-end space-x-2 py-8">
-			<a href={resolve('links')} class={navButton}>
-				<House />
-			</a>
-			<button class={navButton} onclick={changeTheme}>
-				{#if themeStore.isLight()}
-					<Moon />
-				{:else}
-					<Sun />
-				{/if}
-			</button>
-			<button type="button" class={navButton} onclick={signOutUser}> Sign out </button>
-		</nav>
-
+	<header class="h-bar flex items-center gap-1 pr-2 pl-4">
+		<a
+			href={resolve('links')}
+			class="text-ink mr-auto flex items-center gap-2.5 rounded-md text-lg leading-none font-extrabold tracking-[-0.02em]"
+		>
+			<img src="/logo.png" alt="" class="size-7" />
+			Easy Link
+		</a>
 		{#if data.pathname === '/links'}
-			<QuickForm
-				placeholder="Add link"
+			<IconButton Icon={Folders} label="Manage folders" href="folders" />
+		{/if}
+		<IconButton
+			Icon={themeStore.isLight() ? Moon : Sun}
+			label={themeStore.isLight() ? 'Switch to dark theme' : 'Switch to light theme'}
+			onclick={changeTheme}
+		/>
+		<IconButton Icon={LogOut} label="Sign out" onclick={signOutUser} />
+	</header>
+	<main class="flex flex-1 flex-col gap-4 pt-2 pb-4">
+		{@render children()}
+	</main>
+	<div
+		class="from-bg sticky bottom-0 z-10 bg-linear-to-t from-70% to-transparent px-4 pt-3 pb-[calc(16px+env(safe-area-inset-bottom))]"
+	>
+		{#if data.pathname === '/links'}
+			<AddBar
+				placeholder="Paste a link"
+				submitLabel="Save link"
 				bind:value={inputLink}
-				submit={submitLink}
+				onsubmit={submitLink}
 				Icon={Link}
-				attr={inputAttributes}
+				attr={{
+					...inputAttributes,
+					// Not type="url": it would reject schemeless links and plain text, which save today
+					inputmode: 'url',
+					autocapitalize: 'off',
+					autocorrect: 'off',
+				}}
 			/>
 		{:else if data.pathname === '/folders'}
 			{#if userStore.canCreateFolder}
-				<QuickForm
-					placeholder="Add folder"
+				<AddBar
+					placeholder="New folder name"
+					submitLabel="Create folder"
 					bind:value={inputFolder}
-					submit={submitFolder}
+					onsubmit={submitFolder}
 					Icon={Folder}
 					attr={{ ...inputAttributes, maxlength: 36 }}
 				/>
 			{:else}
-				<Message>You’ve reached the maximum number of folders allowed.</Message>
+				<p class="text-ink-muted py-4 text-center text-sm font-medium">
+					You’ve reached the limit of 10 folders.
+				</p>
 			{/if}
 		{/if}
 	</div>
-
-	{@render children()}
 {/if}

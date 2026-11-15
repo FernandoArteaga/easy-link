@@ -4,6 +4,7 @@
 	import { routeGuard } from '#lib/guard.ts'
 	import { auth } from '#lib/firebase.ts'
 	import { onAuthStateChanged } from 'firebase/auth'
+	import { LoaderCircle } from '@lucide/svelte'
 	import foldersCtx from '#lib/contexts/foldersCtx.ts'
 	import userCtx from '#lib/contexts/userCtx.ts'
 	import toasterCtx from '#lib/contexts/toasterCtx.ts'
@@ -23,7 +24,7 @@
 	userCtx.setCtx(userStore)
 	foldersCtx.setCtx(folderStore)
 
-	$effect.pre(() => routeGuard(data.pathname, userStore.isSignedIn))
+	$effect.pre(() => routeGuard(data.pathname, userStore.isSignedIn, userStore.authReady))
 	$effect.pre(() => {
 		const authStateSub = onAuthStateChanged(auth, async (user) => {
 			if (user) {
@@ -32,10 +33,12 @@
 					email: user.email,
 					displayName: user.displayName,
 				}
-				await updateUserLastLogin(user.uid)
 			} else {
 				userStore.signOut()
 			}
+			// Set after the session so the guard never sees "ready but signed out" for a signed-in user
+			userStore.authReady = true
+			if (user) await updateUserLastLogin(user.uid)
 		})
 		return () => authStateSub()
 	})
@@ -43,7 +46,13 @@
 </script>
 
 <div class="mx-auto flex max-w-9/10 flex-col justify-center sm:max-w-xl">
-	{@render children()}
+	{#if userStore.authReady}
+		{@render children()}
+	{:else}
+		<div class="flex h-svh items-center justify-center" role="status" aria-label="Loading">
+			<LoaderCircle class="size-8 animate-spin" />
+		</div>
+	{/if}
 </div>
 
 <Toast.Group {toaster}>

@@ -6,6 +6,7 @@ interface SessionUser {
 export class UserStore {
 	user = $state<Undefinable<Firestore.User>>()
 	session = $state<Undefinable<SessionUser>>()
+	authReady = $state(false)
 	canCreateFolder = $derived.by(() => {
 		const u = this.user
 		return !!u && (u.totalFolders === undefined || u.totalFolders < 10)

@@ -102,7 +102,8 @@
 
 	--spacing-tap: 44px;
 	--spacing-bar: 56px;
-	--container-content: 560px;
+	--container-content: 720px;
+	--container-sheet: 560px;
 
 	--animate-sheet-up: sheet-up 200ms ease-out;
 	--animate-skel: skel 1.4s ease-in-out infinite;

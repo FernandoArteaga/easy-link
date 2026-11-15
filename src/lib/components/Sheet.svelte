@@ -42,7 +42,7 @@
 			class="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-4"
 		>
 			<Dialog.Content
-				class="bg-surface shadow-sheet animate-sheet-up max-w-content flex max-h-[90svh] w-full flex-col gap-4 overflow-y-auto rounded-t-xl px-5 pt-2.5 pb-[calc(20px+env(safe-area-inset-bottom))] sm:animate-none sm:rounded-xl sm:pt-5 sm:pb-5"
+				class="bg-surface shadow-sheet animate-sheet-up max-w-sheet flex max-h-[90svh] w-full flex-col gap-4 overflow-y-auto rounded-t-xl px-5 pt-2.5 pb-[calc(20px+env(safe-area-inset-bottom))] sm:animate-none sm:rounded-xl sm:pt-5 sm:pb-5"
 			>
 				<div
 					class="bg-line-control mx-auto h-[5px] w-9 flex-none rounded-full opacity-50 sm:hidden"

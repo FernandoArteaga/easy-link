@@ -7,8 +7,10 @@
 		ExternalLink,
 		Folder,
 		FolderInput,
+		Globe,
 		Pencil,
 		Trash2,
+		Type,
 		X,
 	} from '@lucide/svelte'
 	import { isValidLink, isValidUrl, splitLink } from '#lib/utils/utils.ts'
@@ -282,11 +284,16 @@
 {/snippet}
 
 {#snippet tile()}
+	<!-- Globe for links, Type for plain text -->
 	<span
-		class="bg-violet-soft text-violet-text grid size-10 flex-none place-items-center rounded-sm text-base leading-none font-extrabold uppercase"
+		class="bg-violet-soft text-violet-text grid size-10 flex-none place-items-center rounded-sm"
 		aria-hidden="true"
 	>
-		{parts.domain.charAt(0)}
+		{#if canOpen}
+			<Globe size={20} />
+		{:else}
+			<Type size={20} />
+		{/if}
 	</span>
 {/snippet}
 
